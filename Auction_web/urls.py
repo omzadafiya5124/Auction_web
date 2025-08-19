@@ -15,28 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from . import views
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', views.home),
-    path('about/', views.about),
-    path('auction/', views.auction),
-    path('auction-details/', views.auc_details),
-    path('blog/',views.blog),
-    path('category/',views.category),
-    path('contact/',views.contact),
-    path('seller_list/',views.seller_list),
-    path('seller_details/',views.seller_details),
-    path('how-to-sell/',views.how_to_sell),
-    path('how-to-bid/',views.how_to_bid),
-    path('faqs/',views.faqs),
-    path('error/',views.error),
-    path('privacy_policy/',views.privacy_policy), 
-    path('support_center/',views.support_center), 
-    path('terms_condition/',views.terms_condition),
-    path('login/', views.login_view, name="login"),
-    path('register/', views.register_view, name="register"),
-    path('forgot-password/', views.forgot_password_view, name="forgot_password")
+    path('', include('accounts.urls')), # Route all traffic to the accounts app
 ]

@@ -3,29 +3,331 @@
 
 {% block title %}{{register}}{% endblock %}
 
+{% block extra_css %}
+ <style>
+       /* --- Base & Theming --- */
+:root {
+    --primary-green: #79a206;
+    --primary-green-dark: #688e05;
+    --error-red: #dc3545;
+    --background-beige-light: #fcfaf6;
+    --background-beige-dark: #fef8f0;
+    --text-dark: #333;
+    --text-light: #555;
+    --border-color: #ccc;
+    --border-focus-color: #79a206;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    background-color: var(--background-beige-light);
+    color: var(--text-dark);
+}
+
+/* --- Layout --- */
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 1.25rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.form-wrapper {
+    background-color: var(--background-beige-dark);
+    padding: 2.5rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Typography --- */
+.form-wrapper h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+.form-wrapper p {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+/* --- Form Elements --- */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+    text-align: left;
+    flex: 1 1 100%; /* Full-width on mobile */
+}
+
+@media (min-width: 576px) {
+    .form-row .form-group {
+        flex: 1 1 45%; /* Two columns on larger screens */
+    }
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Enhanced focus state for better accessibility */
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--border-focus-color);
+    box-shadow: 0 0 0 3px rgba(121, 162, 6, 0.2);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.submit-btn:hover, .submit-btn:focus {
+    background-color: var(--primary-green-dark);
+}
+
+.form-footer {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.form-footer a {
+    color: var(--text-light);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- Validation & Feedback --- */
+.error-message {
+    color: var(--error-red);
+    font-size: 0.875em;
+    margin-top: 0.3rem;
+    height: 1em; /* Reserve space to prevent layout shifting */
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.is-invalid {
+    border-color: var(--error-red);
+}
+
+.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+/* Show error message when an error is present */
+.is-invalid + .error-message {
+    opacity: 1;
+    transform: translateY(0);
+}
+    </style>
+{% endblock %}
+
 {% block content %}
-<div class="auth-wrapper d-flex align-items-center justify-content-center">
-  <div class="auth-box shadow-lg p-4 rounded-4 bg-white">
-    <h2 class="mb-4 text-center">Register</h2>
-    <form method="post">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label>Full Name</label>
-        <input type="text" class="form-control" name="name" required>
-      </div>
-      <div class="mb-3">
-        <label>Email</label>
-        <input type="email" class="form-control" name="email" required>
-      </div>
-      <div class="mb-3">
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" required>
-      </div>
-      <button type="submit" class="btn btn-success w-100">Register</button>
-    </form>
-    <div class="mt-3 text-center">
-      <a href="{% url 'login' %}">Already have an account? Login</a>
+<div class="page-container">
+    <div class="form-wrapper">
+        <h2>Create Your Account</h2>
+        <p>Join our community of bidders and sellers.</p>
+        
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="error-message" style="opacity: 1; text-align: center; color: red; margin-bottom: 1rem;">{{ form.non_field_errors.0 }}</div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">User Name</label>
+                {{ form.username }}
+                <div class="error-message" style="opacity: 1;">{{ form.username.errors.0 }}</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email Address</label>
+                    {{ form.email }}
+                    <div class="error-message" style="opacity: 1;">{{ form.email.errors.0 }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
+                    {{ form.mobile_number }}
+                    <div class="error-message" style="opacity: 1;">{{ form.mobile_number.errors.0 }}</div>
+                </div>
+            </div>
+            
+             <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    <div class="error-message">{{ form.password.errors.0 }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
+                    {{ form.confirm_password }}
+                    <div class="error-message">{{ form.confirm_password.errors.0 }}</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.gender.id_for_label }}">Gender</label>
+                    {{ form.gender }}
+                    <div class="error-message">{{ form.gender.errors.0 }}</div>
+                </div>
+                 <div class="form-group">
+                    <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
+                    {{ form.date_of_birth }}
+                    <div class="error-message">{{ form.date_of_birth.errors.0 }}</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.account_type.id_for_label }}">I want to:</label>
+                {{ form.account_type }}
+                <div class="error-message">{{ form.account_type.errors.0 }}</div>
+            </div>
+
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+
+        <div class="form-footer">
+            <span>Already have an account? </span><a href="{% url 'login' %}">Log In</a>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
+
+{% block js %}
+<script src="script.js">
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('register-form');
+    const fields = [
+        'username', 'email', 'mobile', 'password', 
+        'confirm-password', 'gender', 'dob', 'account-type'
+    ];
+    const inputs = fields.map(id => document.getElementById(id));
+
+    // --- REAL-TIME VALIDATION ON BLUR ---
+    inputs.forEach(input => {
+        input.addEventListener('blur', () => {
+            validateField(input);
+        });
+    });
+
+    // --- VALIDATION ON FORM SUBMIT ---
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Stop form submission
+        
+        let isFormValid = true;
+        inputs.forEach(input => {
+            // Validate each field and track overall validity
+            if (!validateField(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (isFormValid) {
+            alert('Registration Successful! Sending data to server...');
+            // In a real application, you would send the form data here, e.g., using fetch()
+            // form.submit(); 
+            form.reset();
+        }
+    });
+
+    // --- CORE VALIDATION LOGIC ---
+    function validateField(input) {
+        const value = input.value.trim();
+        let errorMessage = null;
+
+        // Validation rules based on input ID
+        switch (input.id) {
+            case 'username':
+                if (value === '') errorMessage = 'Username is required.';
+                else if (value.length < 3) errorMessage = 'Username must be at least 3 characters.';
+                break;
+            case 'email':
+                if (value === '') errorMessage = 'Email is required.';
+                else if (!/^\S+@\S+\.\S+$/.test(value)) errorMessage = 'Please enter a valid email address.';
+                break;
+            case 'mobile':
+                if (value === '') errorMessage = 'Mobile number is required.';
+                else if (!/^\d{10}$/.test(value)) errorMessage = 'Please enter a valid 10-digit mobile number.';
+                break;
+            case 'password':
+                if (value === '') errorMessage = 'Password is required.';
+                else if (value.length < 8) errorMessage = 'Password must be at least 8 characters long.';
+                break;
+            case 'confirm-password':
+                const password = document.getElementById('password').value;
+                if (value === '') errorMessage = 'Please confirm your password.';
+                else if (value !== password) errorMessage = 'Passwords do not match.';
+                break;
+            case 'gender':
+            case 'dob':
+            case 'account-type':
+                if (value === '') errorMessage = 'This field is required.';
+                break;
+        }
+
+        if (errorMessage) {
+            showError(input, errorMessage);
+            return false;
+        } else {
+            clearError(input);
+            return true;
+        }
+    }
+
+    // --- HELPER FUNCTIONS ---
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        input.setAttribute('aria-invalid', 'true');
+        const errorContainer = document.getElementById(`${input.id}-error`);
+        errorContainer.textContent = message;
+    }
+
+    function clearError(input) {
+        input.classList.remove('is-invalid');
+        input.setAttribute('aria-invalid', 'false');
+        const errorContainer = document.getElementById(`${input.id}-error`);
+        errorContainer.textContent = '';
+    }
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,24 @@
+{% extends "header_footer.html" %}
+{% block title %}Verify Email{% endblock %}
+
+{% block extra_css %}
+<style>/* Use login form styles */</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page-container">
+    <div class="login-form-wrapper">
+        <h2>Check Your Email</h2>
+        <p>We've sent a 6-digit OTP to your email address.</p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input type="text" name="otp" required>
+            </div>
+            <button type="submit" class="submit-btn">Verify</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

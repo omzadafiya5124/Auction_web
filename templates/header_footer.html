@@ -29,6 +29,51 @@
     <!-- Title -->
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" href="{% static "assets/img/fav-icon.svg" %}" type="image/gif" sizes="20x20">
+    <style>
+        /* --- CSS FOR USER DROPDOWN --- */
+
+/* Style for the container that holds the username and the dropdown */
+.user-menu-container {
+    position: relative; /* This is crucial for positioning the dropdown */
+    display: inline-block; /* Allows the container to sit nicely with other items */
+}
+
+/* The dropdown menu itself - hidden by default */
+.user-dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 0;
+    top: 100%; /* Position it right below the username button */
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+    list-style: none;
+    padding: 0;
+    margin-top: 5px; /* Small gap between username and dropdown */
+    border-radius: 5px;
+}
+
+/* Style for the links inside the dropdown (e.g., Logout) */
+.user-dropdown-menu li a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+/* Change color of dropdown links on hover */
+.user-dropdown-menu li a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu on hover over the container */
+.user-menu-container:hover .user-dropdown-menu {
+    display: block;
+}
+    </style>
+    {% block extra_css %}{% endblock%}
 </head>
 
 <body id="body">
@@ -51,51 +96,51 @@
         <header class="header-area style-1 three d-flex flex-nowrap align-items-center justify-content-between">
             <div class="nav-left">
                 <div class="company-logo">
-                    <a href="index.html"><img alt="image" class="img-fluid" src="{% static "assets/img/logo.svg" %}"></a>
+                    <a href="{%url 'home' %}"><img alt="image" class="img-fluid" width="170px" src="{% static "assets/img/logo.png" %}"></a>
                 </div>
                 <div class="main-menu">
                     <div class="mobile-logo-area d-lg-none d-flex justify-content-center align-items-center">
                         <div class="mobile-logo-wrap">
-                            <a href="index.html"><img alt="image" src="{% static "assets/img/logo.svg" %}"></a>
+                            <a href="index.html"><img alt="image" src="{% static "assets/img/logo.png" %}"></a>
                         </div>
                     </div>
                     <ul class="menu-list">
-                        <li><a href="index.html" class="drop-down">Home</a></li>
+                        <li><a href="{% url 'home' %}" class="drop-down">Home</a></li>
                         
                         <li class="menu-item-has-children">
                             <a href="#" class="drop-down">Auctions</a><i
                                 class="bi bi-plus dropdown-icon"></i>
                             <ul class="sub-menu">
-                                <li><a href="auction-grid.html">Auctions</a></li>
-                                <li><a href="auction-details.html">Auctions Details</a></li>
+                                <li><a href="{% url "auction" %}">Auctions</a></li>
+                                <li><a href="{% url "auction-details" %}">Auctions Details</a></li>
                             </ul>
                         </li>
                         <li class="menu-item">
-                            <a href="blog-grid.html" class="drop-down">Blog</a>
+                            <a href="{% url "blog" %}" class="drop-down">Blog</a>
                 
                         </li>
                         <li class="menu-item-has-children">
                             <a href="#" class="drop-down">Pages</a><i class="bi bi-plus dropdown-icon"></i>
                             <ul class="sub-menu">
-                                <li><a href="">About</a></li>
-                                <li><a href="category.html">Category</a></li>
+                                <li><a href="{% url "about" %}">About</a></li>
+                                <li><a href="{% url "category" %}">Category</a></li>
                                 <li>
-                                    <a href="store-list.html">Seller</a>
+                                    <a href="#">Seller</a>
                                     <i class="d-lg-flex d-none bi bi-chevron-right dropdown-icon"></i>
                                     <i class="d-lg-none d-flex bi bi-plus dropdown-icon"></i>
                                     <ul class="sub-menu">
-                                        <li><a href="store-list.html">Seller List</a></li>
-                                        <li><a href="store-details.html">Seller Details</a></li>
+                                        <li><a href="{% url "seller_list" %}">Seller List</a></li>
+                                        <li><a href="{% url "seller_details" %}">Seller Details</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="how-to-sell.html">How To Sell</a></li>
-                                <li><a href="how-to-buy.html">How to Bid</a></li>
-                                <li><a href="dashboard.html">Dashbaord</a></li>
-                                <li><a href="faq.html">Faqs</a></li>
-                                <li><a href="error.html">Error</a></li>
+                                <li><a href="{% url "how-to-sell" %}">How To Sell</a></li>
+                                <li><a href="{% url "how-to-bid" %}">How to Bid</a></li>
+                                <li><a href="#">Dashbaord</a></li>
+                                <li><a href="{% url "faqs" %}">Faqs</a></li>
+                                <li><a href="{% url "error" %}">Error</a></li>
                             </ul>
                         </li>
-                        <li><a href="contact.html" class="drop-down">Contact</a></li>
+                        <li><a href="{% url "contact" %}" class="drop-down">Contact</a></li>
                     </ul>
                   
                     <form class="d-lg-none d-flex">
@@ -107,14 +152,35 @@
                         </div>
                     </form>
                     <div class="btn-area d-lg-none d-flex">
-                        <li class="nav-item">
-                            <a href="{% url 'login' %}" class="login-btn btn-hover">
-                                <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.50035 9.09302C5.99384 9.09302 3.95384 7.05302 3.95384 4.54651C3.95384 2.04 5.99384 0 8.50035 0C11.0069 0 13.0469 2.04 13.0469 4.54651C13.0469 7.05302 11.0069 9.09302 8.50035 9.09302ZM8.50035 1.18605C6.65012 1.18605 5.13989 2.69628 5.13989 4.54651C5.13989 6.39674 6.65012 7.90698 8.50035 7.90698C10.3506 7.90698 11.8608 6.39674 11.8608 4.54651C11.8608 2.69628 10.3506 1.18605 8.50035 1.18605ZM15.2924 17C14.9683 17 14.6994 16.7312 14.6994 16.407C14.6994 13.6791 11.9162 11.4651 8.50035 11.4651C5.08454 11.4651 2.30128 13.6791 2.30128 16.407C2.30128 16.7312 2.03244 17 1.70826 17C1.38407 17 1.11523 16.7312 1.11523 16.407C1.11523 13.0307 4.42826 10.2791 8.50035 10.2791C12.5724 10.2791 15.8855 13.0307 15.8855 16.407C15.8855 16.7312 15.6166 17 15.2924 17Z"/>
-                                </svg>
-                                My Account
+
+                       <!-- ============================================= -->
+                    <!-- === DYNAMIC BLOCK FOR MOBILE VIEW STARTS HERE === -->
+                    <!-- ============================================= -->
+                 
+                <div class="btn-area d-lg-none d-flex">
+                    {% if user.is_authenticated %}
+                        <!-- This will now be a dropdown on mobile as well -->
+                        <div class="user-menu-container mobile-user-menu">
+                            <a href="#" class="login-btn btn-hover">
+                                <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                                {{ user.username }}
+                                <i class="bi bi-chevron-down"></i> <!-- Add a dropdown arrow icon -->
                             </a>
-                        </li>
+                            <ul class="user-dropdown-menu">
+                                <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="login-btn btn-hover">
+                            <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                            My Account
+                        </a>
+                    {% endif %}
+                </div>
+                    <!-- =========================================== -->
+                    <!-- === DYNAMIC BLOCK FOR MOBILE VIEW ENDS HERE === -->
+                    <!-- =========================================== -->
                     </div>
                 </div>
             </div>
@@ -149,14 +215,34 @@
                         </form>
                     </div>
                 </div>
-                        <li class="nav-item">
-                            <a href="{% url 'login' %}" class="login-btn btn-hover">
-                                <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.50035 9.09302C5.99384 9.09302 3.95384 7.05302 3.95384 4.54651C3.95384 2.04 5.99384 0 8.50035 0C11.0069 0 13.0469 2.04 13.0469 4.54651C13.0469 7.05302 11.0069 9.09302 8.50035 9.09302ZM8.50035 1.18605C6.65012 1.18605 5.13989 2.69628 5.13989 4.54651C5.13989 6.39674 6.65012 7.90698 8.50035 7.90698C10.3506 7.90698 11.8608 6.39674 11.8608 4.54651C11.8608 2.69628 10.3506 1.18605 8.50035 1.18605ZM15.2924 17C14.9683 17 14.6994 16.7312 14.6994 16.407C14.6994 13.6791 11.9162 11.4651 8.50035 11.4651C5.08454 11.4651 2.30128 13.6791 2.30128 16.407C2.30128 16.7312 2.03244 17 1.70826 17C1.38407 17 1.11523 16.7312 1.11523 16.407C1.11523 13.0307 4.42826 10.2791 8.50035 10.2791C12.5724 10.2791 15.8855 13.0307 15.8855 16.407C15.8855 16.7312 15.6166 17 15.2924 17Z"/>
-                                </svg>
-                                My Account
-                            </a>
-                        </li>
+                   <!-- ============================================== -->
+                <!-- === DYNAMIC BLOCK FOR DESKTOP VIEW STARTS HERE === -->
+                <!-- ============================================== -->
+                 <div class="d-lg-flex d-none align-items-center">
+                {% if user.is_authenticated %}
+                    <!-- This is the new hover dropdown for desktop -->
+                    <div class="user-menu-container">
+                        <a href="#" class="login-btn btn-hover">
+                            <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                            {{ user.username }}
+                            <i class="bi bi-chevron-down" style="margin-left: 5px;"></i> <!-- Dropdown arrow -->
+                        </a>
+                        <ul class="user-dropdown-menu">
+                            <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <!-- This part for logged-out users remains the same -->
+                    <a href="{% url 'login' %}" class="login-btn btn-hover">
+                        <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                        My Account
+                    </a>
+                {% endif %}
+            </div>  
+                <!-- ============================================ -->
+                <!-- === DYNAMIC BLOCK FOR DESKTOP VIEW ENDS HERE === -->
+                <!-- ============================================ -->
                 <div class="sidebar-button mobile-menu-btn">
                     <span></span>
                 </div>
@@ -174,7 +260,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-7 d-flex align-items-center">
                             <div class="footer-logo-area">
                                 <div class="footer-logo">
-                                    <img src="{% static "assets/img/footer-logo.svg"%}" alt="">
+                                    <img src="{% static "assets/img/logo.png"%}" alt="">
                                 </div>
                                 <div class="social-area">
                                     <h5>Social Just You Connected Us!</h5>
@@ -298,9 +384,40 @@
             </div>
         </div>
     </footer>
-   
+    {% block js %}{%endblock%}
     <!-- End Footer section -->
     <!--  Main jQuery  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Find the mobile user menu container
+        const mobileMenu = document.querySelector('.mobile-user-menu');
+        
+        if (mobileMenu) {
+            // Get the dropdown part of the menu
+            const dropdown = mobileMenu.querySelector('.user-dropdown-menu');
+            
+            // Add a click event listener to the container
+            mobileMenu.addEventListener('click', function(event) {
+                // Prevent the link from navigating anywhere
+                event.preventDefault();
+                
+                // Toggle the display of the dropdown
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                }
+            });
+
+            // Optional: Close the dropdown if the user taps anywhere else on the page
+            document.addEventListener('click', function(event) {
+                if (!mobileMenu.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+    });
+    </script>
     <script data-cfasync="false" src="../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{% static "assets/js/jquery-3.7.1.min.js"%}"></script>
     <!-- Popper and Bootstrap JS -->
     <script src="{% static "assets/js/popper.min.js"%}"></script>
