@@ -20,5 +20,17 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', views.home)
+    path('home/', views.home),
+    path('about/', views.about),
+    path('auction/', views.auction),
+    path('auction-details/', views.auc_details),
+    path('blog/',views.blog),
+    path('category/',views.category),
+    path('contact/',views.contact),
+    path('seller_list/',views.seller_list),
+    path('seller_details/',views.seller_details),
+    path('how-to-sell/',views.how_to_sell),
+    path('how-to-bid/',views.how_to_bid),
+    path('faqs/',views.faqs),
+    path('error/',views.error)
 ]
