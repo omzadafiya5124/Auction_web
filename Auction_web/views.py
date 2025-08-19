@@ -48,3 +48,12 @@ def support_center(request):
 
 def terms_condition(request):
     return render(request, "terms-condition.html" , {"terms_condition" : "Terms & Condition"})
+
+def login_view(request):
+    return render(request, "login.html" , {"login" : "Login"})
+
+def register_view(request):
+    return render(request, "register.html" , {"register" : "Register"})
+
+def forgot_password_view(request):
+    return render(request, "forgot_password.html" , {"forgot_password"  : "Forgot Password"})

@@ -35,5 +35,8 @@ urlpatterns = [
     path('error/',views.error),
     path('privacy_policy/',views.privacy_policy), 
     path('support_center/',views.support_center), 
-    path('terms_condition/',views.terms_condition)
+    path('terms_condition/',views.terms_condition),
+    path('login/', views.login_view, name="login"),
+    path('register/', views.register_view, name="register"),
+    path('forgot-password/', views.forgot_password_view, name="forgot_password")
 ]
