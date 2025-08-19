@@ -32,5 +32,8 @@ urlpatterns = [
     path('how-to-sell/',views.how_to_sell),
     path('how-to-bid/',views.how_to_bid),
     path('faqs/',views.faqs),
-    path('error/',views.error)
+    path('error/',views.error),
+    path('privacy_policy/',views.privacy_policy), 
+    path('support_center/',views.support_center), 
+    path('terms_condition/',views.terms_condition)
 ]

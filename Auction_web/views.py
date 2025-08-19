@@ -29,13 +29,22 @@ def seller_details(request):
     return render(request, "seller_details.html" , {"seller_details" : "Seller Details"})
 
 def how_to_sell(request):
-    return render(request, "how-to-sell.html" , {"how_to_sell" : "How to sell"})
+    return render(request, "how-to-sell.html" , {"how_to_sell" : "How to Sell"})
 
 def how_to_bid(request):
-    return render(request, "how-to-buy.html" , {"how_to_bid" : "How to bid"})
+    return render(request, "how-to-buy.html" , {"how_to_bid" : "How to Bid"})
 
 def faqs(request):
     return render(request, "faq.html" , {"faq" : "FAQ"})
 
 def error(request):
     return render(request, "error.html" , {"error" : "Error"})
+
+def privacy_policy(request):
+    return render(request, "privacy-policy.html" , {"privacy_policy" : "Privacy & Policy"})
+
+def support_center(request):
+    return render(request, "support-center.html" , {"support_center" : "Support Center"})
+
+def terms_condition(request):
+    return render(request, "terms-condition.html" , {"terms_condition" : "Terms & Condition"})
