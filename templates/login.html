@@ -86,6 +86,30 @@
     .login-form-wrapper .form-footer a:hover {
         text-decoration: underline;
     }
+    .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* space for icon */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    color: #888;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #c49a6c;
+}
 </style>
 {% endblock %}
 
@@ -106,9 +130,12 @@
                 <label for="{{ form.username.id_for_label }}">Email</label>
                 {{ form.username }}
             </div>
-            <div class="form-group">
+            <div class="form-group password-group">
                 <label for="{{ form.password.id_for_label }}">Password</label>
-                {{ form.password }}
+                 <div class="password-wrapper">
+                     {{ form.password }}
+                 <span class="toggle-password" onclick="togglePassword('id_password')">👁</span>
+            </div>
             </div>
             <button type="submit" class="submit-btn">Login</button>
         </form>
@@ -121,3 +148,13 @@
     </div>
 </div>
 {% endblock %}
+{% block js %}
+<script>
+function togglePassword(fieldId) {
+    const input = document.getElementById(fieldId);
+    if (input) {
+        input.type = input.type === "password" ? "text" : "password";
+    }
+}
+</script>
+{%endblock%}

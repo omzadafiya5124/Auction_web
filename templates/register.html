@@ -1,11 +1,11 @@
 {% extends "header_footer.html" %}
 {% load static %}
 
-{% block title %}{{register}}{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block extra_css %}
- <style>
-       /* --- Base & Theming --- */
+<style>
+/* --- Base & Theming --- */
 :root {
     --primary-green: #79a206;
     --primary-green-dark: #688e05;
@@ -47,12 +47,15 @@ body {
 /* --- Typography --- */
 .form-wrapper h2 {
     margin-top: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    text-align: center;
 }
 
 .form-wrapper p {
     color: var(--text-light);
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 /* --- Form Elements --- */
@@ -65,19 +68,20 @@ body {
 .form-group {
     margin-bottom: 1.25rem;
     text-align: left;
-    flex: 1 1 100%; /* Full-width on mobile */
+    flex: 1 1 100%;
 }
 
 @media (min-width: 576px) {
     .form-row .form-group {
-        flex: 1 1 45%; /* Two columns on larger screens */
+        flex: 1 1 45%;
     }
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .form-group input,
@@ -90,7 +94,6 @@ body {
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Enhanced focus state for better accessibility */
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
@@ -98,6 +101,33 @@ body {
     box-shadow: 0 0 0 3px rgba(121, 162, 6, 0.2);
 }
 
+/* Password wrapper */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    color: #888;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: var(--primary-green);
+}
+
+/* Submit Button */
 .submit-btn {
     width: 100%;
     padding: 0.9rem;
@@ -116,9 +146,11 @@ body {
     background-color: var(--primary-green-dark);
 }
 
+/* Footer */
 .form-footer {
     margin-top: 1.5rem;
     font-size: 0.9rem;
+    text-align: center;
 }
 
 .form-footer a {
@@ -131,31 +163,17 @@ body {
     text-decoration: underline;
 }
 
-/* --- Validation & Feedback --- */
+/* --- Error Handling --- */
 .error-message {
     color: var(--error-red);
-    font-size: 0.875em;
-    margin-top: 0.3rem;
-    height: 1em; /* Reserve space to prevent layout shifting */
-    opacity: 0;
-    transform: translateY(-5px);
-    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    min-height: 1rem;
 }
-
 .is-invalid {
     border-color: var(--error-red);
 }
-
-.is-invalid:focus {
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-}
-
-/* Show error message when an error is present */
-.is-invalid + .error-message {
-    opacity: 1;
-    transform: translateY(0);
-}
-    </style>
+</style>
 {% endblock %}
 
 {% block content %}
@@ -164,41 +182,48 @@ body {
         <h2>Create Your Account</h2>
         <p>Join our community of bidders and sellers.</p>
         
-        <form method="post" action="{% url 'register' %}">
+        <form method="post" id="register-form" action="{% url 'register' %}">
             {% csrf_token %}
             
             {% if form.non_field_errors %}
-                <div class="error-message" style="opacity: 1; text-align: center; color: red; margin-bottom: 1rem;">{{ form.non_field_errors.0 }}</div>
+                <div class="error-message" style="text-align:center;">{{ form.non_field_errors.0 }}</div>
             {% endif %}
 
             <div class="form-group">
                 <label for="{{ form.username.id_for_label }}">User Name</label>
                 {{ form.username }}
-                <div class="error-message" style="opacity: 1;">{{ form.username.errors.0 }}</div>
+                <div class="error-message">{{ form.username.errors.0 }}</div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="{{ form.email.id_for_label }}">Email Address</label>
                     {{ form.email }}
-                    <div class="error-message" style="opacity: 1;">{{ form.email.errors.0 }}</div>
+                    <div class="error-message">{{ form.email.errors.0 }}</div>
                 </div>
                 <div class="form-group">
                     <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
                     {{ form.mobile_number }}
-                    <div class="error-message" style="opacity: 1;">{{ form.mobile_number.errors.0 }}</div>
+                    <div class="error-message">{{ form.mobile_number.errors.0 }}</div>
                 </div>
             </div>
             
-             <div class="form-row">
+            <div class="form-row">
                 <div class="form-group">
                     <label for="{{ form.password.id_for_label }}">Password</label>
-                    {{ form.password }}
+                    <div class="password-wrapper">
+                        {{ form.password }}
+                        <span class="toggle-password" data-target="{{ form.password.id_for_label }}">👁</span>
+                    </div>
                     <div class="error-message">{{ form.password.errors.0 }}</div>
                 </div>
+
                 <div class="form-group">
                     <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
-                    {{ form.confirm_password }}
+                    <div class="password-wrapper">
+                        {{ form.confirm_password }}
+                        <span class="toggle-password" data-target="{{ form.confirm_password.id_for_label }}">👁</span>
+                    </div>
                     <div class="error-message">{{ form.confirm_password.errors.0 }}</div>
                 </div>
             </div>
@@ -209,7 +234,7 @@ body {
                     {{ form.gender }}
                     <div class="error-message">{{ form.gender.errors.0 }}</div>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
                     {{ form.date_of_birth }}
                     <div class="error-message">{{ form.date_of_birth.errors.0 }}</div>
@@ -233,101 +258,18 @@ body {
 {% endblock %}
 
 {% block js %}
-<script src="script.js">
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('register-form');
-    const fields = [
-        'username', 'email', 'mobile', 'password', 
-        'confirm-password', 'gender', 'dob', 'account-type'
-    ];
-    const inputs = fields.map(id => document.getElementById(id));
-
-    // --- REAL-TIME VALIDATION ON BLUR ---
-    inputs.forEach(input => {
-        input.addEventListener('blur', () => {
-            validateField(input);
-        });
-    });
-
-    // --- VALIDATION ON FORM SUBMIT ---
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Stop form submission
-        
-        let isFormValid = true;
-        inputs.forEach(input => {
-            // Validate each field and track overall validity
-            if (!validateField(input)) {
-                isFormValid = false;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".toggle-password").forEach(icon => {
+        icon.addEventListener("click", () => {
+            const targetId = icon.getAttribute("data-target");
+            const input = document.getElementById(targetId);
+            if (input) {
+                input.type = input.type === "password" ? "text" : "password";
+                icon.textContent = input.type === "password" ? "👁" : "🙈";
             }
         });
-
-        if (isFormValid) {
-            alert('Registration Successful! Sending data to server...');
-            // In a real application, you would send the form data here, e.g., using fetch()
-            // form.submit(); 
-            form.reset();
-        }
     });
-
-    // --- CORE VALIDATION LOGIC ---
-    function validateField(input) {
-        const value = input.value.trim();
-        let errorMessage = null;
-
-        // Validation rules based on input ID
-        switch (input.id) {
-            case 'username':
-                if (value === '') errorMessage = 'Username is required.';
-                else if (value.length < 3) errorMessage = 'Username must be at least 3 characters.';
-                break;
-            case 'email':
-                if (value === '') errorMessage = 'Email is required.';
-                else if (!/^\S+@\S+\.\S+$/.test(value)) errorMessage = 'Please enter a valid email address.';
-                break;
-            case 'mobile':
-                if (value === '') errorMessage = 'Mobile number is required.';
-                else if (!/^\d{10}$/.test(value)) errorMessage = 'Please enter a valid 10-digit mobile number.';
-                break;
-            case 'password':
-                if (value === '') errorMessage = 'Password is required.';
-                else if (value.length < 8) errorMessage = 'Password must be at least 8 characters long.';
-                break;
-            case 'confirm-password':
-                const password = document.getElementById('password').value;
-                if (value === '') errorMessage = 'Please confirm your password.';
-                else if (value !== password) errorMessage = 'Passwords do not match.';
-                break;
-            case 'gender':
-            case 'dob':
-            case 'account-type':
-                if (value === '') errorMessage = 'This field is required.';
-                break;
-        }
-
-        if (errorMessage) {
-            showError(input, errorMessage);
-            return false;
-        } else {
-            clearError(input);
-            return true;
-        }
-    }
-
-    // --- HELPER FUNCTIONS ---
-    function showError(input, message) {
-        input.classList.add('is-invalid');
-        input.setAttribute('aria-invalid', 'true');
-        const errorContainer = document.getElementById(`${input.id}-error`);
-        errorContainer.textContent = message;
-    }
-
-    function clearError(input) {
-        input.classList.remove('is-invalid');
-        input.setAttribute('aria-invalid', 'false');
-        const errorContainer = document.getElementById(`${input.id}-error`);
-        errorContainer.textContent = '';
-    }
 });
 </script>
 {% endblock %}
-

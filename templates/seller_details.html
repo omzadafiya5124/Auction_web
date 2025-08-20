@@ -1,18 +1,18 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{seller_details}}{%endblock%}
+{% block title%}Seller Details{%endblock%}
 
 {% block content %}
     <!-- Start Breadcrumb section -->
-    <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="banner-content">
                         <h1>Seller Details</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                           <li><a href="{% url 'home' %}">Home</a></li>
                             <li>Seller Details</li>
                         </ul>
                     </div>
@@ -265,7 +265,7 @@
                 <h5 class="widget-title">Highest Bidding</h5>
                 <div class="highest-bidding-widget mb-20">
                     <div class="highest-bidding-img">
-                        <a href="auction-details.html"><img src="../assets/img/inner-pages/highest-bidding-img1.jpg" alt=""></a>
+                        <a href="auction-details.html"><img src="{% static 'assets/img/inner-pages/highest-bidding-img1.jpg' %}" alt=""></a>
                     </div>
                     <div class="highest-bidding-content">
                         <h6><a href="auction-details.html">Poutsicle Hydratingani Stain offering.</a></h6>
@@ -277,7 +277,7 @@
                 </div>
                 <div class="highest-bidding-widget mb-20">
                     <div class="highest-bidding-img">
-                        <a href="auction-details.html"><img src="../assets/img/inner-pages/highest-bidding-img2.jpg" alt=""></a>
+                        <a href="auction-details.html"><img src="{% static 'assets/img/inner-pages/highest-bidding-img2.jpg' %}" alt=""></a>
                     </div>
                     <div class="highest-bidding-content">
                         <h6><a href="auction-details.html">Heritage Had Curating Watch.</a></h6>
@@ -289,7 +289,7 @@
                 </div>
                 <div class="highest-bidding-widget">
                     <div class="highest-bidding-img">
-                        <a href="auction-details.html"><img src="../assets/img/inner-pages/highest-bidding-img3.jpg" alt=""></a>
+                        <a href="auction-details.html"><img src="{% static 'assets/img/inner-pages/highest-bidding-img3.jpg' %}" alt=""></a>
                     </div>
                     <div class="highest-bidding-content">
                         <h6><a href="auction-details.html">Art decorat bronze sculpture.</a></h6>
@@ -306,7 +306,7 @@
         <div class="container">
            <div class="store-details-profile-area mb-70">
                 <div class="store-details-profile-cover-photo">
-                    <img src="../assets/img/inner-pages/store-details-profile-cover-img1.jpg" alt="">
+                    <img src="{% static 'assets/img/inner-pages/store-details-profile-cover-img1.jpg' %}" alt="">
                 </div>
                 <div class="profile-info-wrap">
                     <div class="row g-3 align-items-center">
@@ -328,7 +328,7 @@
                         <div class="col-lg-4 d-flex justify-content-lg-center order-lg-2 order-1">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-details-profile-img1.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-details-profile-img1.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h3>Alexander Owen</h3>
@@ -431,7 +431,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img1.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img1.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -497,7 +497,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img2.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img2.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -563,7 +563,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img4.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img4.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="upcoming">
@@ -631,7 +631,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img5.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img5.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -697,7 +697,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img8.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img8.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -763,7 +763,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img6.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img6.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -829,7 +829,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img3.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img3.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="upcoming">
@@ -897,7 +897,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img10.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img10.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -963,7 +963,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img9.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img9.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="upcoming">
@@ -1031,7 +1031,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img7.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img7.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">
@@ -1097,7 +1097,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img12.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img12.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="upcoming">
@@ -1165,7 +1165,7 @@
                     <div class="auction-card style-7">
                         <div class="auction-card-img-wrap">
                             <a href="auction-details.html" class="card-img">
-                                <img src="../assets/img/home1/auction-img11.jpg" alt="">
+                                <img src="{% static 'assets/img/home1/auction-img11.jpg' %}" alt="">
                             </a>
                             <div class="batch">
                                 <span class="live">

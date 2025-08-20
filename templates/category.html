@@ -1,18 +1,18 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{category}}{%endblock%}
+{% block title%}Category{%endblock%}
 
 {% block content %}
     <!-- Start Breadcrumb section -->
-    <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="banner-content">
                         <h1>Category</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li>Category</li>
                         </ul>
                     </div>
@@ -29,7 +29,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="200ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon1.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon1.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -37,7 +37,7 @@
                                 <span>45,533 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img1.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img1.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon2.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon2.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -53,7 +53,7 @@
                                 <span>43,856 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img2.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img2.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="400ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon3.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon3.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -69,7 +69,7 @@
                                 <span>48,258 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img3.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img3.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="500ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon4.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon4.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -85,7 +85,7 @@
                                 <span>46,156 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img4.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img4.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="600ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon5.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon5.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -101,7 +101,7 @@
                                 <span>41,546 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img5.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img5.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="700ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon6.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon6.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -117,7 +117,7 @@
                                 <span>45,489 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img6.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img6.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="800ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon7.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon7.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -133,7 +133,7 @@
                                 <span>45,890 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img7.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img7.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="800ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon8.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon8.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -149,7 +149,7 @@
                                 <span>41,255 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img8.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img8.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="700ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon9.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon9.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -165,7 +165,7 @@
                                 <span>41,589 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img9.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img9.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="600ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon10.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon10.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -181,7 +181,7 @@
                                 <span>43,658 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img10.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img10.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="500ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon11.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon11.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -197,7 +197,7 @@
                                 <span>43,898 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img11.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img11.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="400ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon12.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon12.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -213,7 +213,7 @@
                                 <span>44,784 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img12.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img12.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
                 <div class="col wow animate fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="../assets/img/home7/icon/home7-category-icon13.svg" alt="">
+                            <img src="{% static 'assets/img/home7/icon/home7-category-icon13.svg' %}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
@@ -229,7 +229,7 @@
                                 <span>46,258 Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="../assets/img/home7/home7-category-img13.jpg" alt="">
+                                <img src="{% static 'assets/img/home7/home7-category-img13.jpg' %}" alt="">
                             </div>
                         </div>
                     </div>

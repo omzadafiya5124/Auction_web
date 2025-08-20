@@ -1,18 +1,18 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{how_to_bid}}{%endblock%}
+{% block title%}How to Bid{%endblock%}
 
 {% block content %}
     <!-- Start Breadcrumb section -->
-    <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="banner-content">
                         <h1>How to Bid</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                           <li><a href="{% url 'home' %}">Home</a></li>
                             <li>How to Bid</li>
                         </ul>
                     </div>
@@ -109,7 +109,7 @@
             <div class="video-tutorial-area">
                 <h2>Guidelines For Biding</h2>
                 <div class="video-wrapper">
-                    <img src="../assets/img/inner-pages/how-to-sell-video-img.jpg" alt="">
+                    <img src="{% static 'assets/img/inner-pages/how-to-sell-video-img.jpg' %}" alt="">
                     <a href="https://www.youtube.com/watch?v=nInHvH6X7zM" class="video-area video-player">
                         <div class="icon">
                             <svg class="video-circle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="65px" viewBox="0 0 206 206" style="enable-background:new 0 0 206 206;" xml:space="preserve">

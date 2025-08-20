@@ -1,9 +1,26 @@
 {% extends "header_footer.html" %}
 {% load static %}
     <!-- End Breadcrumb section -->
-{% block title%}{{about}}{%endblock%}
+{% block title%}About Us{%endblock%}
     <!-- Start About Page -->
 {% block content%}
+  <!-- Start Breadcrumb section -->
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="banner-content">
+                        <h1>About Us</h1>
+                        <ul class="breadcrumb-list">
+                            <li><a href="{% url 'home'%}">Home</a></li>
+                            <li>About Us</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumb section -->
     <div class="home5-about-section pt-110 mb-110">
         <div class="container">
             <div class="row align-items-center">
@@ -91,7 +108,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="about-img wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
-                        <img src="../assets/img/home5/home5-about-img.png" alt="">
+                        <img src="{% static 'assets/img/home5/home5-about-img.png' %}" alt="">
                         <div class="counter-wrap">
                             <div class="icon">
                                 <svg width="40" height="40" viewBox="0 0 31 35"
@@ -123,7 +140,7 @@
                 <div class="row g-xxl-4 g-lg-3 gy-4">
                     <div class="col-xxl-6 col-xl-5">
                         <div class="about-top-img">
-                            <img src="../assets/img/home1/home1-about-img1.jpg" alt="">
+                            <img src="{% static 'assets/img/home1/home1-about-img1.jpg' %}" alt="">
                         </div>
                     </div>
                     <div class="col-xxl-6 col-xl-7">
@@ -276,7 +293,7 @@
                     </div>
                     <div class="col-xxl-6 col-xl-7 order-xl-2 order-1">
                         <div class="about-bottom-img">
-                            <img src="../assets/img/home1/home1-about-img2.jpg" alt="">
+                            <img src="{% static 'assets/img/home1/home1-about-img2.jpg' %}" alt="">
                         </div>
                     </div>
                 </div>
@@ -620,7 +637,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img1.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img1.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -648,7 +665,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img2.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img2.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -676,7 +693,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img3.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img3.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -704,7 +721,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img4.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img4.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -732,7 +749,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img5.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img5.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -760,7 +777,7 @@
                                         <div class="author-area">
                                             <div class="author-img-wrap">
                                                 <div class="author-img">
-                                                    <img src="../assets/img/home2/testi-author-img6.png" alt="">
+                                                    <img src="{% static 'assets/img/home2/testi-author-img6.png' %}" alt="">
                                                 </div>
                                             </div>
                                             <div class="author-content">
@@ -825,7 +842,7 @@
                                     <h4><a href="blog-details.html">Collectibles, collectibles art, and uncover fascinating.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img1.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img1.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">
@@ -854,7 +871,7 @@
                                     <h4><a href="blog-details.html">Exploring the hrils tales and trends in the world.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img2.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img2.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">
@@ -883,7 +900,7 @@
                                     <h4><a href="blog-details.html">Bidding Chronicles Unveiling Behind Stories.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img3.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img3.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">
@@ -912,7 +929,7 @@
                                     <h4><a href="blog-details.html">Bid Better Tips a Successful Auctions with grow.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img4.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img4.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">
@@ -941,7 +958,7 @@
                                     <h4><a href="blog-details.html">Page Turners & Price Bider Inside the World of Book.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img5.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img5.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">
@@ -970,7 +987,7 @@
                                     <h4><a href="blog-details.html">From Shelf Gavels Stories Behind Rare Book Auctions.</a></h4>
                                     <div class="blog-card-img-wrap">
                                         <a href="blog-details.html" class="card-img">
-                                            <img src="../assets/img/home7/blog-img6.jpg" alt="">
+                                            <img src="{% static 'assets/img/home7/blog-img6.jpg' %}" alt="">
                                         </a>
                                         <div class="batch">
                                             <a href="blog-grid.html" class="date">

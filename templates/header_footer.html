@@ -135,7 +135,6 @@
                                 </li>
                                 <li><a href="{% url "how-to-sell" %}">How To Sell</a></li>
                                 <li><a href="{% url "how-to-bid" %}">How to Bid</a></li>
-                                <li><a href="#">Dashbaord</a></li>
                                 <li><a href="{% url "faqs" %}">Faqs</a></li>
                                 <li><a href="{% url "error" %}">Error</a></li>
                             </ul>
@@ -162,18 +161,18 @@
                         <!-- This will now be a dropdown on mobile as well -->
                         <div class="user-menu-container mobile-user-menu">
                             <a href="#" class="login-btn btn-hover">
-                                <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
                                 {{ user.username }}
                                 <i class="bi bi-chevron-down"></i> <!-- Add a dropdown arrow icon -->
                             </a>
                             <ul class="user-dropdown-menu">
                                 <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
+                                 <li><a href="{% url 'dashboard' %}">My Profile</a></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </div>
                     {% else %}
                         <a href="{% url 'login' %}" class="login-btn btn-hover">
-                            <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                            <i class="bi bi-person-fill"></i>
                             My Account
                         </a>
                     {% endif %}
@@ -223,19 +222,19 @@
                     <!-- This is the new hover dropdown for desktop -->
                     <div class="user-menu-container">
                         <a href="#" class="login-btn btn-hover">
-                            <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
                             {{ user.username }}
                             <i class="bi bi-chevron-down" style="margin-left: 5px;"></i> <!-- Dropdown arrow -->
                         </a>
                         <ul class="user-dropdown-menu">
                             <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
+                              <li><a href="{% url 'dashboard' %}">My Profile</a></li>
                             <li><a href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                     </div>
                 {% else %}
                     <!-- This part for logged-out users remains the same -->
                     <a href="{% url 'login' %}" class="login-btn btn-hover">
-                        <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg"><path d="..."></path></svg>
+                        <i class="bi bi-person-fill"></i>
                         My Account
                     </a>
                 {% endif %}
@@ -339,7 +338,7 @@
                                         <li><a href="faq.html">FAQ Probid</a></li>
                                         <li><a href="contact.html">Contact Us</a></li>
                                         <li><a href="terms-condition.html">Terms of Service</a></li>
-                                        <li><a href="privacy-policy.html">Our Policy</a></li>
+                                        <li><a href="{% url 'privacy_policy' %}">Our Policy</a></li>
                                         <li><a href="#">Sell Support</a></li>
                                     </ul>
                                 </div>
@@ -371,13 +370,13 @@
                 </div>
                 <div class="footer-bottom">
                     <div class="copyright-area">
-                        <p>©Copyright 2024 <a href="index.html">Probid</a> | Design By <a href="https://www.egenslab.com/">Egens Lab</a></p>   
+                        <p>©Copyright 2025 <a href="index.html">Bolibazar</a> | Design By <a href="https://www.egenslab.com/">TheOSDLegacy</a></p>   
                     </div>
                     <div class="footer-bottom-right">
                         <ul>
                             <li><a href="support-center.html">Support Center</a></li>
                             <li><a href="terms-condition.html">Terms & Conditions</a></li>
-                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                            <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
                         </ul>
                     </div>
                 </div>

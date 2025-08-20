@@ -2,7 +2,110 @@
 {% block title %}Verify Email{% endblock %}
 
 {% block extra_css %}
-<style>/* Use login form styles */</style>
+<style>
+    /* ===============================
+   OTP Page Container
+   =============================== */
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 100px 20px;
+}
+
+/* ===============================
+   OTP Form Wrapper
+   =============================== */
+.login-form-wrapper {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+/* Headings */
+.login-form-wrapper h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.login-form-wrapper p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* ===============================
+   OTP Input
+   =============================== */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    letter-spacing: 3px; /* OTP style */
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.form-group input:focus {
+    border-color: #c49a6c;
+    box-shadow: 0 0 0 3px rgba(196, 154, 108, 0.2);
+}
+
+/* ===============================
+   Submit Button
+   =============================== */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #c49a6c, #b8895a);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #b8895a, #a67747);
+}
+
+/* ===============================
+   Animations
+   =============================== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 {% endblock %}
 
 {% block content %}

@@ -1,9 +1,26 @@
  {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{blog}}{%endblock%}
+{% block title%}Blog{%endblock%}
 
 {%block content%}
+<!-- Start Breadcrumb section -->
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="banner-content">
+                        <h1>Blog's</h1>
+                        <ul class="breadcrumb-list">
+                          <li><a href="{% url 'home' %}">Home</a></li>
+                            <li>Blog's</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumb section -->
     <!-- Start Blog Standard section -->
     <div class="blog-standard-page pt-110 mb-110">
         <div class="container">
@@ -14,7 +31,7 @@
                             <div class="blog-card">
                                 <div class="blog-card-img-wrap">
                                     <a href="blog-details.html" class="card-img">
-                                        <img src="../assets/img/inner-pages/blog-st-img1.jpg" alt="">
+                                        <img src="{% static 'assets/img/inner-pages/blog-st-img1.jpg' %}" alt="">
                                     </a>
                                     <div class="batch">
                                         <a href="blog-grid.html" class="date">
@@ -46,7 +63,7 @@
                             <div class="blog-card">
                                 <div class="blog-card-img-wrap">
                                     <a href="blog-details.html" class="card-img">
-                                        <img src="../assets/img/inner-pages/blog-st-img2.jpg" alt="">
+                                        <img src="{% static 'assets/img/inner-pages/blog-st-img2.jpg' %}" alt="">
                                     </a>
                                     <div class="batch">
                                         <a href="blog-grid.html" class="date">
@@ -78,7 +95,7 @@
                             <div class="blog-card">
                                 <div class="blog-card-img-wrap">
                                     <a href="blog-details.html" class="card-img">
-                                        <img src="../assets/img/inner-pages/blog-st-img3.jpg" alt="">
+                                        <img src="{% static 'assets/img/inner-pages/blog-st-img3.jpg' %}" alt="">
                                     </a>
                                     <div class="batch">
                                         <a href="blog-grid.html" class="date">
@@ -195,7 +212,7 @@
                             <h5 class="widget-title">Popular Post</h5>
                             <div class="recent-post-widget mb-20">
                                 <div class="recent-post-img">
-                                    <a href="blog-details.html"><img src="../assets/img/inner-pages/popular-post-img1.jpg" alt=""></a>
+                                    <a href="blog-details.html"><img src="{% static 'assets/img/inner-pages/popular-post-img1.jpg' %}" alt=""></a>
                                 </div>
                                 <div class="recent-post-content">
                                     <a href="blog-grid.html">20 February, 2024</a>
@@ -204,7 +221,7 @@
                             </div>
                             <div class="recent-post-widget mb-20">
                                 <div class="recent-post-img">
-                                    <a href="blog-details.html"><img src="../assets/img/inner-pages/popular-post-img2.jpg" alt=""></a>
+                                    <a href="blog-details.html"><img src="{% static 'assets/img/inner-pages/popular-post-img2.jpg' %}" alt=""></a>
                                 </div>
                                 <div class="recent-post-content">
                                     <a href="blog-grid.html">12 January, 2024</a>
@@ -213,7 +230,7 @@
                             </div>
                             <div class="recent-post-widget mb-20">
                                 <div class="recent-post-img">
-                                    <a href="blog-details.html"><img src="../assets/img/inner-pages/popular-post-img3.jpg" alt=""></a>
+                                    <a href="blog-details.html"><img src="{% static 'assets/img/inner-pages/popular-post-img3.jpg' %}" alt=""></a>
                                 </div>
                                 <div class="recent-post-content">
                                     <a href="blog-grid.html">04 January, 2024</a>

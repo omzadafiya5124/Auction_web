@@ -1,18 +1,18 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{contact}}{%endblock%}
+{% block title%}Contact{%endblock%}
 
 {% block content %}
     <!-- Start Breadcrumb section -->
-    <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="banner-content">
                         <h1>Contact Us</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li>Contact Us</li>
                         </ul>
                     </div>

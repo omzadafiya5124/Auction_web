@@ -1,9 +1,28 @@
  {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{auc_details}}{%endblock%}
+{% block title%}Auction Details{%endblock%}
+
     <!-- Start Auction Details section -->
      {% block content %}
+
+     <!-- Start Breadcrumb section -->
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="banner-content">
+                        <h1>Auction Details</h1>
+                        <ul class="breadcrumb-list">
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li>Auction Details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumb section -->
     <div class="auction-details-section pt-110 mb-110">
         <div class="container-fluid">
             <div class="row gy-5">
@@ -12,30 +31,30 @@
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-img1" role="tabpanel">
                                 <div class="auction-details-tab-img">
-                                    <img src="../assets/img/inner-pages/auction-details-img1.jpg" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/auction-details-img1.jpg' %}" alt="">
                                 </div> 
                             </div>
                             <div class="tab-pane fade" id="v-pills-img2" role="tabpanel">
                                 <div class="auction-details-tab-img">
-                                    <img src="../assets/img/inner-pages/auction-details-img2.jpg" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/auction-details-img2.jpg' %}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="v-pills-img3" role="tabpanel"
                                 aria-labelledby="v-pills-img3-tab">
                                 <div class="auction-details-tab-img">
-                                    <img src="../assets/img/inner-pages/auction-details-img3.jpg" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/auction-details-img3.jpg' %}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="v-pills-img4" role="tabpanel"
                                 aria-labelledby="v-pills-img4-tab">
                                 <div class="auction-details-tab-img">
-                                    <img src="../assets/img/inner-pages/auction-details-img4.jpg" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/auction-details-img4.jpg' %}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="v-pills-img5" role="tabpanel"
                             aria-labelledby="v-pills-img5-tab">
                                 <div class="auction-details-tab-img">
-                                    <img src="../assets/img/inner-pages/auction-details-img5.jpg" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/auction-details-img5.jpg' %}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -47,7 +66,7 @@
                                         <div class="nav-item" role="presentation">
                                             <button class="nav-link active" id="v-pills-img1-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-pills-img1" type="button" role="tab" aria-controls="v-pills-img1" aria-selected="true">
-                                                <img src="../assets/img/inner-pages/auction-details-img1.jpg" alt="">
+                                                <img src="{% static 'assets/img/inner-pages/auction-details-img1.jpg' %}" alt="">
                                             </button>
                                         </div>
                                     </div>
@@ -56,7 +75,7 @@
                                             <button class="nav-link" id="v-pills-img2-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-pills-img2" type="button" role="tab" aria-controls="v-pills-img2"
                                                 aria-selected="false">
-                                                <img src="../assets/img/inner-pages/auction-details-img2.jpg" alt="">
+                                                <img src="{% static 'assets/img/inner-pages/auction-details-img2.jpg' %}" alt="">
                                             </button>
                                         </div>
                                     </div>
@@ -65,7 +84,7 @@
                                             <button class="nav-link" id="v-pills-img3-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-pills-img3" type="button" role="tab" aria-controls="v-pills-img3"
                                                 aria-selected="false">
-                                                <img src="../assets/img/inner-pages/auction-details-img3.jpg" alt="">
+                                                <img src="{% static 'assets/img/inner-pages/auction-details-img3.jpg' %}" alt="">
                                             </button>
                                         </div>
                                     </div>
@@ -74,7 +93,7 @@
                                             <button class="nav-link" id="v-pills-img4-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-pills-img4" type="button" role="tab" aria-controls="v-pills-img4"
                                                 aria-selected="false">
-                                                <img src="../assets/img/inner-pages/auction-details-img4.jpg" alt="">
+                                                <img src="{% static 'assets/img/inner-pages/auction-details-img4.jpg' %}" alt="">
                                             </button>
                                         </div>
                                     </div>
@@ -83,7 +102,7 @@
                                             <button class="nav-link" id="v-pills-img5-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-pills-img5" type="button" role="tab" aria-controls="v-pills-img5"
                                                 aria-selected="false">
-                                                <img src="../assets/img/inner-pages/auction-details-img5.jpg" alt="">
+                                                <img src="{% static 'assets/img/inner-pages/auction-details-img5.jpg' %}" alt="">
                                             </button>
                                         </div>
                                     </div>
@@ -147,13 +166,13 @@
                         <div class="payment-method">
                             <h6>Guaranted Safe Checkout</h6>
                             <ul class="payment-card-list">
-                                <li><img src="../assets/img/inner-pages/payment-img1.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img2.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img3.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img4.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img5.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img6.svg" alt=""></li>
-                                <li><img src="../assets/img/inner-pages/payment-img7.svg" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img1.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img2.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img3.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img4.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img5.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img6.svg' %}" alt=""></li>
+                                <li><img src="{% static 'assets/img/inner-pages/payment-img7.svg' %}" alt=""></li>
                             </ul>
                         </div>
                         <ul class="question-and-wishlist-area">
@@ -307,7 +326,7 @@
                                                 <li>
                                                     <div class="single-comment-area">
                                                         <div class="author-img">
-                                                            <img src="../assets/img/inner-pages/comment-author-01.jpg" alt="">
+                                                            <img src="{% static 'assets/img/inner-pages/comment-author-01.jpg' %}" alt="">
                                                         </div>
                                                         <div class="comment-content">
                                                             <div class="author-and-review">
@@ -330,7 +349,7 @@
                                                 <li>
                                                     <div class="single-comment-area">
                                                         <div class="author-img">
-                                                            <img src="../assets/img/inner-pages/comment-author-02.jpg" alt="">
+                                                            <img src="{% static 'assets/img/inner-pages/comment-author-02.jpg' %}" alt="">
                                                         </div>
                                                         <div class="comment-content">
                                                             <div class="author-and-review">
@@ -353,7 +372,7 @@
                                                 <li>
                                                     <div class="single-comment-area">
                                                         <div class="author-img">
-                                                            <img src="../assets/img/inner-pages/comment-author-03.jpg" alt="">
+                                                            <img src="{% static 'assets/img/inner-pages/comment-author-03.jpg' %}" alt="">
                                                         </div>
                                                         <div class="comment-content">
                                                             <div class="author-and-review">
@@ -473,7 +492,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home2/auction-img1.html" alt="">
+                                                <img src="{% static 'assets/img/home2/auction-img1.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="live">
@@ -539,7 +558,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home2/auction-img2.html" alt="">
+                                                <img src="{% static 'assets/img/home2/auction-img2.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="live">
@@ -605,7 +624,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home2/auction-img3.html" alt="">
+                                                <img src="{% static 'assets/img/home2/auction-img3.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="upcoming">
@@ -673,7 +692,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home2/auction-img4.html" alt="">
+                                                <img src="{% static 'assets/img/home2/auction-img4.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="live">
@@ -739,7 +758,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home1/auction-img1.html" alt="">
+                                                <img src="{% static 'assets/img/home1/auction-img1.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="live">
@@ -805,7 +824,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home1/auction-img8.html" alt="">
+                                                <img src="{% static 'assets/img/home1/auction-img8.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="upcoming">
@@ -873,7 +892,7 @@
                                     <div class="auction-card style-7">
                                         <div class="auction-card-img-wrap">
                                             <a href="auction-details.html" class="card-img">
-                                                <img src="../../assets/img/home2/auction-img5.html" alt="">
+                                                <img src="{% static 'assets/img/home2/auction-img5.jpg' %}" alt="">
                                             </a>
                                             <div class="batch">
                                                 <span class="live">

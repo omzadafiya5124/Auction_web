@@ -1,7 +1,7 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{error}}{%endblock%}
+{% block title%}Error{%endblock%}
 
 {% block content %}
     <!-- Start Error Page -->
@@ -10,12 +10,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="error-wrap">
-                        <img src="../assets/img/inner-pages/error-img.png" alt="">
+                        <img src="{% static 'assets/img/inner-pages/error-img.png' %}" alt="">
                         <div class="error-content">
                             <h1>Sorry! We Can't Find That Page.</h1>
                             <p>The page you are looking for was moved, removed, renamed or never existed.</p>
                             <div class="back-btn d-flex justify-content-center">
-                                <a class="primary-btn btn-hover" href="index.html">
+                                <a class="primary-btn btn-hover" href="{%url 'home'%}">
                                     Go home
                                     <span></span>
                                 </a>

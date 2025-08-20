@@ -28,4 +28,5 @@ urlpatterns = [
     path('privacy-policy/',views.privacy_policy, name="privacy_policy"), 
     path('support-center/',views.support_center, name="support_center"), 
     path('terms-condition/',views.terms_condition, name="terms_condition"),
+    path('dashboard/',views.dash_board, name="dashboard"),
 ]

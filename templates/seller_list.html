@@ -1,19 +1,19 @@
 {% extends "header_footer.html" %}
  {% load static %}
 
-{% block title%}{{seller}}{%endblock%}
+{% block title%}Seller{%endblock%}
 
 {% block content %}
 
     <!-- Start Breadcrumb section -->
-    <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
+    <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="banner-content">
                         <h1>Seller List</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li>Seller List</li>
                         </ul>
                     </div>
@@ -42,12 +42,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img1.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img1.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img1.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img1.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Sebastian Daniel</a></h5>
@@ -98,12 +98,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img2.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img2.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img2.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img2.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Jack Michael</a></h5>
@@ -154,12 +154,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img3.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img3.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img3.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img3.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Alexander Owen</a></h5>
@@ -210,12 +210,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img4.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img4.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img4.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img4.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Asher Samuel</a></h5>
@@ -266,12 +266,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img5.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img5.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img5.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img5.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Jackson Mason</a></h5>
@@ -322,12 +322,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img6.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img6.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img6.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img6.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">John Hudson</a></h5>
@@ -378,12 +378,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img7.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img7.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img7.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img7.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Joseph David</a></h5>
@@ -434,12 +434,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img8.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img8.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img8.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img8.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Julian Gabriel</a></h5>
@@ -490,12 +490,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img9.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img9.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img9.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img9.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Matthew Maverik</a></h5>
@@ -546,12 +546,12 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="store-card">
                         <div class="store-card-cover-photo">
-                            <img src="../assets/img/inner-pages/store-card-cover-img10.jpg" alt="">
+                            <img src="{% static 'assets/img/inner-pages/store-card-cover-img10.jpg' %}" alt="">
                         </div>
                         <div class="store-card-content">
                             <div class="profile-area">
                                 <div class="profile-img">
-                                    <img src="../assets/img/inner-pages/store-profile-img10.png" alt="">
+                                    <img src="{% static 'assets/img/inner-pages/store-profile-img10.png' %}" alt="">
                                 </div>
                                 <div class="profile-content">
                                     <h5><a href="store-details.html">Anthony Thomas</a></h5>
