@@ -1,254 +1,298 @@
 {% extends "header_footer.html" %}
 {% load static %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Create Your Account{% endblock %}
 
 {% block extra_css %}
+<!-- Font Awesome for checkmark icon, optional -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <style>
-/* --- Base & Theming --- */
-:root {
-    --primary-green: #79a206;
-    --primary-green-dark: #688e05;
-    --error-red: #dc3545;
-    --background-beige-light: #fcfaf6;
-    --background-beige-dark: #fef8f0;
-    --text-dark: #333;
-    --text-light: #555;
-    --border-color: #ccc;
-    --border-focus-color: #79a206;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    margin: 0;
-    background-color: var(--background-beige-light);
-    color: var(--text-dark);
-}
-
-/* --- Layout --- */
-.page-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5rem 1.25rem;
-    min-height: 100vh;
-    box-sizing: border-box;
-}
-
-.form-wrapper {
-    background-color: var(--background-beige-dark);
-    padding: 2.5rem;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 650px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* --- Typography --- */
-.form-wrapper h2 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1.8rem;
-    text-align: center;
-}
-
-.form-wrapper p {
-    color: var(--text-light);
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-/* --- Form Elements --- */
-.form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-}
-
-.form-group {
-    margin-bottom: 1.25rem;
-    text-align: left;
-    flex: 1 1 100%;
-}
-
-@media (min-width: 576px) {
-    .form-row .form-group {
-        flex: 1 1 45%;
+    /* --- Base & Theming (No body styles) --- */
+    :root {
+        --primary-green: #79a206;
+        --primary-green-dark: #688e05;
+        --primary-green-glow: rgba(121, 162, 6, 0.2);
+        --completed-green: #4caf50;
+        --light-gray: #e0e0e0;
+        --medium-gray: #bdbdbd;
+        --dark-gray: #6c757d;
+        --error-red: #dc3545;
+        --text-dark: #333;
     }
-}
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
+    /* --- Page Container for Centering --- */
+    .register-page-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 5rem 1rem;
+        box-sizing: border-box;
+        width: 100%;
+        background-color: #fcfaf6;
+    }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
+    /* --- Form Wrapper --- */
+    .form-wrapper {
+        background-color: #ffffff;
+        padding: 2rem 2.5rem 2.5rem;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 750px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+    }
+    /* --- Form Wrapper --- */
+        .form-wrapper {
+            width: 100%;
+            max-width: 800px;
+        }
 
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--border-focus-color);
-    box-shadow: 0 0 0 3px rgba(121, 162, 6, 0.2);
-}
+        /* --- NEW: Form Header & Progress Bar --- */
+        .form-header {
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .progress-bar {
+            position: relative;
+            width: 80%; /* Narrows the progress bar */
+            margin: 0 auto; /* Centers it */
+        }
+        /* The thin gray line */
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 2px;
+            width: 100%;
+            background-color: var(--light-gray);
+        }
+        /* Container for the steps that sits on top of the line */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative; /* Sits on top of the line */
+        }
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .step-indicator {
+            width: 30px; /* Default small size */
+            height: 30px;
+            border-radius: 50%;
+            background-color: #fff; /* Key: white background to hide the line */
+            border: 2px solid var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--medium-gray);
+            transition: all 0.4s ease;
+        }
+        .step-label {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--medium-gray);
+            transition: color 0.4s ease;
+        }
+        /* Step States */
+        .step.active .step-indicator {
+            width: 45px; /* Larger size for active step */
+            height: 45px;
+            border-color: var(--primary-green);
+            border-width: 3px;
+            color: var(--primary-green);
+        }
+        .step.active .step-label {
+            color: var(--primary-green);
+        }
+        .step.completed .step-indicator {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: #fff;
+        }
+        .step.completed .step-label {
+            color: var(--text-dark);
+        }
+    
+    /* --- Form Body & Steps --- */
+    .form-body { overflow: hidden; }
+    .form-step { display: none; }
+    .form-step.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
 
-/* Password wrapper */
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
+    /* --- CSS Grid for Perfect Columns --- */
+    .grid-layout {
+        display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+    }
+    @media (min-width: 600px) {
+        .grid-layout { grid-template-columns: 1fr 1fr; }
+    }
+    .grid-col-span-2 { grid-column: 1 / -1; }
 
-.password-wrapper input {
-    width: 100%;
-    padding-right: 40px;
-}
+    /* --- Form Elements Styling --- */
+    .form-group {
+        opacity: 0; transform: translateY(20px);
+    }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+    .form-group input, .form-group select {
+        width: 100%; padding: 0 1rem; border: 1px solid #d1d1d1;
+        border-radius: 8px; font-size: 1rem; background-color: #f9f9f9;
+        box-sizing: border-box; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        height: 52px; -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    }
+    .form-group select {
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+        background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.7em auto;
+        padding-right: 3rem;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: none; border-color: var(--primary-green);
+        box-shadow: 0 0 0 3px var(--primary-green-glow);
+    }
+    .password-wrapper { position: relative; }
+    .password-wrapper input { padding-right: 45px; }
+    .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; }
+    .error-message { color: var(--error-red); font-size: 0.85rem; margin-top: 0.4rem; }
+    .is-invalid { border-color: var(--error-red) !important; }
 
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    user-select: none;
-    color: #888;
-    transition: color 0.3s;
-}
-
-.toggle-password:hover {
-    color: var(--primary-green);
-}
-
-/* Submit Button */
-.submit-btn {
-    width: 100%;
-    padding: 0.9rem;
-    background-color: var(--primary-green);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 1rem;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.submit-btn:hover, .submit-btn:focus {
-    background-color: var(--primary-green-dark);
-}
-
-/* Footer */
-.form-footer {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    text-align: center;
-}
-
-.form-footer a {
-    color: var(--text-light);
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.form-footer a:hover {
-    text-decoration: underline;
-}
-
-/* --- Error Handling --- */
-.error-message {
-    color: var(--error-red);
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-    min-height: 1rem;
-}
-.is-invalid {
-    border-color: var(--error-red);
-}
+    /* --- Buttons & Footer --- */
+    .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+    .btn {
+        flex-grow: 1; padding: 1rem; border: none; border-radius: 8px;
+        cursor: pointer; font-size: 1.1rem; font-weight: bold;
+        transition: all 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 7px 20px rgba(0,0,0,0.1); }
+    .btn-next { background-image: linear-gradient(to right, #8cb81a, #688e05); color: white; }
+    .btn-prev { background-color: #f0f0f0; color: var(--dark-gray); }
+    .form-footer { margin-top: 2rem; text-align: center; }
+    .form-footer a { color: var(--primary-green); font-weight: 600; text-decoration: none; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="page-container">
+<div class="register-page-container">
     <div class="form-wrapper">
-        <h2>Create Your Account</h2>
-        <p>Join our community of bidders and sellers.</p>
-        
-        <form method="post" id="register-form" action="{% url 'register' %}">
-            {% csrf_token %}
-            
-            {% if form.non_field_errors %}
-                <div class="error-message" style="text-align:center;">{{ form.non_field_errors.0 }}</div>
-            {% endif %}
-
-            <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">User Name</label>
-                {{ form.username }}
-                <div class="error-message">{{ form.username.errors.0 }}</div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.email.id_for_label }}">Email Address</label>
-                    {{ form.email }}
-                    <div class="error-message">{{ form.email.errors.0 }}</div>
+        <!-- Form Header with Horizontal Progress Bar -->
+        <div class="form-header">
+        <div class="progress-bar">
+            <div class="progress-line"></div>
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-indicator">1</div>
+                    <div class="step-label">Personal</div>
                 </div>
-                <div class="form-group">
-                    <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
-                    {{ form.mobile_number }}
-                    <div class="error-message">{{ form.mobile_number.errors.0 }}</div>
+                <div class="step" data-step="2">
+                    <div class="step-indicator">2</div>
+                    <div class="step-label">Verify</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-indicator">3</div>
+                    <div class="step-label">Account</div>
                 </div>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.password.id_for_label }}">Password</label>
-                    <div class="password-wrapper">
-                        {{ form.password }}
-                        <span class="toggle-password" data-target="{{ form.password.id_for_label }}">👁</span>
+        </div>
+    </div>
+        <!-- Form Body -->
+        <div class="form-body">
+            <form method="post" id="register-form" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="error-message" style="text-align: center; margin-bottom: 1rem;">
+                        {{ form.non_field_errors.0 }}
                     </div>
-                    <div class="error-message">{{ form.password.errors.0 }}</div>
-                </div>
+                {% endif %}
 
-                <div class="form-group">
-                    <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
-                    <div class="password-wrapper">
-                        {{ form.confirm_password }}
-                        <span class="toggle-password" data-target="{{ form.confirm_password.id_for_label }}">👁</span>
+                <!-- Step 1: Personal Details -->
+                <div class="form-step active" id="step-1">
+                    <div class="grid-layout">
+                        <div class="form-group grid-col-span-2">
+                            <label for="{{ form.username.id_for_label }}">User Name</label>
+                            {{ form.username }}
+                            <div class="error-message">{{ form.username.errors.0 }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Email Address</label>
+                            {{ form.email }}
+                            <div class="error-message">{{ form.email.errors.0 }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
+                            {{ form.mobile_number }}
+                            <div class="error-message">{{ form.mobile_number.errors.0 }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
+                            {{ form.date_of_birth }}
+                            <div class="error-message">{{ form.date_of_birth.errors.0 }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.gender.id_for_label }}">Gender</label>
+                            {{ form.gender }}
+                            <div class="error-message">{{ form.gender.errors.0 }}</div>
+                        </div>
+                        <div class="form-group grid-col-span-2">
+                            <label for="{{ form.account_type.id_for_label }}">I want to:</label>
+                            {{ form.account_type }}
+                            <div class="error-message">{{ form.account_type.errors.0 }}</div>
+                        </div>
                     </div>
-                    <div class="error-message">{{ form.confirm_password.errors.0 }}</div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-next">Next</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="{{ form.gender.id_for_label }}">Gender</label>
-                    {{ form.gender }}
-                    <div class="error-message">{{ form.gender.errors.0 }}</div>
+                <!-- Step 2: OTP Verification -->
+                <div class="form-step" id="step-2">
+                    <div class="grid-layout">
+                        <div class="form-group grid-col-span-2">
+                            <p style="text-align: center; color: var(--text-light); margin-bottom: 1rem;">An OTP has been sent to your email. Please enter it below.</p>
+                            <label for="otp">Enter 6-Digit OTP</label>
+                            <input type="text" name="otp" required maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+                        </div>
+                    </div>  
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-prev">Previous</button>
+                        <button type="button" class="btn btn-next">Verify Account</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
-                    {{ form.date_of_birth }}
-                    <div class="error-message">{{ form.date_of_birth.errors.0 }}</div>
+
+                <!-- Step 3: Password -->
+                <div class="form-step" id="step-3">
+                    <div class="grid-layout">
+                        <div class="form-group">
+                            <label for="{{ form.password.id_for_label }}">Password</label>
+                            <div class="password-wrapper">
+                                {{ form.password }}
+                                <span class="toggle-password" data-target="{{ form.password.id_for_label }}">👁</span>
+                            </div>
+                             <div class="error-message">{{ form.password.errors.0 }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
+                            <div class="password-wrapper">
+                                {{ form.confirm_password }}
+                                <span class="toggle-password" data-target="{{ form.confirm_password.id_for_label }}">👁</span>
+                            </div>
+                            <div class="error-message">{{ form.confirm_password.errors.0 }}</div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-prev">Previous</button>
+                        <button type="submit" class="btn btn-next">Create Account</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="{{ form.account_type.id_for_label }}">I want to:</label>
-                {{ form.account_type }}
-                <div class="error-message">{{ form.account_type.errors.0 }}</div>
-            </div>
-
-            <button type="submit" class="submit-btn">Register</button>
-        </form>
+            </form>
+        </div>
 
         <div class="form-footer">
             <span>Already have an account? </span><a href="{% url 'login' %}">Log In</a>
@@ -260,15 +304,96 @@ body {
 {% block js %}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    const formSteps = document.querySelectorAll(".form-step");
+    const progressSteps = document.querySelectorAll(".step");
+    const progressLineActive = document.querySelector(".progress-line-active");
+    let currentStep = 0;
+
+    const updateProgressBar = () => {
+        progressSteps.forEach((step, index) => {
+            const indicator = step.querySelector('.step-indicator');
+            if (index < currentStep) {
+                step.classList.add("completed");
+                step.classList.remove("active");
+                indicator.innerHTML = '<i class="fas fa-check"></i>';
+            } else if (index === currentStep) {
+                step.classList.add("active");
+                step.classList.remove("completed");
+                indicator.innerText = index + 1;
+            } else {
+                step.classList.remove("active", "completed");
+                indicator.innerText = index + 1;
+            }
+        });
+        const progressPercentage = (currentStep / (progressSteps.length - 1)) * 100;
+        progressLineActive.style.width = `${progressPercentage}%`;
+    };
+
+    const animateStepFields = (stepElement) => {
+        stepElement.querySelectorAll('.form-group').forEach((group, index) => {
+            group.style.opacity = '0';
+            group.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                group.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                group.style.opacity = '1';
+                group.style.transform = 'translateY(0)';
+            }, 100 * (index + 1));
+        });
+    };
+
+    const showStep = (stepIndex) => {
+        formSteps.forEach((step, index) => {
+            step.classList.toggle('active', index === stepIndex);
+        });
+        if (formSteps[stepIndex]) {
+            animateStepFields(formSteps[stepIndex]);
+        }
+        updateProgressBar();
+    };
+
+    document.getElementById("register-form").addEventListener("click", e => {
+        if (e.target.matches(".btn-next")) {
+            if (currentStep < formSteps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        } else if (e.target.matches(".btn-prev")) {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+    });
+
     document.querySelectorAll(".toggle-password").forEach(icon => {
         icon.addEventListener("click", () => {
             const targetId = icon.getAttribute("data-target");
             const input = document.getElementById(targetId);
             if (input) {
-                input.type = input.type === "password" ? "text" : "password";
-                icon.textContent = input.type === "password" ? "👁" : "🙈";
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.textContent = "🙈";
+                } else {
+                    input.type = "password";
+                    icon.textContent = "👁";
+                }
             }
         });
+    });
+
+    showStep(currentStep);
+
+    const errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(msg => {
+        if (msg.textContent.trim() !== "") {
+            const formGroup = msg.closest('.form-group');
+            if (formGroup) {
+                const input = formGroup.querySelector('input, select');
+                if (input) {
+                    input.classList.add('is-invalid');
+                }
+            }
+        }
     });
 });
 </script>

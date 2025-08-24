@@ -30,7 +30,7 @@ def register_view(request):
             request.session['registration_otp'] = otp
             email = form.cleaned_data['email']
             send_mail(
-                'Verify your ProBid Account',
+                'Verify your Bolibazar Account',
                 f'Your OTP for registration is: {otp}',
                 settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False,
             )
