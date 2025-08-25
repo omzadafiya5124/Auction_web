@@ -12,6 +12,10 @@ urlpatterns = [
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
 
+    #required login 
+    path('start-bid/', views.start_a_bid_view, name='start_a_bid'), # The protected view
+
+
     # Other Page URLs
     path('about/', views.about, name="about"),
     path('auction/', views.auction, name="auction"),

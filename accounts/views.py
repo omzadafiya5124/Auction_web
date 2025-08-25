@@ -128,6 +128,17 @@ def password_reset_confirm_view(request):
     return render(request, 'password_reset_confirm.html', {'form': form})
 
 
+@login_required
+def start_a_bid_view(request):
+    return redirect('login')
+
+# This view can remain public, as anyone can view auctions
+def view_all_auctions(request):
+    # Your logic for showing all auctions
+    return redirect('auction')
+
+
+
 # --- OTHER PAGE VIEWS (Placeholders) ---
 
 def home(request): return render(request, "index.html")

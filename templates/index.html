@@ -18,14 +18,32 @@
                                 <h1>Select Your <span>Best Bid Product</span> At Our Auction.</h1>
                                 <p>Join us as we carve a path to success, driven by passion, powered by innovation, and  we're here to turn them into reality.</p>
                                 <div class="button-area">
-                                    <a class="primary-btn6 btn-hover" href="auction-grid.html">
-                                        Start A Bid
-                                        <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
-                                        </svg>
-                                        <span></span>
-                                    </a>
-                                    <a class="primary-btn6 btn-hover white-bg" href="auction-grid.html">
+                                    {% if user.is_authenticated %}
+                                        
+                                        <!-- THIS IS SHOWN ONLY TO LOGGED-IN USERS -->
+                                        <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
+                                            Start A Bid
+                                            <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
+                                            </svg>
+                                            <span></span>
+                                        </a>
+
+                                    {% else %}
+
+                                        <!-- THIS IS SHOWN ONLY TO GUESTS (NOT LOGGED IN) -->
+                                        <a class="primary-btn6 btn-hover" href="{% url 'login' %}?next={% url 'auction' %}">
+                                            Login to Bid
+                                            <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
+                                            </svg>
+                                            <span></span>
+                                        </a>
+
+                                    {% endif %}
+
+                                    <!-- This button can be visible to everyone -->
+                                    <a class="primary-btn6 btn-hover white-bg" href="{% url 'auction' %}">
                                         View All Auction
                                         <span></span>
                                     </a>
@@ -34,7 +52,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="banner-img d-lg-block d-none">
-                                <img src="{% static "assets/img/home7/home7-banner-img.png" %}" alt="">
+                                <img src="{% static 'assets/img/home7/home7-banner-img.png' %}" alt="">
                             </div>
                         </div>
                     </div>
@@ -142,9 +160,15 @@
                                                     <span>Current Bid at:</span>
                                                     <strong>$2,898</strong>
                                                 </div>
-                                                <a href="auction-details.html" class="bid-btn">
+                                                {% if user.is_authenticated %}
+                                                <a href="{% url 'auction' %}" class="bid-btn">
                                                     Bid Now
                                                 </a>
+                                                {% else %}
+                                                <a href="{% url 'login' %}" class="bid-btn">
+                                                    Bid Now
+                                                </a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -577,7 +601,7 @@
             </div>
             <div class="row wow animate fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
                 <div class="col-lg-12 d-flex justify-content-center">
-                    <a class="primary-btn6 transparent btn-hover" href="auction-grid.html">
+                    <a class="primary-btn6 transparent btn-hover" href="{% url 'auction' %}">
                         View All Auction
                         <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -599,7 +623,7 @@
                         <span><i class="bi bi-arrow-right"></i>TIPS & TRICKS</span>
                         <h2>Browse By <span>Category</span></h2>
                     </div>
-                    <a class="primary-btn6 transparent btn-hover" href="category.html">
+                    <a class="primary-btn6 transparent btn-hover" href="{% url 'category' %}">
                         View All Category
                         <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -1451,7 +1475,7 @@
                     </div>
                     <div class="row wow animate fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <a class="primary-btn6 btn-hover" href="auction-grid.html">
+                            <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
                                 View All Auction
                                 <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -2170,7 +2194,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <a class="primary-btn6 btn-hover" href="auction-grid.html">
+                            <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
                                 View All Auction
                                 <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -2889,7 +2913,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <a class="primary-btn6 btn-hover" href="auction-grid.html">
+                            <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
                                 View All Auction
                                 <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -3608,7 +3632,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <a class="primary-btn6 btn-hover" href="auction-grid.html">
+                            <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
                                 View All Auction
                                 <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
@@ -4327,7 +4351,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <a class="primary-btn6 btn-hover" href="auction-grid.html">
+                            <a class="primary-btn6 btn-hover" href="{% url 'auction' %}">
                                 View All Auction
                                 <svg width="11" height="11" viewBox="0 0 11 11" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.22781 7.97482L1.25294 -4.57764e-05L0 1.25289L7.97487 9.22776H1.25294V11H11V1.25289H9.22781V7.97482Z"/>
