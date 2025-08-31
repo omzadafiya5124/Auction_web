@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -37,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', 
     'accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -48,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'Auction_web.urls'
@@ -138,3 +147,39 @@ EMAIL_USE_TLS = True  # For secure connection
 EMAIL_HOST_USER = 'singisking5658@gmail.com'  # <-- IMPORTANT: Your full Gmail address
 EMAIL_HOST_PASSWORD = 'crodnlbibappzouo' # <-- IMPORTANT: The App Password you just generated
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# --- MEDIA FILE CONFIGURATION ---
+# The absolute path to the directory where user-uploaded files will be stored.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# The URL that will serve the media files.
+MEDIA_URL = '/media/'
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1 # Required for django.contrib.sites
+
+LOGIN_REDIRECT_URL = '/' # Where to redirect after login
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/' # Or wherever your login page is
+# Google specific settings (YOU WILL GET THESE FROM GOOGLE DEVELOPER CONSOLE)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '89148708126-souu7547o3bvdcqu4a8co4juq6vj3rbu.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}

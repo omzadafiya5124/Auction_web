@@ -1,37 +1,41 @@
 # In accounts/forms.py
-# FINAL AND CORRECTED
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User
 
 class RegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput, min_length=8)
-    confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    # These fields are defined here to control their order and widgets
+    password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False, min_length=8)
+    confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=False)
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    # --- KEY CHANGE: Added placeholders for better UX ---
+    # gender = forms.ChoiceField(choices=[('', 'Select Gender...')] + User.GENDER_CHOICES)
+    # account_type = forms.ChoiceField(choices=[('', 'Select Account Type...')] + User.ACCOUNT_TYPE_CHOICES)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'mobile_number', 'gender', 'date_of_birth', 'account_type']
-
+        fields = ['username', 'email', 'mobile_number', 'date_of_birth', 'gender', 'account_type', 'image']
+        
     def clean_email(self):
         email = self.cleaned_data.get('email').lower()
-        if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("An account with this email address already exists.")
+        # Ensure we don't validate against an existing inactive user during their own registration
+        if User.objects.filter(email__iexact=email, is_active=True).exists():
+            raise forms.ValidationError("An active account with this email address already exists.")
         return email
 
-    def clean_confirm_password(self):
-        password = self.cleaned_data.get("password")
-        confirm_password = self.cleaned_data.get("confirm_password")
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
         if password and confirm_password and password != confirm_password:
-            raise forms.ValidationError("Passwords do not match.")
-        return confirm_password
+            self.add_error('confirm_password', "Passwords do not match.")
+        return cleaned_data
 
     def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
+        # The password is now set in the view, so we just call the parent save method
+        user = super().save(commit=commit)
         return user
 
 class EmailAuthenticationForm(AuthenticationForm):

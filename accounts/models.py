@@ -1,5 +1,4 @@
-# In accounts/models.py
-
+    # In accounts/models.py
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
@@ -16,7 +15,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True) # Superuser should be active by default
+        extra_fields.setdefault('is_active', True)
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -29,8 +28,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     account_type = models.CharField(max_length=10, choices=ACCOUNT_TYPE_CHOICES)
+    image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
-    is_active = models.BooleanField(default=False) # Not active until email is verified
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()

@@ -1,19 +1,19 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views # <-- Import Django's auth views
 from . import views
 
 urlpatterns = [
-    # Your existing URLs
     path('', views.home, name='home'),
     path('register/', views.register_view, name='register'),
-    path('verify-otp/', views.verify_otp_view, name='verify_otp'),
+    
+    path('validate-step1/', views.validate_step1, name='validate_step1'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
+    path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('set-password/', views.set_password, name='set_password'), # New URL
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
 
-    #required login 
-    path('start-bid/', views.start_a_bid_view, name='start_a_bid'), # The protected view
 
 
     # Other Page URLs

@@ -116,7 +116,7 @@
                 <div class="dashboard-content-wrap">
                     <div class="profile-info-wrap">
                         <div class="profile-img">
-                            <img src="{% static 'assets/img/inner-pages/dashboard-profile-img.png' %}" alt="">
+                            <img src="{{user.image.url}}" alt="">
                         </div>
                         <div class="profile-content">
                             <h4>{{user.username}}</h4>
