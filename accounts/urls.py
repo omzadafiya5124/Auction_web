@@ -14,6 +14,8 @@ urlpatterns = [
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
 
+    #admin dashbord
+    path('dashboard-admin/', views.dashboardAdmin, name='dashboard-admin'),
 
 
     # Other Page URLs
@@ -33,4 +35,7 @@ urlpatterns = [
     path('support-center/',views.support_center, name="support_center"), 
     path('terms-condition/',views.terms_condition, name="terms_condition"),
     path('dashboard/',views.dash_board, name="dashboard"),
+    path('edit-profile/',views.edit_profile_view, name="edit_profile_view"),
+    #For Edit profile
+    path('edit-profile/edit/', views.edit_profile, name='edit_profile'),
 ]

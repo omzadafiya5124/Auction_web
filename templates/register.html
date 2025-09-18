@@ -1,568 +1,568 @@
-{% extends "header_footer.html" %}
-{% load static %}
-{% load socialaccount %}     
-{% block title %}Create Your Account{% endblock %}
+    {% extends "header_footer.html" %}
+    {% load static %}
+    {% load socialaccount %}     
+    {% block title %}Create Your Account{% endblock %}
 
-{% block extra_css %}
-<!-- Font Awesome for checkmark icon, optional -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-<style>
- /* --- THEME & COLORS --- */
-    :root {
-        --primary-green: #7fb51e;
-        --light-gray: #e9e9e9;
-        --medium-gray: #bdbdbd;
-        --text-dark: #333;
-        --background-page: #f9f9f9;
-        --error-red: #dc3545;
-    }
+    {% block extra_css %}
+    <!-- Font Awesome for checkmark icon, optional -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+    /* --- THEME & COLORS --- */
+        :root {
+            --primary-green: #7fb51e;
+            --light-gray: #e9e9e9;
+            --medium-gray: #bdbdbd;
+            --text-dark: #333;
+            --background-page: #f9f9f9;
+            --error-red: #dc3545;
+        }
 
-    /* --- Page & Form Wrapper --- */
-    .register-page-container {
-        display: flex; justify-content: center; align-items: flex-start;
-        padding: 5rem 1rem; width: 100%; background-color: var(--background-page);
-    }
-    .form-wrapper {
-        background-color: #ffffff; padding: 2.5rem 3rem; border-radius: 20px;
-        width: 100%; max-width: 800px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-        position: relative;
-    }
+        /* --- Page & Form Wrapper --- */
+        .register-page-container {
+            display: flex; justify-content: center; align-items: flex-start;
+            padding: 5rem 1rem; width: 100%; background-color: var(--background-page);
+        }
+        .form-wrapper {
+            background-color: #ffffff; padding: 2.5rem 3rem; border-radius: 20px;
+            width: 100%; max-width: 800px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
 
-    /* --- Form Title --- */
-    .form-wrapper h2 {
-        text-align: center; font-size: 2rem; font-weight: 400;color: #7fb51e;
-        margin-top: 0; margin-bottom: 2.5rem;
-    }
+        /* --- Form Title --- */
+        .form-wrapper h2 {
+            text-align: center; font-size: 2rem; font-weight: 400;color: #7fb51e;
+            margin-top: 0; margin-bottom: 2.5rem;
+        }
 
-    /* --- Progress Bar --- */
-    .form-header { margin-bottom: 1rem; padding-bottom: 2rem; border-bottom: 1px solid var(--light-gray); }
-    .progress-bar { position: relative; width: 90%; margin: 0 auto; }
-    .progress-line { position: absolute; top: 50%; left: 0; transform: translateY(-50%); height: 2px; width: 100%; background-color: var(--light-gray); z-index: 1; }
-    .progress-steps { display: flex; justify-content: space-between; position: relative; z-index: 2; }
-    .step { display: flex; flex-direction: column; align-items: center; }
-    .step-indicator {
-        width: 24px; height: 24px; border-radius: 50%; background-color: #fff;
-        border: 2px solid var(--light-gray); display: flex; justify-content: center;
-        align-items: center; font-weight: 600; color: var(--medium-gray);
-        transition: all 0.4s ease;
-    }
-    .step-label { margin-top: 0.8rem; font-size: 0.9rem; font-weight: 500; color: var(--medium-gray); transition: color 0.4s ease; }
-    .step.active .step-indicator { width: 36px; height: 36px; border-color: var(--primary-green); border-width: 3px; color: var(--primary-green); }
-    .step.active .step-label { color: var(--primary-green); font-weight: 600; }
-    .step.completed .step-indicator { background-color: var(--primary-green); border-color: var(--primary-green); color: #fff; }
-    .step.completed .step-label { color: var(--text-dark); }
-    
-    /* --- Form Steps & Layout --- */
-    .form-body { /* No overflow: hidden */ }
-    .form-step { display: none; }
-    .form-step.active { display: block; animation: stepFadeIn 0.4s ease-in-out; }
-    @keyframes stepFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .grid-col-span-2 { grid-column: 1 / -1; }
-    @media (max-width: 600px) { .grid-layout { grid-template-columns: 1fr; } }
+        /* --- Progress Bar --- */
+        .form-header { margin-bottom: 1rem; padding-bottom: 2rem; border-bottom: 1px solid var(--light-gray); }
+        .progress-bar { position: relative; width: 90%; margin: 0 auto; }
+        .progress-line { position: absolute; top: 50%; left: 0; transform: translateY(-50%); height: 2px; width: 100%; background-color: var(--light-gray); z-index: 1; }
+        .progress-steps { display: flex; justify-content: space-between; position: relative; z-index: 2; }
+        .step { display: flex; flex-direction: column; align-items: center; }
+        .step-indicator {
+            width: 24px; height: 24px; border-radius: 50%; background-color: #fff;
+            border: 2px solid var(--light-gray); display: flex; justify-content: center;
+            align-items: center; font-weight: 600; color: var(--medium-gray);
+            transition: all 0.4s ease;
+        }
+        .step-label { margin-top: 0.8rem; font-size: 0.9rem; font-weight: 500; color: var(--medium-gray); transition: color 0.4s ease; }
+        .step.active .step-indicator { width: 36px; height: 36px; border-color: var(--primary-green); border-width: 3px; color: var(--primary-green); }
+        .step.active .step-label { color: var(--primary-green); font-weight: 600; }
+        .step.completed .step-indicator { background-color: var(--primary-green); border-color: var(--primary-green); color: #fff; }
+        .step.completed .step-label { color: var(--text-dark); }
+        
+        /* --- Form Steps & Layout --- */
+        .form-body { /* No overflow: hidden */ }
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: stepFadeIn 0.4s ease-in-out; }
+        @keyframes stepFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .grid-col-span-2 { grid-column: 1 / -1; }
+        @media (max-width: 600px) { .grid-layout { grid-template-columns: 1fr; } }
 
-    /* --- Form Elements --- */
-    .form-group {
-        opacity: 0;
-        transform: translateY(20px);
-        /* --- START OF THE FIX --- */
-        position: relative; /* This is necessary for z-index to take effect */
-        z-index: 1;         /* Give a default stacking order */
-    }
-    /* This special selector applies when you click on an input/select INSIDE the group */
-    .form-group:focus-within {
-        z-index: 2; /* This lifts the active group above its neighbors */
-    }
-    /* --- END OF THE FIX --- */
-    
-    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-    .form-group input, .form-group select {
-        width: 100%; padding: 0 1rem; border: 1px solid #d1d1d1;
-        border-radius: 8px; font-size: 1rem; background-color: #fdfdfd;
-        box-sizing: border-box; height: 50px;
-    }
-    
-    /* --- Custom File Input --- */
-    .file-upload-wrapper { position: relative; }
-    .file-upload-label {
-        display: flex; align-items: center; justify-content: center;
-        height: 52px; border: 2px dashed var(--light-gray); border-radius: 8px;
-        cursor: pointer; transition: all 0.2s ease;
-    }
-    .file-upload-label:hover { border-color: var(--primary-green); background-color: #f9f9f9; }
-    #id_image { display: none; }
-    .file-name { margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dark); font-style: italic; display: block; }
+        /* --- Form Elements --- */
+        .form-group {
+            opacity: 0;
+            transform: translateY(20px);
+            /* --- START OF THE FIX --- */
+            position: relative; /* This is necessary for z-index to take effect */
+            z-index: 1;         /* Give a default stacking order */
+        }
+        /* This special selector applies when you click on an input/select INSIDE the group */
+        .form-group:focus-within {
+            z-index: 2; /* This lifts the active group above its neighbors */
+        }
+        /* --- END OF THE FIX --- */
+        
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 0 1rem; border: 1px solid #d1d1d1;
+            border-radius: 8px; font-size: 1rem; background-color: #fdfdfd;
+            box-sizing: border-box; height: 50px;
+        }
+        
+        /* --- Custom File Input --- */
+        .file-upload-wrapper { position: relative; }
+        .file-upload-label {
+            display: flex; align-items: center; justify-content: center;
+            height: 52px; border: 2px dashed var(--light-gray); border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .file-upload-label:hover { border-color: var(--primary-green); background-color: #f9f9f9; }
+        #id_image { display: none; }
+        .file-name { margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dark); font-style: italic; display: block; }
 
-    /* --- Other Styles --- */
-    .error-message { color: var(--error-red); font-size: 0.85rem; margin-top: 0.4rem; min-height: 1rem; }
-    .is-invalid { border-color: var(--error-red) !important; }
-    .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
-    .btn { flex-grow: 1; padding: 1rem; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
-    .btn-next { background-color: var(--primary-green); color: white; }
-    .btn-prev { background-color: #f0f0f0; color: var(--text-dark); }
-    .loader-overlay {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(255, 255, 255, 0.8); border-radius: 20px;
-        display: none; justify-content: center; align-items: center; z-index: 10;
+        /* --- Other Styles --- */
+        .error-message { color: var(--error-red); font-size: 0.85rem; margin-top: 0.4rem; min-height: 1rem; }
+        .is-invalid { border-color: var(--error-red) !important; }
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn { flex-grow: 1; padding: 1rem; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
+        .btn-next { background-color: var(--primary-green); color: white; }
+        .btn-prev { background-color: #f0f0f0; color: var(--text-dark); }
+        .loader-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); border-radius: 20px;
+            display: none; justify-content: center; align-items: center; z-index: 10;
+        }
+        .loader {
+            border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-green);
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .resend-otp { text-align: center; margin-top: 1.5rem; }
+        .resend-otp-link { color: var(--primary-green); text-decoration: none; font-weight: 600; cursor: pointer; }
+        .resend-otp-link.disabled { color: var(--medium-gray); cursor: not-allowed; }
+        .password-field-wrapper {
+            position: relative;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%; /* Adjust as needed based on label height */
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+        .password-field-wrapper input {
+            padding-right: 2.5rem; /* Make space for the icon */
+        }
+        /* Adjust top for label */
+        .password-field-wrapper label + input,
+        .password-field-wrapper label + .password-toggle {
+            margin-top: 0.5rem; /* Align with label's margin-bottom */
+        }
+        .password-toggle {
+            /* This will move the icon down correctly relative to its parent .form-group */
+            top: calc(50% + 0.25rem); /* Half of input height + half of label margin-bottom */
+        }
+        
+        .social-login-options {
+            margin-top: 2rem;
+        }
+        .btn-google {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background-color: #c49a6c; /* Google blue */
+            color: white;
+            padding: 1rem 1.0rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 100%; /* Make it fill available width */
+            max-width: 300px; /* Limit its max width */
+            margin: 0 auto; /* Center the button */
+        }
+        .btn-google:hover {
+            background-color: #c49a6c; /* Darker Google blue */
+        }
+        .btn-google i {
+            font-size: 1.2rem;
+        }
+        .form-footer {
+        margin-top: 1rem;
+        color: var(--text-dark);
+        text-align: center;
     }
-    .loader {
-        border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-green);
-        border-radius: 50%; width: 50px; height: 50px;
-        animation: spin 1s linear infinite;
+    .form-footer a{
+        color: #c49a6c;
+        text-decoration: underline;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .resend-otp { text-align: center; margin-top: 1.5rem; }
-    .resend-otp-link { color: var(--primary-green); text-decoration: none; font-weight: 600; cursor: pointer; }
-    .resend-otp-link.disabled { color: var(--medium-gray); cursor: not-allowed; }
-    .password-field-wrapper {
-        position: relative;
-    }
-    .password-toggle {
-        position: absolute;
-        right: 1rem;
-        top: 50%; /* Adjust as needed based on label height */
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: var(--medium-gray);
-        font-size: 0.9rem;
-    }
-    .password-field-wrapper input {
-        padding-right: 2.5rem; /* Make space for the icon */
-    }
-    /* Adjust top for label */
-    .password-field-wrapper label + input,
-    .password-field-wrapper label + .password-toggle {
-        margin-top: 0.5rem; /* Align with label's margin-bottom */
-    }
-    .password-toggle {
-        /* This will move the icon down correctly relative to its parent .form-group */
-        top: calc(50% + 0.25rem); /* Half of input height + half of label margin-bottom */
-    }
-    
-    .social-login-options {
-        margin-top: 2rem;
-    }
-    .btn-google {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        background-color: #c49a6c; /* Google blue */
-        color: white;
-        padding: 1rem 1.0rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: bold;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        width: 100%; /* Make it fill available width */
-        max-width: 300px; /* Limit its max width */
-        margin: 0 auto; /* Center the button */
-    }
-    .btn-google:hover {
-        background-color: #c49a6c; /* Darker Google blue */
-    }
-    .btn-google i {
-        font-size: 1.2rem;
-    }
-    .form-footer {
-    margin-top: 1rem;
-    color: var(--text-dark);
-    text-align: center;
-}
-.form-footer a{
-    color: #c49a6c;
-    text-decoration: underline;
-}
-</style>
-{% endblock %}
+    </style>
+    {% endblock %}
 
-{% block content %}
-<div class="register-page-container">
-    <div class="form-wrapper">
-        <div class="loader-overlay" id="loader-overlay"><div class="loader"></div></div>
+    {% block content %}
+    <div class="register-page-container">
+        <div class="form-wrapper">
+            <div class="loader-overlay" id="loader-overlay"><div class="loader"></div></div>
 
-        <!-- CORRECTION: Added H2 Title -->
-        <h2>Create Your Account</h2>
-        <!-- Progress Bar Header -->
-        <div class="form-header">
-            <div class="progress-bar">
-                <div class="progress-line"></div>
-                <div class="progress-steps">
-                    <div class="step active" data-step="1"><div class="step-indicator">1</div><div class="step-label">Personal</div></div>
-                    <div class="step" data-step="2"><div class="step-indicator">2</div><div class="step-label">Verify</div></div>
-                    <div class="step" data-step="3"><div class="step-indicator">3</div><div class="step-label">Account</div></div>
+            <!-- CORRECTION: Added H2 Title -->
+            <h2>Create Your Account</h2>
+            <!-- Progress Bar Header -->
+            <div class="form-header">
+                <div class="progress-bar">
+                    <div class="progress-line"></div>
+                    <div class="progress-steps">
+                        <div class="step active" data-step="1"><div class="step-indicator">1</div><div class="step-label">Personal</div></div>
+                        <div class="step" data-step="2"><div class="step-indicator">2</div><div class="step-label">Verify</div></div>
+                        <div class="step" data-step="3"><div class="step-indicator">3</div><div class="step-label">Account</div></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Form Body -->
-        <div class="form-body">
-            <form method="post" id="register-form" action="{% url 'register' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div id="non-field-errors" class="error-message" style="text-align: center; margin-bottom: 1rem;"></div>
-                
-                <!-- Step 1: Personal Details -->
-                <div class="form-step active" id="step-1">
-                    <div class="grid-layout">
-                        <div class="form-group grid-col-span-2">
-                            <label for="{{ form.username.id_for_label }}">User Name</label>
-                            {{ form.username }}
-                            <div class="error-message" data-field="username"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}">Email Address</label>
-                            {{ form.email }}
-                            <div class="error-message" data-field="email"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
-                            {{ form.mobile_number }}
-                            <div class="error-message" data-field="mobile_number"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
-                            {{ form.date_of_birth }}
-                            <div class="error-message" data-field="date_of_birth"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Profile Picture (Optional)</label>
-                            <div class="file-upload-wrapper">
-                                <label for="{{ form.image.id_for_label }}" class="file-upload-label">
-                                   <span class="file-label-text">Click to upload an image</span>
-                               </label>
-                               {{ form.image }}
-                               <span class="file-name" id="file-name-display"></span>
+            
+            <!-- Form Body -->
+            <div class="form-body">
+                <form method="post" id="register-form" action="{% url 'register' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="non-field-errors" class="error-message" style="text-align: center; margin-bottom: 1rem;"></div>
+                    
+                    <!-- Step 1: Personal Details -->
+                    <div class="form-step active" id="step-1">
+                        <div class="grid-layout">
+                            <div class="form-group grid-col-span-2">
+                                <label for="{{ form.username.id_for_label }}">User Name</label>
+                                {{ form.username }}
+                                <div class="error-message" data-field="username"></div>
                             </div>
-                            <div class="error-message" data-field="image"></div>
+                            <div class="form-group">
+                                <label for="{{ form.email.id_for_label }}">Email Address</label>
+                                {{ form.email }}
+                                <div class="error-message" data-field="email"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.mobile_number.id_for_label }}">Mobile Number</label>
+                                {{ form.mobile_number }}
+                                <div class="error-message" data-field="mobile_number"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth</label>
+                                {{ form.date_of_birth }}
+                                <div class="error-message" data-field="date_of_birth"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Profile Picture (Optional)</label>
+                                <div class="file-upload-wrapper">
+                                    <label for="{{ form.image.id_for_label }}" class="file-upload-label">
+                                    <span class="file-label-text">Click to upload an image</span>
+                                </label>
+                                {{ form.image }}
+                                <span class="file-name" id="file-name-display"></span>
+                                </div>
+                                <div class="error-message" data-field="image"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.gender.id_for_label }}">Gender</label>
+                                {{ form.gender }}
+                                <div class="error-message" data-field="gender"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.account_type.id_for_label }}">I want to:</label>
+                                {{ form.account_type }}
+                                <div class="error-message" data-field="account_type"></div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="{{ form.gender.id_for_label }}">Gender</label>
-                            {{ form.gender }}
-                            <div class="error-message" data-field="gender"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.account_type.id_for_label }}">I want to:</label>
-                            {{ form.account_type }}
-                            <div class="error-message" data-field="account_type"></div>
-                        </div>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-next" id="next-to-otp">Next</button>
-                    </div>
-                </div>
-                
-                <!-- Step 2: OTP Verification -->
-                <div class="form-step" id="step-2">
-                    <div class="grid-layout">
-                        <div class="form-group grid-col-span-2">
-                            <p style="text-align: center; color: var(--text-light); margin-bottom: 1rem;">An OTP has been sent. Please check your email.</p>
-                            <label for="otp-input">Enter 6-Digit OTP</label>
-                            <input type="text" name="otp" id="otp-input" required maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
-                            <div class="error-message" data-field="otp"></div>
-                        </div>
-                    </div>
-                    <div class="resend-otp">
-                        <a class="resend-otp-link disabled" id="resend-otp-link">Resend OTP</a>
-                        <span id="timer-display"></span>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-prev">Previous</button>
-                        <button type="button" class="btn btn-next" id="verify-otp-btn">Verify Account</button>
-                    </div>
-                </div>
-                
-                <!-- Step 3: Password -->
-                <div class="form-step" id="step-3">
-                    <div class="grid-layout">
-                        <div class="form-group password-field-wrapper"> <!-- Added wrapper class -->
-                            <label for="id_password">Password</label>
-                            <input type="password" name="password" id="id_password">
-                            <span class="password-toggle" data-target="id_password"><i class="fas fa-eye"></i></span> <!-- Eye icon -->
-                            <div class="error-message" data-field="password"></div>
-                        </div>
-                        <div class="form-group password-field-wrapper"> <!-- Added wrapper class -->
-                            <label for="id_confirm_password">Confirm Password</label>
-                            <input type="password" name="confirm_password" id="id_confirm_password">
-                            <span class="password-toggle" data-target="id_confirm_password"><i class="fas fa-eye"></i></span> <!-- Eye icon -->
-                            <div class="error-message" data-field="confirm_password"></div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-next" id="next-to-otp">Next</button>
                         </div>
                     </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-prev">Previous</button>
-                        <button type="submit" class="btn btn-next">Create Account</button>
+                    
+                    <!-- Step 2: OTP Verification -->
+                    <div class="form-step" id="step-2">
+                        <div class="grid-layout">
+                            <div class="form-group grid-col-span-2">
+                                <p style="text-align: center; color: var(--text-light); margin-bottom: 1rem;">An OTP has been sent. Please check your email.</p>
+                                <label for="otp-input">Enter 6-Digit OTP</label>
+                                <input type="text" name="otp" id="otp-input" required maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+                                <div class="error-message" data-field="otp"></div>
+                            </div>
+                        </div>
+                        <div class="resend-otp">
+                            <a class="resend-otp-link disabled" id="resend-otp-link">Resend OTP</a>
+                            <span id="timer-display"></span>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-prev">Previous</button>
+                            <button type="button" class="btn btn-next" id="verify-otp-btn">Verify Account</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                    
+                    <!-- Step 3: Password -->
+                    <div class="form-step" id="step-3">
+                        <div class="grid-layout">
+                            <div class="form-group password-field-wrapper"> <!-- Added wrapper class -->
+                                <label for="id_password">Password</label>
+                                <input type="password" name="password" id="id_password">
+                                <span class="password-toggle" data-target="id_password"><i class="fas fa-eye"></i></span> <!-- Eye icon -->
+                                <div class="error-message" data-field="password"></div>
+                            </div>
+                            <div class="form-group password-field-wrapper"> <!-- Added wrapper class -->
+                                <label for="id_confirm_password">Confirm Password</label>
+                                <input type="password" name="confirm_password" id="id_confirm_password">
+                                <span class="password-toggle" data-target="id_confirm_password"><i class="fas fa-eye"></i></span> <!-- Eye icon -->
+                                <div class="error-message" data-field="confirm_password"></div>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-prev">Previous</button>
+                            <button type="submit" class="btn btn-next">Create Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="form-footer">
+                <span>Already have an account? </span><a href="{% url 'login' %}">Log In</a>
+            </div>
+            <!-- Google Login Button -->
+            <div class="social-login-options" style="text-align: center; margin-bottom: 2rem;">
+                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
+                    <i class="fab fa-google"></i> Continue with Google
+                </a>
+            </div>
         </div>
-        <div class="form-footer">
-            <span>Already have an account? </span><a href="{% url 'login' %}">Log In</a>
-        </div>
-        <!-- Google Login Button -->
-           <div class="social-login-options" style="text-align: center; margin-bottom: 2rem;">
-               <a href="{% provider_login_url 'google' %}" class="btn btn-google">
-                   <i class="fab fa-google"></i> Continue with Google
-               </a>
-           </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block js %}
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    // --- ELEMENT SELECTORS ---
-    const form = document.getElementById("register-form");
-    const loader = document.getElementById("loader-overlay");
-    const formSteps = document.querySelectorAll(".form-step");
-    const progressSteps = document.querySelectorAll(".step");
-    
-    const nextToOtpBtn = document.getElementById("next-to-otp");
-    const verifyOtpBtn = document.getElementById("verify-otp-btn");
-    const prevButtons = document.querySelectorAll(".btn-prev");
-    
-    const fileInput = document.getElementById("id_image");
-    const fileNameDisplay = document.getElementById("file-name-display");
-    const resendLink = document.getElementById("resend-otp-link");
-    const timerDisplay = document.getElementById("timer-display");
-
-    let currentStep = 0;
-    let timer;
-
-    // --- UTILITY FUNCTIONS ---
-    const showLoader = () => loader.style.display = 'flex';
-    const hideLoader = () => loader.style.display = 'none';
-    const getCsrfToken = () => document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    const clearErrors = () => {
-        document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
-        document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-    };
-    
-    const displayErrors = (errors) => {
-        clearErrors();
-        for (const field in errors) {
-            const errorMsg = Array.isArray(errors[field]) ? errors[field][0] : errors[field];
-            const errorDiv = document.querySelector(`.error-message[data-field="${field}"]`);
-            if (errorDiv) {
-                errorDiv.textContent = errorMsg;
-                const input = document.getElementById(`id_${field}`);
-                if (input) input.classList.add('is-invalid');
-            }
-        }
-    };
-
-    const updateProgressBar = () => {
-        progressSteps.forEach((step, index) => {
-            step.classList.remove('active', 'completed');
-            if (index < currentStep) {
-                step.classList.add("completed");
-                step.querySelector('.step-indicator').innerHTML = '<i class="fas fa-check"></i>';
-            } else if (index === currentStep) {
-                step.classList.add("active");
-                step.querySelector('.step-indicator').innerText = index + 1;
-            } else {
-                step.querySelector('.step-indicator').innerText = index + 1;
-            }
-        });
-    };
-
-    const animateStepFields = (stepElement) => {
-        stepElement.querySelectorAll('.form-group').forEach((group, index) => {
-            group.style.opacity = '0';
-            group.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                group.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-                group.style.opacity = '1';
-                group.style.transform = 'translateY(0)';
-            }, 50 * index);
-        });
-    };
-
-    const showStep = (stepIndex) => {
-        formSteps.forEach((step, index) => step.classList.toggle('active', index === stepIndex));
-        currentStep = stepIndex;
-        if (formSteps[stepIndex]) {
-            animateStepFields(formSteps[stepIndex]);
-        }
-        updateProgressBar();
-    };
-
-    // --- TIMER LOGIC ---
-    const startTimer = () => {
-        let timeLeft = 60;
-        resendLink.classList.add("disabled");
-        timerDisplay.textContent = `(Resend in ${timeLeft}s)`;
-
-        timer = setInterval(() => {
-            timeLeft--;
-            timerDisplay.textContent = `(Resend in ${timeLeft}s)`;
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                resendLink.classList.remove("disabled");
-                timerDisplay.textContent = "";
-            }
-        }, 1000);
-    };
-
-    // --- EVENT LISTENERS ---
-    fileInput.addEventListener("change", () => {
-        fileNameDisplay.textContent = fileInput.files.length > 0 ? fileInput.files[0].name : "";
-    });
-
-    nextToOtpBtn.addEventListener("click", async () => {
-        clearErrors();
-        showLoader();
+    {% block js %}
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- ELEMENT SELECTORS ---
+        const form = document.getElementById("register-form");
+        const loader = document.getElementById("loader-overlay");
+        const formSteps = document.querySelectorAll(".form-step");
+        const progressSteps = document.querySelectorAll(".step");
         
-        const formData = new FormData(form);
+        const nextToOtpBtn = document.getElementById("next-to-otp");
+        const verifyOtpBtn = document.getElementById("verify-otp-btn");
+        const prevButtons = document.querySelectorAll(".btn-prev");
+        
+        const fileInput = document.getElementById("id_image");
+        const fileNameDisplay = document.getElementById("file-name-display");
+        const resendLink = document.getElementById("resend-otp-link");
+        const timerDisplay = document.getElementById("timer-display");
 
-        try {
-            const response = await fetch("{% url 'validate_step1' %}", {
-                method: 'POST',
-                headers: { 'X-CSRFToken': getCsrfToken() },
-                body: formData
+        let currentStep = 0;
+        let timer;
+
+        // --- UTILITY FUNCTIONS ---
+        const showLoader = () => loader.style.display = 'flex';
+        const hideLoader = () => loader.style.display = 'none';
+        const getCsrfToken = () => document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        const clearErrors = () => {
+            document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
+            document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+        };
+        
+        const displayErrors = (errors) => {
+            clearErrors();
+            for (const field in errors) {
+                const errorMsg = Array.isArray(errors[field]) ? errors[field][0] : errors[field];
+                const errorDiv = document.querySelector(`.error-message[data-field="${field}"]`);
+                if (errorDiv) {
+                    errorDiv.textContent = errorMsg;
+                    const input = document.getElementById(`id_${field}`);
+                    if (input) input.classList.add('is-invalid');
+                }
+            }
+        };
+
+        const updateProgressBar = () => {
+            progressSteps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index < currentStep) {
+                    step.classList.add("completed");
+                    step.querySelector('.step-indicator').innerHTML = '<i class="fas fa-check"></i>';
+                } else if (index === currentStep) {
+                    step.classList.add("active");
+                    step.querySelector('.step-indicator').innerText = index + 1;
+                } else {
+                    step.querySelector('.step-indicator').innerText = index + 1;
+                }
             });
+        };
 
-            const data = await response.json();
-            if (data.success) {
-                showStep(1);
-                startTimer();
-            } else {
-                displayErrors(data.errors);
+        const animateStepFields = (stepElement) => {
+            stepElement.querySelectorAll('.form-group').forEach((group, index) => {
+                group.style.opacity = '0';
+                group.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    group.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                    group.style.opacity = '1';
+                    group.style.transform = 'translateY(0)';
+                }, 50 * index);
+            });
+        };
+
+        const showStep = (stepIndex) => {
+            formSteps.forEach((step, index) => step.classList.toggle('active', index === stepIndex));
+            currentStep = stepIndex;
+            if (formSteps[stepIndex]) {
+                animateStepFields(formSteps[stepIndex]);
             }
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            hideLoader();
-        }
-    });
+            updateProgressBar();
+        };
 
-    verifyOtpBtn.addEventListener("click", async () => {
+        // --- TIMER LOGIC ---
+        const startTimer = () => {
+            let timeLeft = 60;
+            resendLink.classList.add("disabled");
+            timerDisplay.textContent = `(Resend in ${timeLeft}s)`;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `(Resend in ${timeLeft}s)`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    resendLink.classList.remove("disabled");
+                    timerDisplay.textContent = "";
+                }
+            }, 1000);
+        };
+
+        // --- EVENT LISTENERS ---
+        fileInput.addEventListener("change", () => {
+            fileNameDisplay.textContent = fileInput.files.length > 0 ? fileInput.files[0].name : "";
+        });
+
+        nextToOtpBtn.addEventListener("click", async () => {
+            clearErrors();
+            showLoader();
+            
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch("{% url 'validate_step1' %}", {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCsrfToken() },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showStep(1);
+                    startTimer();
+                } else {
+                    displayErrors(data.errors);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                hideLoader();
+            }
+        });
+
+        verifyOtpBtn.addEventListener("click", async () => {
+            clearErrors();
+            showLoader();
+            
+            const otpValue = document.getElementById('otp-input').value;
+
+            try {
+                const response = await fetch("{% url 'verify_otp' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()
+                    },
+                    body: JSON.stringify({ otp: otpValue })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    clearInterval(timer);
+                    showStep(2);
+                } else {
+                    displayErrors(data.errors);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                hideLoader();
+            }
+        });
+
+        resendLink.addEventListener("click", async (e) => {
+            if (e.target.classList.contains('disabled')) return;
+            
+            showLoader();
+            try {
+                const response = await fetch("{% url 'resend_otp' %}", {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCsrfToken() }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    startTimer();
+                } else {
+                    alert(data.message || 'Could not resend OTP.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                hideLoader();
+            }
+        });
+
+        prevButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (currentStep > 0) {
+                    showStep(currentStep - 1);
+                }
+            });
+        });
+        const createAccountButton = document.querySelector('#step-3 .btn-next');
+
+    // Ensure this button correctly submits the form
+    createAccountButton.addEventListener("click", async (e) => {
+        e.preventDefault(); // Prevent default form submission initially
+
         clearErrors();
         showLoader();
-        
-        const otpValue = document.getElementById('otp-input').value;
+
+        const password = document.getElementById('id_password').value;
+        const confirmPassword = document.getElementById('id_confirm_password').value;
 
         try {
-            const response = await fetch("{% url 'verify_otp' %}", {
+            const response = await fetch("{% url 'set_password' %}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCsrfToken()
                 },
-                body: JSON.stringify({ otp: otpValue })
+                body: JSON.stringify({ password: password, confirm_password: confirmPassword })
             });
 
             const data = await response.json();
             if (data.success) {
-                clearInterval(timer);
-                showStep(2);
+                // New: Handle redirect from JSON response
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    // Fallback, though redirect_url should always be present on success
+                    alert('Account created successfully!');
+                    window.location.href = "{% url 'login' %}";
+                }
             } else {
                 displayErrors(data.errors);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error creating account:', error);
+            // Display a general error message if something goes wrong
+            document.getElementById("non-field-errors").textContent = "An unexpected error occurred. Please try again.";
         } finally {
             hideLoader();
         }
     });
 
-    resendLink.addEventListener("click", async (e) => {
-        if (e.target.classList.contains('disabled')) return;
-        
-        showLoader();
-        try {
-            const response = await fetch("{% url 'resend_otp' %}", {
-                method: 'POST',
-                headers: { 'X-CSRFToken': getCsrfToken() }
+        // Initialize first step
+        showStep(currentStep);
+
+        // --- TOGGLE PASSWORD VISIBILITY ---
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const targetId = toggle.dataset.target;
+                const passwordInput = document.getElementById(targetId);
+                const icon = toggle.querySelector('i');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
             });
-            const data = await response.json();
-            if (data.success) {
-                startTimer();
-            } else {
-                alert(data.message || 'Could not resend OTP.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            hideLoader();
-        }
-    });
-
-    prevButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            if (currentStep > 0) {
-                showStep(currentStep - 1);
-            }
-        });
-    });
-    const createAccountButton = document.querySelector('#step-3 .btn-next');
-
-// Ensure this button correctly submits the form
-createAccountButton.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevent default form submission initially
-
-    clearErrors();
-    showLoader();
-
-    const password = document.getElementById('id_password').value;
-    const confirmPassword = document.getElementById('id_confirm_password').value;
-
-    try {
-        const response = await fetch("{% url 'set_password' %}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
-            },
-            body: JSON.stringify({ password: password, confirm_password: confirmPassword })
         });
 
-        const data = await response.json();
-        if (data.success) {
-            // New: Handle redirect from JSON response
-            if (data.redirect_url) {
-                window.location.href = data.redirect_url;
-            } else {
-                // Fallback, though redirect_url should always be present on success
-                alert('Account created successfully!');
-                window.location.href = "{% url 'login' %}";
-            }
-        } else {
-            displayErrors(data.errors);
-        }
-    } catch (error) {
-        console.error('Error creating account:', error);
-        // Display a general error message if something goes wrong
-        document.getElementById("non-field-errors").textContent = "An unexpected error occurred. Please try again.";
-    } finally {
-        hideLoader();
-    }
-});
-
-    // Initialize first step
-    showStep(currentStep);
-
-     // --- TOGGLE PASSWORD VISIBILITY ---
-    document.querySelectorAll('.password-toggle').forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const targetId = toggle.dataset.target;
-            const passwordInput = document.getElementById(targetId);
-            const icon = toggle.querySelector('i');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
     });
-
-});
-</script>
-{% endblock %}
+    </script>
+    {% endblock %}

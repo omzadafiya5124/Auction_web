@@ -1,8 +1,33 @@
 # In accounts/forms.py
 
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm 
 from .models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
+
+class ProfileUpdateForm(forms.ModelForm):
+    """A form for updating a user's profile information."""
+    date_of_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    class Meta:
+        model = get_user_model()
+        fields = [
+            'username', 'email', 'mobile_number', 
+            'date_of_birth', 'image', 'gender'
+        ]
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    """A styled version of Django's secure password change form."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({
+                'placeholder': '********',
+                'autocomplete': 'new-password' # Helps prevent browser auto-filling
+            })
 
 class RegistrationForm(forms.ModelForm):
     # These fields are defined here to control their order and widgets

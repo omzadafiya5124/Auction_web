@@ -1,3 +1,10 @@
+{% extends "header_footer.html" %}
+{% load static %}
+{% load socialaccount %}     
+{% block title %}Create Your Account{% endblock %}
+
+{% block extra_css %}
+
 <!doctype html>
 <html lang="en">
 
@@ -28,6 +35,9 @@
     <title>Probid- Multi Vendor Auction and Bidding HTML Template.</title>
     <link rel="icon" href="../assets/img/fav-icon.svg" type="image/gif" sizes="20x20">
 </head>
+{% endblock %}
+
+
 
 <body id="body" class="eg-multipurpose2-home">
 
@@ -255,7 +265,8 @@
             </div>
         </header>
     </div>
-
+    
+{% block content %}
     <!-- Start Breadcrumb section -->
     <div class="breadcrumb-section seven" style="background-image:url(../assets/img/inner-pages/breadcrumb-bg7.png);">  
         <div class="container">
@@ -456,6 +467,7 @@
         </div>
     </div>
     <!-- End Dashboard section -->
+{% endblock %}
 
     <!-- Start Footer section -->
     <footer class="style-7">
@@ -592,7 +604,7 @@
     </footer>
     <!-- End Footer section -->
 
-
+{% block js %}
     <!--  Main jQuery  -->
     <script data-cfasync="false" src="../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../assets/js/jquery-3.7.1.min.js"></script>
     <!-- Popper and Bootstrap JS -->
@@ -621,3 +633,4 @@
 
 <!-- Mirrored from demo.egenslab.com/html/probid/preview/multipurpose2/dashboard-payment.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 25 Jul 2025 16:55:34 GMT -->
 </html>
+{% endblock %}

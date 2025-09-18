@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
@@ -11,10 +11,115 @@ import random, sys
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 import base64
+from django.core.paginator import Paginator
 
-from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm
+#For Admin
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import login
+from django.contrib.auth import update_session_auth_hash
+
+#For edit profile
+from django.contrib.auth.forms import PasswordChangeForm
+from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
+
+from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, ProfileUpdateForm, CustomPasswordChangeForm
 
 User = get_user_model()
+
+# --- OTHER PAGE VIEWS (Placeholders) ---
+
+def home(request): return render(request, "index.html")
+def about(request): return render(request, "about.html")
+def auction(request): return render(request, "auction.html")
+def auc_details(request): return render(request, "auction-details.html")
+def blog(request): return render(request, "blog.html")
+def category(request): return render(request, "category.html")
+def contact(request): return render(request, "contact.html")
+def seller_list(request): return render(request, "seller_list.html")
+def seller_details(request): return render(request, "seller_details.html")
+def how_to_sell(request): return render(request, "how-to-sell.html")
+def how_to_bid(request): return render(request, "how-to-buy.html")
+def faqs(request): return render(request, "faq.html")
+def error(request): return render(request, "error.html")
+def privacy_policy(request): return render(request, "privacy-policy.html")
+def support_center(request): return render(request, "support-center.html")
+def terms_condition(request): return render(request, "terms-condition.html")
+def dash_board(request): return render(request,"dashboard.html")
+#For Edit profile
+def edit_profile_view(request): return render(request,"dashboard-edit-profile.html")
+
+#For Edit profile
+@login_required
+def edit_profile(request):
+    
+    if request.method == 'GET':
+        profile_form = ProfileUpdateForm(instance=request.user)
+        password_form = CustomPasswordChangeForm(user=request.user)
+        
+        context = {
+            'profile_form': profile_form,
+            'password_form': password_form
+        }
+        return render(request, 'accounts/edit_profile.html', context)
+
+    if request.method == 'POST':
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        
+        if profile_form.is_valid():
+            profile_form.save()
+            
+            if request.POST.get('old_password'):
+                password_form = CustomPasswordChangeForm(request.user, request.POST)
+                if password_form.is_valid():
+                    user = password_form.save()
+                    update_session_auth_hash(request, user)
+                    
+                    return JsonResponse({'success': True})
+                else:
+                    return JsonResponse({'success': False, 'errors': password_form.errors})
+            
+            return JsonResponse({'success': True})
+        
+        else:
+            return JsonResponse({'success': False, 'errors': profile_form.errors})
+
+@login_required
+def dashboardAdmin(request):
+    # Get the currently logged-in user
+    current_user = request.user
+
+    attended_auctions_count = 290 
+
+    won_auctions_count = 50 
+
+    canceled_auctions_count = 25 
+
+    from collections import namedtuple
+    Auction = namedtuple('Auction', ['id', 'product_name'])
+    Bid = namedtuple('Bid', ['auction', 'amount', 'status', 'created_at'])
+    import datetime
+    all_bids = [
+        Bid(Auction(12584885455, 'Porcelain'), 1800, 'Winning', datetime.date(2024, 6, 25)),
+        Bid(Auction(12584885482, 'Old Clocks'), 1900, 'Winning', datetime.date(2024, 6, 13)),
+        Bid(Auction(12584885536, 'Manuscripts'), 2000, 'Cancel', datetime.date(2024, 6, 2)),
+        Bid(Auction(12584885548, 'Renaissance Art'), 2100, 'Winning', datetime.date(2024, 6, 8)),
+        Bid(Auction(12584885563, 'Impressionism Art'), 2200, 'Winning', datetime.date(2024, 6, 21)),
+        Bid(Auction(12584885589, 'Romanticism Art'), 2300, 'Cancel', datetime.date(2024, 6, 9)),
+    ]
+
+    paginator = Paginator(all_bids, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'attended_auctions_count': attended_auctions_count,
+        'won_auctions_count': won_auctions_count,
+        'canceled_auctions_count': canceled_auctions_count,
+        'page_obj': page_obj, # Pass the paginated object
+    }
+    
+    return render(request, 'Admin/dashbord_admin.html', context)
 
 # This view now ONLY handles the initial page load.
 def register_view(request):
@@ -159,12 +264,17 @@ def set_password(request):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == 'POST':
         form = EmailAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
-            return redirect('home')
+            if user.email.lower() == 'sujalzadafiya330@gmail.com':
+                login(request, user)
+                return redirect('dashboard-admin')  
+            else:
+                login(request, user)
+                return redirect('home')
         else:
             messages.error(request, "Invalid email or password.")
     else:
@@ -223,22 +333,3 @@ def password_reset_confirm_view(request):
 
 
 
-# --- OTHER PAGE VIEWS (Placeholders) ---
-
-def home(request): return render(request, "index.html")
-def about(request): return render(request, "about.html")
-def auction(request): return render(request, "auction.html")
-def auc_details(request): return render(request, "auction-details.html")
-def blog(request): return render(request, "blog.html")
-def category(request): return render(request, "category.html")
-def contact(request): return render(request, "contact.html")
-def seller_list(request): return render(request, "seller_list.html")
-def seller_details(request): return render(request, "seller_details.html")
-def how_to_sell(request): return render(request, "how-to-sell.html")
-def how_to_bid(request): return render(request, "how-to-buy.html")
-def faqs(request): return render(request, "faq.html")
-def error(request): return render(request, "error.html")
-def privacy_policy(request): return render(request, "privacy-policy.html")
-def support_center(request): return render(request, "support-center.html")
-def terms_condition(request): return render(request, "terms-condition.html")
-def dash_board(request): return render(request,"dashboard.html")
