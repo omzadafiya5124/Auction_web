@@ -1,13 +1,13 @@
 import json
+import random, sys
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from datetime import date, datetime
-import random, sys
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 import base64
@@ -17,6 +17,9 @@ from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
+from .forms import ProductForm,ReviewForm
+from .models import Product
+
 
 #For edit profile
 from django.contrib.auth.forms import PasswordChangeForm
@@ -31,8 +34,43 @@ User = get_user_model()
 
 def home(request): return render(request, "index.html")
 def about(request): return render(request, "about.html")
-def auction(request): return render(request, "auction.html")
-def auc_details(request): return render(request, "auction-details.html")
+def auction(request):
+    products = Product.objects.all()  
+    return render(request, "auction.html", {'products': products})
+
+@login_required
+def auc_details(request,pk): 
+    product = get_object_or_404(Product, pk=pk)
+     # Get all reviews for this product, ordered by the newest first
+    reviews = product.reviews.all().order_by('-created_at')
+    review_count = reviews.count()
+    # Initialize the form for adding a new review
+    review_form = ReviewForm()
+
+    if request.method == 'POST':
+        # If the form is submitted, process the data
+        form_data = ReviewForm(request.POST)
+        if form_data.is_valid():
+            # Create a new review object but don't save it to the database yet
+            new_review = form_data.save(commit=False)
+            # Associate the review with the current product
+            new_review.product = product
+            # Save the new review to the database
+            new_review.save()
+            # Redirect to the same page to show the new review and clear the form
+            return redirect('auction-details', pk=pk)
+        else:
+            # If the form is invalid, re-render the page with the submitted data and errors
+            review_form = form_data
+
+    context = {
+        'product': product,
+        'reviews': reviews,
+        'review_form': review_form,
+        'review_count': review_count,
+    }
+    return render(request, 'auction-details.html', context)
+
 def blog(request): return render(request, "blog.html")
 def category(request): return render(request, "category.html")
 def contact(request): return render(request, "contact.html")
@@ -86,7 +124,7 @@ def edit_profile(request):
 
 @login_required
 def dashboardAdmin(request):
-    # Get the currently logged-in user
+
     current_user = request.user
 
     attended_auctions_count = 290 
@@ -331,5 +369,14 @@ def password_reset_confirm_view(request):
         form = SetNewPasswordForm()
     return render(request, 'password_reset_confirm.html', {'form': form})
 
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            return redirect('auction')  # Redirect to product list page
+    else:
+        form = ProductForm()
 
+    return render(request, 'add_product.html', {'form': form})
 

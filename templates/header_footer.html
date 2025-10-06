@@ -107,17 +107,12 @@
                     <ul class="menu-list">
                         <li><a href="{% url 'home' %}" class="drop-down">Home</a></li>
                         
-                        <li class="menu-item-has-children">
-                            <a href="#" class="drop-down">Auctions</a><i
-                                class="bi bi-plus dropdown-icon"></i>
-                            <ul class="sub-menu">
-                                <li><a href="{% url "auction" %}">Auctions</a></li>
-                                <li><a href="{% url "auction-details" %}">Auctions Details</a></li>
-                            </ul>
+                        <li class="menu-item">
+                            <a href="{% url "auction" %}" class="drop-down">Auctions</a>
                         </li>
+                        
                         <li class="menu-item">
                             <a href="{% url "blog" %}" class="drop-down">Blog</a>
-                
                         </li>
                         <li class="menu-item-has-children">
                             <a href="#" class="drop-down">Pages</a><i class="bi bi-plus dropdown-icon"></i>
@@ -151,35 +146,25 @@
                         </div>
                     </form>
                     <div class="btn-area d-lg-none d-flex">
-
-                       <!-- ============================================= -->
-                    <!-- === DYNAMIC BLOCK FOR MOBILE VIEW STARTS HERE === -->
-                    <!-- ============================================= -->
-                 
-                <div class="btn-area d-lg-none d-flex">
-                    {% if user.is_authenticated %}
-                        <!-- This will now be a dropdown on mobile as well -->
-                        <div class="user-menu-container mobile-user-menu">
-                            <a href="#" class="login-btn btn-hover">
-                                {{ user.username }}
-                                <i class="bi bi-chevron-down"></i> <!-- Add a dropdown arrow icon -->
+                        {% if user.is_authenticated %}
+                            <!-- This will now be a dropdown on mobile as well -->
+                            <div class="user-menu-container mobile-user-menu">
+                                <a href="#" class="login-btn btn-hover">
+                                    {{ user.username }}
+                                    <i class="bi bi-chevron-down"></i> <!-- Add a dropdown arrow icon -->
+                                </a>
+                                <ul class="user-dropdown-menu">
+                                    <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
+                                    <li><a href="{% url 'dashboard' %}">My Profile</a></li>
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="login-btn btn-hover">
+                                <i class="bi bi-person-fill"></i>
+                                My Account
                             </a>
-                            <ul class="user-dropdown-menu">
-                                <!-- You can add more links here later, like 'Dashboard' or 'My Profile' -->
-                                 <li><a href="{% url 'dashboard' %}">My Profile</a></li>
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="login-btn btn-hover">
-                            <i class="bi bi-person-fill"></i>
-                            My Account
-                        </a>
-                    {% endif %}
-                </div>
-                    <!-- =========================================== -->
-                    <!-- === DYNAMIC BLOCK FOR MOBILE VIEW ENDS HERE === -->
-                    <!-- =========================================== -->
+                        {% endif %}
                     </div>
                 </div>
             </div>

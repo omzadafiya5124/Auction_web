@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
+from .models import Product,Review
 
 class ProfileUpdateForm(forms.ModelForm):
     """A form for updating a user's profile information."""
@@ -80,3 +81,33 @@ class SetNewPasswordForm(forms.Form):
         if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
         return confirm_password
+    
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            'product_name',
+            'product_description',
+            'start_price',
+            'auction_start_date_time',
+            'auction_end_date_time',
+            'main_image',
+            'category',
+        ]
+        widgets = {
+            'product_description': forms.Textarea(attrs={'rows': 4}),
+            'auction_start_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'auction_end_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['name', 'email', 'message', 'rating']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Name*'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email*'}),
+            'message': forms.Textarea(attrs={'placeholder': 'Message...'}),
+            'rating': forms.HiddenInput(),  # The rating will be set via JavaScript
+        }

@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google', 
     'accounts',
 
 ]
@@ -162,24 +160,4 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1 # Required for django.contrib.sites
 
-LOGIN_REDIRECT_URL = '/' # Where to redirect after login
-ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/' # Or wherever your login page is
-# Google specific settings (YOU WILL GET THESE FROM GOOGLE DEVELOPER CONSOLE)
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '89148708126-souu7547o3bvdcqu4a8co4juq6vj3rbu.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        },
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}

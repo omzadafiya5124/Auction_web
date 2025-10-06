@@ -1,6 +1,5 @@
     {% extends "header_footer.html" %}
-    {% load static %}
-    {% load socialaccount %}     
+    {% load static %}   
     {% block title %}Create Your Account{% endblock %}
 
     {% block extra_css %}
@@ -298,12 +297,6 @@
             </div>
             <div class="form-footer">
                 <span>Already have an account? </span><a href="{% url 'login' %}">Log In</a>
-            </div>
-            <!-- Google Login Button -->
-            <div class="social-login-options" style="text-align: center; margin-bottom: 2rem;">
-                <a href="{% provider_login_url 'google' %}" class="btn btn-google">
-                    <i class="fab fa-google"></i> Continue with Google
-                </a>
             </div>
         </div>
     </div>

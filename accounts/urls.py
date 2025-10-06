@@ -13,7 +13,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
-
+    path('add_product/', views.add_product, name='add_product'),
     #admin dashbord
     path('dashboard-admin/', views.dashboardAdmin, name='dashboard-admin'),
 
@@ -21,7 +21,7 @@ urlpatterns = [
     # Other Page URLs
     path('about/', views.about, name="about"),
     path('auction/', views.auction, name="auction"),
-    path('auction-details/', views.auc_details, name="auction-details"),
+    path('auction-details/<int:pk>/', views.auc_details, name="auction-details"),
     path('blog/',views.blog, name="blog"),
     path('category/',views.category, name="category"),
     path('contact/',views.contact, name="contact"),
