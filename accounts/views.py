@@ -26,7 +26,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, ProfileUpdateForm, CustomPasswordChangeForm
+from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm
 
 User = get_user_model()
 
@@ -44,8 +44,13 @@ def auc_details(request,pk):
      # Get all reviews for this product, ordered by the newest first
     reviews = product.reviews.all().order_by('-created_at')
     review_count = reviews.count()
-    # Initialize the form for adding a new review
-    review_form = ReviewForm()
+    if request.user.is_authenticated:
+        initial_data = {
+            'name': request.user.username,
+            'email': request.user.email,
+        }
+        review_form = ReviewForm(initial=initial_data)
+
 
     if request.method == 'POST':
         # If the form is submitted, process the data
@@ -85,43 +90,39 @@ def support_center(request): return render(request, "support-center.html")
 def terms_condition(request): return render(request, "terms-condition.html")
 def dash_board(request): return render(request,"dashboard.html")
 #For Edit profile
-def edit_profile_view(request): return render(request,"dashboard-edit-profile.html")
+def edit_profile_view(request):
+    form = UserProfileEditForm() 
+    return render(request,"dashboard-edit-profile.html",{'form':form})
+
+
+#For contect Form
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            
+            messages.success(request, 'Thank you! Your message has been submitted successfully.')
+            return redirect('contact') 
+    else:
+        form = ContactForm()
+
+    return render(request, 'contact.html', {'form': form})
 
 #For Edit profile
 @login_required
 def edit_profile(request):
-    
-    if request.method == 'GET':
-        profile_form = ProfileUpdateForm(instance=request.user)
-        password_form = CustomPasswordChangeForm(user=request.user)
-        
-        context = {
-            'profile_form': profile_form,
-            'password_form': password_form
-        }
-        return render(request, 'accounts/edit_profile.html', context)
-
     if request.method == 'POST':
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
-        
-        if profile_form.is_valid():
-            profile_form.save()
-            
-            if request.POST.get('old_password'):
-                password_form = CustomPasswordChangeForm(request.user, request.POST)
-                if password_form.is_valid():
-                    user = password_form.save()
-                    update_session_auth_hash(request, user)
-                    
-                    return JsonResponse({'success': True})
-                else:
-                    return JsonResponse({'success': False, 'errors': password_form.errors})
-            
-            return JsonResponse({'success': True})
-        
-        else:
-            return JsonResponse({'success': False, 'errors': profile_form.errors})
+        form = UserProfileEditForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('edit_profile_view')
+    else:
+        form = UserProfileEditForm(instance=request.user)
 
+    return render(request, 'dashboard-edit-profile.html', {'form': form})
+    
 @login_required
 def dashboardAdmin(request):
 
@@ -369,14 +370,32 @@ def password_reset_confirm_view(request):
         form = SetNewPasswordForm()
     return render(request, 'password_reset_confirm.html', {'form': form})
 
+
 def add_product(request):
     if request.method == 'POST':
+        
         form = ProductForm(request.POST, request.FILES)
+        gallery_files = request.FILES.getlist('gallery_images_upload')
+
         if form.is_valid():
-            product = form.save()
-            return redirect('auction')  # Redirect to product list page
+            product_instance = form.save(commit=False)
+
+            
+            product_instance.save()
+
+            gallery_paths = []
+            for file in gallery_files[:5]:  # limit to 5
+                saved_path = default_storage.save(f"products/gallery/{file.name}", file)
+                gallery_paths.append(saved_path)
+
+           
+            product_instance.gallery_images = gallery_paths
+            product_instance.save(update_fields=['gallery_images'])
+
+            return redirect('auction')
+        else:
+            print("Form Errors:", form.errors)
     else:
         form = ProductForm()
 
     return render(request, 'add_product.html', {'form': form})
-

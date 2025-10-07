@@ -27,95 +27,58 @@
         <div class="container-fluid">
             <div class="row gy-5">
                 <div class="col-xl-7">
-                    <div class="auction-details-img">  
+                    <div class="auction-details-img">
+                        <!-- Main Image Display Area (This part is correct) -->
                         <div class="tab-content" id="v-pills-tabContent">
-                            {% if product.main_image %}
-                            <div class="tab-pane fade show active" id="v-pills-img1" role="tabpanel">
-                                <div class="auction-details-tab-img">
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                </div> 
-                            </div>
-                            <div class="tab-pane fade" id="v-pills-img2" role="tabpanel">
+                            <!-- Tab for Main Image -->
+                            <div class="tab-pane fade show active" id="v-pills-img1" role="tabpanel" aria-labelledby="v-pills-img1-tab">
                                 <div class="auction-details-tab-img">
                                     <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="v-pills-img3" role="tabpanel"
-                                aria-labelledby="v-pills-img3-tab">
-                                <div class="auction-details-tab-img">
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
+
+                            <!-- Loop through gallery paths for other tabs -->
+                            {% for image_path in product.gallery_images %}
+                                <div class="tab-pane fade" id="v-pills-img{{ forloop.counter|add:1 }}" role="tabpanel" aria-labelledby="v-pills-img{{ forloop.counter|add:1 }}-tab">
+                                    <div class="auction-details-tab-img">
+                                        <img src="{{ MEDIA_URL }}{{ image_path }}" alt="{{ product.product_name }} - Image {{ forloop.counter|add:1 }}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="v-pills-img4" role="tabpanel"
-                                aria-labelledby="v-pills-img4-tab">
-                                <div class="auction-details-tab-img">
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="v-pills-img5" role="tabpanel"
-                            aria-labelledby="v-pills-img5-tab">
-                                <div class="auction-details-tab-img">
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                </div>
-                            </div>
-                            {%endif%}
+                            {% endfor %}
                         </div>
-                        <div class="nav nav-pills" id="v-pills-tab" role="tablist"
-                            aria-orientation="vertical">
-                            <div class="swiper auction-details-nav-slider">
-                                <div class="swiper-wrapper">
-                                    {% if product.main_image %}
-                                    <div class="swiper-slide">
-                                        <div class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="v-pills-img1-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-img1" type="button" role="tab" aria-controls="v-pills-img1" aria-selected="true">
-                                                <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="nav-item" role="presentation">
-                                            <button class="nav-link" id="v-pills-img2-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-img2" type="button" role="tab" aria-controls="v-pills-img2"
-                                                aria-selected="false">
-                                                <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="nav-item" role="presentation">
-                                            <button class="nav-link" id="v-pills-img3-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-img3" type="button" role="tab" aria-controls="v-pills-img3"
-                                                aria-selected="false">
-                                                <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="nav-item" role="presentation">
-                                            <button class="nav-link" id="v-pills-img4-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-img4" type="button" role="tab" aria-controls="v-pills-img4"
-                                                aria-selected="false">
-                                                <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="nav-item" role="presentation">
-                                            <button class="nav-link" id="v-pills-img5-tab" data-bs-toggle="pill"
-                                                data-bs-target="#v-pills-img5" type="button" role="tab" aria-controls="v-pills-img5"
-                                                aria-selected="false">
-                                                <img src="{{ product.main_image.url }}" alt="{{ product.product_name }}">
-                                            </button>
-                                        </div>
-                                    </div>
-                                    {%endif%}
+
+                        <!-- Thumbnail Navigation Slider -->
+                        <!-- 
+                            **FIX 1**: Added Bootstrap's 'nav' and 'nav-pills' classes to the main swiper container.
+                            This tells Bootstrap that this entire block is a tab navigator.
+                            **FIX 2**: Added an 'id' and 'role="tablist"' for accessibility and proper JS function.
+                        -->
+                        <div class="swiper auction-details-nav-slider nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <div class="swiper-wrapper">
+                                
+                                <!-- Thumbnail for Main Image -->
+                                <div class="swiper-slide">
+                                    <!-- 
+                                        **FIX 3**: Added 'aria-controls' to explicitly link the button to its content pane.
+                                    -->
+                                    <button class="nav-link active" id="v-pills-img1-tab" data-bs-toggle="pill" data-bs-target="#v-pills-img1" type="button" role="tab" aria-controls="v-pills-img1" aria-selected="true">
+                                        <img src="{{ product.main_image.url }}" alt="Thumbnail 1">
+                                    </button>
                                 </div>
-                            </div>   
+
+                                <!-- Loop for gallery thumbnails -->
+                                {% for image_path in product.gallery_images %}
+                                    <div class="swiper-slide">
+                                        <button class="nav-link" id="v-pills-img{{ forloop.counter|add:1 }}-tab" data-bs-toggle="pill" data-bs-target="#v-pills-img{{ forloop.counter|add:1 }}" type="button" role="tab" aria-controls="v-pills-img{{ forloop.counter|add:1 }}" aria-selected="false">
+                                            <img src="{{ MEDIA_URL }}{{ image_path }}" alt="Thumbnail {{ forloop.counter|add:1 }}">
+                                        </button>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-xl-5">
                     <div class="auction-details-content">
                         <div class="batch">
@@ -125,36 +88,35 @@
                         <p>{{ product.product_description }}</p>
                         <div class="price-area">
                             <span>Current Bid at:</span>
-                            <strong>₹{{ product.current_bid }}</strong>
+                            <!-- Assuming you have a current_bid field, otherwise use start_price -->
+                            <strong>₹{{ product.current_bid|default:product.start_price }}</strong>
                         </div>
+                        <div class="mb-4">
+                            <span class="fs-5"><strong>Starting On:</strong> {{ product.auction_start_date_time|date:"F d, Y, h:i A" }}</span>
+                        </div>
+
+                        <!-- Countdown Block -->
                         <div class="coundown-area">
-                            <h6>Auction Will Be End:</h6>
+                            <h6>Auction Will End In:</h6>
                             <div class="countdown-timer">
-                                <ul data-countdown="2024-08-24 12:00:00">
-                                    <li data-days="00">80 <span>Days</span> <span>Days</span></li>
-                                    <li class="clone">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13">
-                                            <path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path>
-                                        </svg>
-                                    </li>
-                                    <li data-hours="00">19 <span>Hours</span> <span>Hours</span></li>
-                                    <li class="clone">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13">
-                                            <path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path>
-                                        </svg>
-                                    </li>
-                                    <li data-minutes="00">26 <span>Mint</span> <span>Minutes</span></li>
-                                    <li class="clone">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13">
-                                            <path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path>
-                                        </svg>
-                                    </li>
-                                    <li data-seconds="00">17 <span>Sec</span> <span>Seconds</span></li>
+                                <!-- End time formatted for JavaScript -->
+                                <ul data-countdown="{{ product.auction_end_date_time|date:'Y-m-d H:i:s' }}">
+                                    <li data-days="00">00 <span>Days</span> <span>Days</span></li>
+                                    <li class="clone"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13"><path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path></svg></li>
+                                    <li data-hours="00">00 <span>Hours</span> <span>Hours</span></li>
+                                    <li class="clone"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13"><path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path></svg></li>
+                                    <li data-minutes="00">00 <span>Mint</span> <span>Minutes</span></li>
+                                    <li class="clone"><svg xmlns="http://www.w3.org/2000/svg" width="4" height="13" viewBox="0 0 4 13"><path d="M0 11.0633C0 11.5798 0.186992 12.0317 0.560976 12.419C0.95122 12.8063 1.43089 13 2 13C2.58537 13 3.06504 12.8063 3.43903 12.419C3.81301 12.0317 4 11.5798 4 11.0633C4 10.5146 3.81301 10.0546 3.43903 9.68343C3.06504 9.29609 2.58537 9.10242 2 9.10242C1.43089 9.10242 0.95122 9.29609 0.560976 9.68343C0.186992 10.0546 0 10.5146 0 11.0633ZM0 1.96089C0 2.49348 0.186992 2.95345 0.560976 3.34078C0.95122 3.72812 1.43089 3.92179 2 3.92179C2.58537 3.92179 3.06504 3.72812 3.43903 3.34078C3.81301 2.95345 4 2.49348 4 1.96089C4 1.42831 3.81301 0.968343 3.43903 0.581006C3.06504 0.193669 2.58537 0 2 0C1.43089 0 0.95122 0.193669 0.560976 0.581006C0.186992 0.968343 0 1.42831 0 1.96089Z"></path></svg></li>
+                                    <li data-seconds="00">00 <span>Sec</span> <span>Seconds</span></li>
                                 </ul>
                             </div>
-                            <span><strong>Ending On:</strong>{{ product.auction_end_date_time }} </span>
+                            
+                            <!-- Ending On Block (Styled identically to "Starting On") -->
+                            <div class="mt-4">
+                                <span class="fs-5"><strong>Ending On:</strong> {{ product.auction_end_date_time|date:"F d, Y, h:i A" }}</span>
+                            </div>
                         </div>
-                        <div class="quantity-area">
+                          <div class="quantity-area">
                             <h6>Your Max Bid:</h6>
                             <div class="quantity-counter-and-btn-area">
                                 <div class="quantity-counter">
@@ -286,10 +248,6 @@
                                                                     </div>
                                                                 {% endif %}
                                                                 <div class="rate">
-                                                                    <!--
-                                                                    THE FIX: Changed name="rate" to name="rating"
-                                                                    This must match the field name in your Django form.
-                                                                    -->
                                                                     <input type="radio" id="star5" name="rating" value="5" required>
                                                                     <label for="star5" title="text">5 stars</label>
                                                                     <input type="radio" id="star4" name="rating" value="4">
@@ -306,7 +264,6 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="form-inner mb-20">
-                                                            <!-- Use Django form rendering to ensure correct name and value -->
                                                             {{ review_form.name }}
                                                             {% if review_form.name.errors %}
                                                                 <div class="alert alert-danger">{{ review_form.name.errors }}</div>

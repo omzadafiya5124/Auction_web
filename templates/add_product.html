@@ -2,17 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add a New Product</title>
+    <!-- Your existing <style> section is perfect, no changes needed -->
+    <style>
+        /* General Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #495057;
+            margin-bottom: 25px;
+        }
+        
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important */
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add a New Product for Auction</h1>
+    <div class="container">
+        <h1>Add a New Product for Auction</h1>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
+       <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- This renders any non-field errors (like validation issues) -->
+            {{ form.non_field_errors }}
 
-        <button type="submit">Add Product</button>
-    </form>
+            <div class="form-group">
+                <label>{{ form.product_name.label_tag }}</label>
+                {{ form.product_name }}
+                {{ form.product_name.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.product_description.label_tag }}</label>
+                {{ form.product_description }}
+                {{ form.product_description.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.start_price.label_tag }}</label>
+                {{ form.start_price }}
+                {{ form.start_price.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.auction_start_date_time.label_tag }}</label>
+                {{ form.auction_start_date_time }}
+                {{ form.auction_start_date_time.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.auction_end_date_time.label_tag }}</label>
+                {{ form.auction_end_date_time }}
+                {{ form.auction_end_date_time.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.category.label_tag }}</label>
+                {{ form.category }}
+                {{ form.category.errors }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.main_image.label_tag }}</label>
+                {{ form.main_image }}
+                {{ form.main_image.errors }}
+            </div>
+
+        
+            <div class="form-group">
+                <label>{{ form.gallery_images_upload.label_tag }}</label>
+                {{ form.gallery_images_upload }}
+                {{ form.gallery_images_upload.errors }}
+            </div>
+            <!-- =============================================================== -->
+
+            <button type="submit" class="submit-btn">Add Product</button>
+        </form>
+    </div>
 </body>
 </html>

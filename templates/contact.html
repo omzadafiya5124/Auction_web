@@ -81,30 +81,45 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="contact-form-area">
-                        <form>
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'submit_contact_form' %}">
+                            <!-- Add CSRF token for security -->
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-12 mb-20">
                                     <div class="form-inner">
                                         <label>Name*</label>
-                                        <input type="text" placeholder="Daniel Scoot">
+                                        <!-- Add name="name" and required attribute -->
+                                        <input type="text" name="name" value="{{user.username}}" required readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-20">
                                     <div class="form-inner">
                                         <label>Phone</label>
-                                        <input type="text" placeholder="+8801700000000">
+                                        <!-- Add name="phone" -->
+                                        <input type="text" name="phone" value="{{user.mobile_number}}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-20">
                                     <div class="form-inner">
                                         <label>Email</label>
-                                        <input type="email" placeholder="info@example.com">
+                                        <!-- Add name="email" and required attribute -->
+                                        <input type="email" name="email" value="{{user.email}}" required readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-30">
                                     <div class="form-inner">
                                         <label>Write Your Massage*</label>
-                                        <textarea placeholder="What’s on your mind"></textarea>
+                                        <!-- Add name="message" and required attribute -->
+                                        <textarea name="message" placeholder="What’s on your mind" required></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">

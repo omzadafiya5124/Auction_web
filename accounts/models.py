@@ -50,7 +50,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
 class Product(models.Model):
     product_name = models.CharField(max_length=200)
     product_description = models.TextField()
@@ -61,16 +60,33 @@ class Product(models.Model):
     auction_end_date_time = models.DateTimeField()
 
     main_image = models.ImageField(upload_to="products/")
+    # This field will store a list of paths to the gallery images
+    gallery_images = models.JSONField(default=list, blank=True)
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.product_name
 
+    # Set current_bid to start_price when a new product is created
     def save(self, *args, **kwargs):
         if not self.id and self.current_bid is None:
             self.current_bid = self.start_price
         super().save(*args, **kwargs)
+
+    # **CRITICAL**: Custom delete method to remove associated files from storage
+    def delete(self, *args, **kwargs):
+        # First, delete the main image file
+        self.main_image.delete(save=False)
+        
+        # Loop through the JSON list and delete each gallery image file
+        for image_path in self.gallery_images:
+            if default_storage.exists(image_path):
+                default_storage.delete(image_path)
+
+        # Call the original delete method
+        super().delete(*args, **kwargs)
+
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -82,3 +98,14 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review for {self.product.name} by {self.name}'
+
+#Contect Form
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20, blank=True) # blank=True makes it optional
+    email = models.EmailField()
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.name} - {self.email}"  
