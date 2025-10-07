@@ -4,7 +4,7 @@
 {% block title%}Auction Details{%endblock%}
 
     <!-- Start Auction Details section -->
-     {% block content %}
+{% block content %}
 
      <!-- Start Breadcrumb section -->
     <div class="breadcrumb-section seven" style="background-image:url({% static 'assets/img/inner-pages/breadcrumb-bg7.png' %});">  
@@ -85,7 +85,7 @@
                             <span>Product Id :: {{product.id}}</span>
                         </div>
                         <h1>{{ product.product_name }}</h1>
-                        <p>{{ product.product_description }}</p>
+                        <p>{{ product.sub_description }}</p>
                         <div class="price-area">
                             <span>Current Bid at:</span>
                             <!-- Assuming you have a current_bid field, otherwise use start_price -->
@@ -192,7 +192,9 @@
                                                     <li>
                                                         <div class="single-comment-area">
                                                             <div class="author-img">
-                                                                <img src="{% static 'assets/img/inner-pages/comment-author-01.jpg' %}" alt="User Review Image">
+                                                                {% if review.image %}
+                                                                    <img src="{{ review.image.url }}" alt="Image for review by {{ review.name }}">
+                                                                {% endif %}
                                                             </div>
                                                             <div class="comment-content">
                                                                 <div class="author-and-review">
@@ -313,5 +315,12 @@
             document.querySelector('input[name="rating"]').value = this.value;
         });
     });
+
+    {% if messages %}
+            {% for message in messages %}
+                alert('{{ message|escapejs }}');
+            {% endfor %}
+    {% endif %}
+
     </script>
     {% endblock %}

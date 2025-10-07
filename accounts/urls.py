@@ -38,6 +38,6 @@ urlpatterns = [
     path('edit-profile/',views.edit_profile_view, name="edit_profile_view"),
     #For Edit profile
     path('edit-profile/edit/', views.edit_profile, name='edit_profile'),
-    #For contect Form
+        #For contect Form
     path('submit-contact/', views.contact_view, name='submit_contact_form'),
 ]

@@ -12,7 +12,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 import base64
 from django.core.paginator import Paginator
-
+from django.core.files.storage import default_storage
 #For Admin
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
@@ -34,48 +34,6 @@ User = get_user_model()
 
 def home(request): return render(request, "index.html")
 def about(request): return render(request, "about.html")
-def auction(request):
-    products = Product.objects.all()  
-    return render(request, "auction.html", {'products': products})
-
-@login_required
-def auc_details(request,pk): 
-    product = get_object_or_404(Product, pk=pk)
-     # Get all reviews for this product, ordered by the newest first
-    reviews = product.reviews.all().order_by('-created_at')
-    review_count = reviews.count()
-    if request.user.is_authenticated:
-        initial_data = {
-            'name': request.user.username,
-            'email': request.user.email,
-        }
-        review_form = ReviewForm(initial=initial_data)
-
-
-    if request.method == 'POST':
-        # If the form is submitted, process the data
-        form_data = ReviewForm(request.POST)
-        if form_data.is_valid():
-            # Create a new review object but don't save it to the database yet
-            new_review = form_data.save(commit=False)
-            # Associate the review with the current product
-            new_review.product = product
-            # Save the new review to the database
-            new_review.save()
-            # Redirect to the same page to show the new review and clear the form
-            return redirect('auction-details', pk=pk)
-        else:
-            # If the form is invalid, re-render the page with the submitted data and errors
-            review_form = form_data
-
-    context = {
-        'product': product,
-        'reviews': reviews,
-        'review_form': review_form,
-        'review_count': review_count,
-    }
-    return render(request, 'auction-details.html', context)
-
 def blog(request): return render(request, "blog.html")
 def category(request): return render(request, "category.html")
 def contact(request): return render(request, "contact.html")
@@ -159,6 +117,10 @@ def dashboardAdmin(request):
     }
     
     return render(request, 'Admin/dashbord_admin.html', context)
+
+def auction(request):
+    products = Product.objects.all()  
+    return render(request, "auction.html", {'products': products})
 
 # This view now ONLY handles the initial page load.
 def register_view(request):
@@ -373,29 +335,76 @@ def password_reset_confirm_view(request):
 
 def add_product(request):
     if request.method == 'POST':
-        
+        # The form will handle all fields except the manual gallery input
         form = ProductForm(request.POST, request.FILES)
-        gallery_files = request.FILES.getlist('gallery_images_upload')
 
         if form.is_valid():
+            # 1. Get the instance from the form but don't save it to the DB yet
             product_instance = form.save(commit=False)
 
+            # 2. Manually get the gallery files from request.FILES
+            #    The key 'gallery_images' MUST match the 'name' attribute in your HTML <input> tag.
+            gallery_files = request.FILES.getlist('gallery_images')
             
-            product_instance.save()
-
             gallery_paths = []
-            for file in gallery_files[:5]:  # limit to 5
-                saved_path = default_storage.save(f"products/gallery/{file.name}", file)
-                gallery_paths.append(saved_path)
+            if gallery_files:
+                for file in gallery_files[:5]:  # Limit to 5 files
+                    # Save each file and collect its path
+                    saved_path = default_storage.save(f"products/gallery/{file.name}", file)
+                    gallery_paths.append(saved_path)
 
-           
+            # 3. Assign the list of paths to the instance
             product_instance.gallery_images = gallery_paths
-            product_instance.save(update_fields=['gallery_images'])
+
+            # 4. Now, save the complete instance to the database once.
+            product_instance.save()
 
             return redirect('auction')
         else:
+            # For debugging, it's helpful to see what's wrong
             print("Form Errors:", form.errors)
     else:
         form = ProductForm()
 
     return render(request, 'add_product.html', {'form': form})
+    
+
+@login_required
+def auc_details(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    reviews = product.reviews.all().order_by('-created_at')
+    review_count = reviews.count()
+    review_form = ReviewForm()  # Initialize the form
+
+    if request.user.is_authenticated:
+        initial_data = {
+            'name': request.user.username,
+            'email': request.user.email,
+        }
+        review_form = ReviewForm(initial=initial_data)
+
+    if request.method == 'POST':
+        form_data = ReviewForm(request.POST)
+        if form_data.is_valid():
+            new_review = form_data.save(commit=False)
+            new_review.product = product
+
+            if request.user.is_authenticated:
+                if hasattr(request.user, 'image') and request.user.image:
+                    new_review.image = request.user.image
+
+            new_review.save()
+            messages.success(request, 'Your review was submitted successfully!')
+            return redirect('auction-details', pk=pk)
+        else:
+            review_form = form_data
+
+    context = {
+        'product': product,
+        'reviews': reviews,
+        'review_form': review_form,
+        'review_count': review_count,
+        'MEDIA_URL': settings.MEDIA_URL,
+    }
+    
+    return render(request, 'auction-details.html', context)

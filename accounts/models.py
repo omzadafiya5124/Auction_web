@@ -52,6 +52,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=200)
+    sub_description = models.TextField(default='')
     product_description = models.TextField()
     start_price = models.DecimalField(max_digits=10, decimal_places=2)
     current_bid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -91,6 +92,7 @@ class Product(models.Model):
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     email = models.EmailField()
     message = models.TextField()
     rating = models.IntegerField()

@@ -107,29 +107,17 @@ class SetNewPasswordForm(forms.Form):
             raise forms.ValidationError("Passwords do not match.")
         return confirm_password
     
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-    
 class ProductForm(forms.ModelForm):
-    # This field is for the upload widget. It is NOT saved to the database.
-    # We will process the files from this field manually in the view.
-    gallery_images_upload = forms.FileField(
-        widget=MultipleFileInput(),  # <-- Use the custom widget here
-        required=False,
-        label="Gallery Images (Optional, up to 5)"
-    )
-
     class Meta:
         model = Product
-        # Note: The 'gallery_images' JSONField is NOT included here.
-        # We only include the fields that Django can handle automatically.
         fields = [
-            'product_name', 'product_description', 'start_price',
+            'product_name', 'sub_description', 'product_description', 'start_price',
             'auction_start_date_time', 'auction_end_date_time',
             'category', 'main_image',
         ]
         widgets = {
             'product_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'sub_description': forms.TextInput(attrs={'class': 'form-control'}),
             'product_description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
             'start_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'auction_start_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
@@ -137,6 +125,7 @@ class ProductForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'main_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
         
 class ReviewForm(forms.ModelForm):
     class Meta:

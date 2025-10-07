@@ -87,6 +87,11 @@
                 {{ form.product_name.errors }}
             </div>
             <div class="form-group">
+                <label>{{ form.sub_description.label_tag }}</label>
+                {{ form.sub_description }}
+                {{ form.sub_description.errors }}
+            </div>
+            <div class="form-group">
                 <label>{{ form.product_description.label_tag }}</label>
                 {{ form.product_description }}
                 {{ form.product_description.errors }}
@@ -117,10 +122,9 @@
                 {{ form.main_image.errors }}
             </div>
 
-        
             <div class="form-group">
-                <label>{{ form.gallery_images_upload.label_tag }}</label>
-                {{ form.gallery_images_upload }}
+                <label for="gallery_images">Gallery Images (Optional, up to 5):</label>
+                <input type="file" name="gallery_images" id="gallery_images" multiple>
                 {{ form.gallery_images_upload.errors }}
             </div>
             <!-- =============================================================== -->
