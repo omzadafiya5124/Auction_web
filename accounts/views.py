@@ -1,6 +1,6 @@
 import json
 import random, sys
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.contrib import messages
@@ -13,12 +13,13 @@ from django.core.files.base import ContentFile
 import base64
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
+from django.views.decorators.http import require_POST
 #For Admin
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
 from .forms import ProductForm,ReviewForm
-from .models import Product
+from .models import Product,Wishlist 
 
 
 #For edit profile
@@ -32,7 +33,9 @@ User = get_user_model()
 
 # --- OTHER PAGE VIEWS (Placeholders) ---
 
-def home(request): return render(request, "index.html")
+def home(request): 
+    products = Product.objects.all()
+    return render(request, "index.html",{'products':products})
 def about(request): return render(request, "about.html")
 def blog(request): return render(request, "blog.html")
 def category(request): return render(request, "category.html")
@@ -408,3 +411,49 @@ def auc_details(request, pk):
     }
     
     return render(request, 'auction-details.html', context)
+
+@login_required
+def toggle_wishlist(request, product_id):
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        
+        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+        
+        if wishlist.products.filter(id=product.id).exists():
+            wishlist.products.remove(product)
+            status = 'removed'
+            message = 'Product removed from your wishlist.'
+        else:
+            wishlist.products.add(product)
+            status = 'added'
+            message = 'Product added to your wishlist.'
+            
+        return JsonResponse({'status': status, 'message': message})
+
+    except Product.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Product not found.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': 'An unexpected error occurred.'}, status=500)
+
+
+@login_required
+def user_wishlist_products(request):
+    """
+    Displays the user's wishlist page.
+    """
+    products = []
+    try:
+        # It's common to have a OneToOneField from User to Wishlist,
+        # which makes this lookup easier.
+        wishlist = request.user.wishlist
+        products = wishlist.products.all()
+    except Wishlist.DoesNotExist:
+        # If the user has never added an item, their wishlist might not exist.
+        # In this case, 'products' will correctly remain an empty list.
+        pass
+
+    # THE FIX IS HERE: The key 'wishlist_products' now matches the template.
+    context = {
+        'wishlist_products': products
+    }
+    return render(request, 'wishlist.html', context)

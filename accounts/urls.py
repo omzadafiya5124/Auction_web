@@ -40,4 +40,6 @@ urlpatterns = [
     path('edit-profile/edit/', views.edit_profile, name='edit_profile'),
         #For contect Form
     path('submit-contact/', views.contact_view, name='submit_contact_form'),
+    path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
+    path('wishlist/', views.user_wishlist_products, name='user_wishlist'),
 ]

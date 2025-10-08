@@ -72,6 +72,72 @@
 .user-menu-container:hover .user-dropdown-menu {
     display: block;
 }
+
+.wishlist-toggle-btn svg path {
+    fill: #000000;
+    stroke: #000000;
+    stroke-width: 1.2;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 2. Active State (Product IS in Wishlist): Solid Red Heart */
+/* This is the "permanent" red color. */
+.wishlist-toggle-btn.active svg path {
+    fill: #FF0000;
+    stroke: #FF0000;
+}
+
+
+/* 3. HOVER QUERY (when NOT in wishlist) */
+/* This rule only applies if the button does NOT have the 'active' class. */
+.wishlist-toggle-btn:not(.active):hover svg path {
+    fill: #FF0000;
+    stroke: #FF0000;
+}
+
+
+/* 4. THE KEY TO A "PERMANENT" RED HEART (when IS in wishlist) */
+/* This new rule explicitly tells the active button to STAY red on hover,
+   overriding any other potential hover styles from your theme. */
+.wishlist-toggle-btn.active:hover svg path {
+    fill: #FF0000;
+    stroke: #FF0000;
+}
+
+/* 5. Bonus: Ensure no unwanted background color appears on the link itself */
+.wishlist-toggle-btn:hover {
+    background-color: transparent !important;
+}
+
+.auction-card-img-wrap .card-img {
+    display: block;
+    overflow: hidden; /* Hides any part of the image that overflows the container */
+    position: relative;
+    background-color: #f5f5f5; /* A light grey background for loading or missing images */
+    
+    /* This is the magic property for a consistent shape. 4/3 is a common aspect ratio. */
+    /* Use 1/1 for perfect squares if you prefer. */
+    aspect-ratio: 4 / 3; 
+}
+
+/* 2. Style the Image Itself */
+.auction-card-img-wrap .product-card-image {
+    width: 100%;
+    height: 100%;
+    
+    /* This is the MOST IMPORTANT property. It tells the image to:
+       - Fill the entire container.
+       - Maintain its aspect ratio (no stretching).
+       - Crop any extra parts (like background-size: cover). */
+    object-fit: cover; 
+    
+    transition: transform 0.4s ease; /* For a smooth hover effect */
+}
+
+/* 3. (Optional) Add a Professional Hover Effect */
+.auction-card-img-wrap .card-img:hover .product-card-image {
+    transform: scale(1.05); /* Slightly zooms the image on hover */
+}
     </style>
     {% block extra_css %}{% endblock%}
 </head>
@@ -401,6 +467,72 @@
             });
         }
     });
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // This listens for clicks on the entire page. It's very efficient.
+            document.body.addEventListener('click', function(e) {
+                
+                // Check if the clicked element (or its parent) is a wishlist button.
+                const button = e.target.closest('.wishlist-toggle-btn');
+                if (!button) {
+                    return; // If not, do nothing.
+                }
+
+                // THIS IS THE MOST CRITICAL LINE
+                // It stops the browser from redirecting to the URL in 'href'.
+                e.preventDefault();
+
+                const url = button.getAttribute('href');
+                const csrftoken = getCookie('csrftoken');
+
+                // Send the request to your Django view in the background.
+                fetch(url, {
+                    method: 'POST', // Use POST as required by the view
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // If the server has an error, we should undo the color change.
+                        button.classList.toggle('active'); 
+                        return Promise.reject('Server responded with an error.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // The request was successful. Now we update the heart's color.
+                    if (data.status === 'added') {
+                        button.classList.add('active'); // Makes the heart red
+                    } else if (data.status === 'removed') {
+                        button.classList.remove('active'); // Makes the heart black
+                    }
+                })
+                .catch(error => {
+                    console.error('Wishlist toggle failed:', error);
+                    // We could optionally show a non-intrusive error message here.
+                });
+            });
+        });
+        
     </script>
     <script data-cfasync="false" src="../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{% static "assets/js/jquery-3.7.1.min.js"%}"></script>
     <!-- Popper and Bootstrap JS -->
