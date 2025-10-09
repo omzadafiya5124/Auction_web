@@ -20,6 +20,11 @@ class UserProfileEditForm(forms.ModelForm):
         required=False
     )
     image = forms.ImageField(required=False, widget=forms.FileInput)
+    gender = forms.ChoiceField(
+        choices=User.GENDER_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
+    )
 
     class Meta:
         model = User
@@ -47,6 +52,25 @@ class UserProfileEditForm(forms.ModelForm):
         if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("An account with this email address already exists.")
         return email
+
+
+class CustomPasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label='Old Password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your old password'})
+    )
+    new_password1 = forms.CharField(
+        label='New Password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter a new password'})
+    )
+    new_password2 = forms.CharField(
+        label='Confirm Password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm your new password'})
+    )
+
+    class Meta:
+        model = User # Assuming your user model is the default
+        fields = ('old_password', 'new_password1', 'new_password2')
 
 class CustomPasswordChangeForm(PasswordChangeForm):
     """A styled version of Django's secure password change form."""
@@ -137,3 +161,19 @@ class ReviewForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'placeholder': 'Message...'}),
             'rating': forms.HiddenInput(),  # The rating will be set via JavaScript
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       

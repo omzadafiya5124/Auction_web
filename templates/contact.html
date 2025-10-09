@@ -81,17 +81,9 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="contact-form-area">
-                        
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}" role="alert">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
 
                         <form method="POST" action="{% url 'submit_contact_form' %}">
-                            <!-- Add CSRF token for security -->
+        
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-12 mb-20">

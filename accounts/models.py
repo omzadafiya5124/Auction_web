@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    GENDER_CHOICES = (('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other'))
+    GENDER_CHOICES = [('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')]
     ACCOUNT_TYPE_CHOICES = (('Bidder', 'Bidder'), ('Seller', 'Seller'))
     
     email = models.EmailField(unique=True)
@@ -47,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="category/")
 
     def __str__(self):
         return self.name

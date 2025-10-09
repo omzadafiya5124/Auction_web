@@ -316,11 +316,5 @@
         });
     });
 
-    {% if messages %}
-            {% for message in messages %}
-                alert('{{ message|escapejs }}');
-            {% endfor %}
-    {% endif %}
-
     </script>
     {% endblock %}

@@ -27,7 +27,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm
+from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm,CustomPasswordForm
 
 User = get_user_model()
 
@@ -50,6 +50,8 @@ def privacy_policy(request): return render(request, "privacy-policy.html")
 def support_center(request): return render(request, "support-center.html")
 def terms_condition(request): return render(request, "terms-condition.html")
 def dash_board(request): return render(request,"dashboard.html")
+def password_reset(request): return render(request,"dashboard-change-password.html")
+def help_support(request): return render(request,"dashboard-help-and-support.html")
 #For Edit profile
 def edit_profile_view(request):
     form = UserProfileEditForm() 
@@ -73,17 +75,43 @@ def contact_view(request):
 #For Edit profile
 @login_required
 def edit_profile(request):
+    user = request.user  # current logged-in user
+
     if request.method == 'POST':
-        form = UserProfileEditForm(request.POST, request.FILES, instance=request.user)
+        form = UserProfileEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('edit_profile_view')
+            return redirect('edit_profile')  # redirect to same view or another page
     else:
-        form = UserProfileEditForm(instance=request.user)
+        # This ensures form fields (like gender) are pre-filled with user data
+        form = UserProfileEditForm(instance=user)
 
-    return render(request, 'dashboard-edit-profile.html', {'form': form})
+    return render(request, 'dashboard-edit-profile.html', {'form': form, 'user': user})
     
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = CustomPasswordForm(user=request.user, data=request.POST)
+        
+        if form.is_valid():
+            user = form.save()
+            
+            # Important! Update the session to prevent the user from being logged out
+            update_session_auth_hash(request, user)
+            
+            messages.success(request, 'Your password has been successfully changed!')
+            return redirect('dashboard')
+        else:
+            # The form will contain error messages, e.g., "Your old password was entered incorrectly."
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        # For a GET request, create an unbound form instance
+        form = CustomPasswordForm(user=request.user)
+        
+    return render(request, 'dashboard-change-password.html', {'form': form})
+
 @login_required
 def dashboardAdmin(request):
 
