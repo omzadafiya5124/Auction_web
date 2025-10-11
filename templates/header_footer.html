@@ -106,7 +106,6 @@
     aspect-ratio: 4 / 3; 
 }
 
-
 .auction-card-img-wrap .product-card-image {
     width: 100%;
     height: 100%;
@@ -116,6 +115,7 @@
 .auction-card-img-wrap .card-img:hover .product-card-image {
     transform: scale(1.05); 
 }
+
     </style>
     {% block extra_css %}{% endblock%}
 </head>
@@ -154,14 +154,12 @@
                         <li class="menu-item">
                             <a href="{% url "auction" %}" class="drop-down">Auctions</a>
                         </li>
-                        
                         <li class="menu-item">
-                            <a href="{% url "blog" %}" class="drop-down">Blog</a>
-                        </li>
+                            <a href="{% url "about" %}">About Us</a>
+                        </li> 
                         <li class="menu-item-has-children">
                             <a href="#" class="drop-down">Pages</a><i class="bi bi-plus dropdown-icon"></i>
                             <ul class="sub-menu">
-                                <li><a href="{% url "about" %}">About</a></li>
                                 <li><a href="{% url "category" %}">Category</a></li>
                                 <li>
                                     <a href="#">Seller</a>
@@ -510,6 +508,10 @@
                 });
             });
         });
+
+        setInterval(function() {
+        location.reload();
+    }, 60000); 
         
     </script>
     <script data-cfasync="false" src="../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{% static "assets/js/jquery-3.7.1.min.js"%}"></script>

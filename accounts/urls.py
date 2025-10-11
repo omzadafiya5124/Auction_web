@@ -22,7 +22,7 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('auction/', views.auction, name="auction"),
     path('auction-details/<int:pk>/', views.auc_details, name="auction-details"),
-    path('blog/',views.blog, name="blog"),
+    path('add_category/', views.add_category, name='add_category'),
     path('category/',views.category, name="category"),
     path('contact/',views.contact, name="contact"),
     path('sellers/',views.seller_list, name="seller_list"),
@@ -44,4 +44,9 @@ urlpatterns = [
     path('submit-contact/', views.contact_view, name='submit_contact_form'),
     path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/', views.user_wishlist_products, name='user_wishlist'),
+
+    # path('blogs/', views.blog, name='blog_list'),
+    path('blogs/<int:pk>/', views.blog, name='blog'),
+    path('add_blog/', views.add_blog, name='add_blog'),
 ]
+

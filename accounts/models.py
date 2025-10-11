@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="category/")
+    image = models.ImageField(upload_to="category/",null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -63,7 +63,6 @@ class Product(models.Model):
     auction_end_date_time = models.DateTimeField()
 
     main_image = models.ImageField(upload_to="products/")
-    # This field will store a list of paths to the gallery images
     gallery_images = models.JSONField(default=list, blank=True)
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
@@ -90,6 +89,22 @@ class Product(models.Model):
         # Call the original delete method
         super().delete(*args, **kwargs)
 
+    def auction_status(self):
+        now = timezone.now()
+        if self.auction_start_date_time <= now <= self.auction_end_date_time:
+            return "live"
+        elif now < self.auction_start_date_time:
+            return "upcoming"
+        else:
+            return "closed"
+        
+    def countdown_start(self):
+        """Return the datetime to start countdown, only if auction has started."""
+        now = timezone.now()
+        if now >= self.auction_start_date_time and now <= self.auction_end_date_time:
+            return self.auction_end_date_time
+        return None
+
 class Wishlist(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wishlist')
     products = models.ManyToManyField(Product, blank=True)
@@ -101,9 +116,7 @@ class Wishlist(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    email = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews',null=True, blank=True) 
     message = models.TextField()
     rating = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -121,3 +134,13 @@ class ContactSubmission(models.Model):
 
     def __str__(self):
         return f"Message from {self.name} - {self.email}"  
+
+class Blog(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="blogs")
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    image = models.ImageField(upload_to="blogs/")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

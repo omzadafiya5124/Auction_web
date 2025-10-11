@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
-from .models import Product,Review,ContactSubmission
+from .models import Product,Review,ContactSubmission,Category,Blog
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -150,19 +150,35 @@ class ProductForm(forms.ModelForm):
             'main_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
-        
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['name', 'email', 'message', 'rating']
+        fields = ['message', 'rating']
         widgets = {
-            'name': forms.TextInput(attrs={'readonly': 'readonly'}),
-            'email': forms.EmailInput(attrs={'readonly': 'readonly'}),
             'message': forms.Textarea(attrs={'placeholder': 'Message...'}),
-            'rating': forms.HiddenInput(),  # The rating will be set via JavaScript
+            'rating': forms.HiddenInput(),  # set by JavaScript (e.g. from the star rating)
         }
 
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter category name',
+            }),
+        }
 
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['category', 'title', 'description', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter blog title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Write your blog...'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 
 

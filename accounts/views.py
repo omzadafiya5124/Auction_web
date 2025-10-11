@@ -14,12 +14,13 @@ import base64
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from django.views.decorators.http import require_POST
+from django.db.models import Count
 #For Admin
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
 from .forms import ProductForm,ReviewForm
-from .models import Product,Wishlist 
+from .models import Product,Wishlist,Category,Blog
 
 
 #For edit profile
@@ -27,7 +28,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm, SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm,CustomPasswordForm
+from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm,CategoryForm,SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm,CustomPasswordForm,BlogForm   
 
 User = get_user_model()
 
@@ -35,10 +36,24 @@ User = get_user_model()
 
 def home(request): 
     products = Product.objects.all()
-    return render(request, "index.html",{'products':products})
+    categories = Category.objects.annotate(product_count=Count('product')).order_by('id')[:7]
+    blogs = Blog.objects.all().order_by('-created_at')
+    
+    context ={
+        'products':products,
+        'categories':categories,
+        'blogs':blogs,
+    }
+    return render(request, "index.html",context)
+
 def about(request): return render(request, "about.html")
-def blog(request): return render(request, "blog.html")
-def category(request): return render(request, "category.html")
+def blog(request,pk):
+    blog = get_object_or_404(Blog, pk=pk) 
+    return render(request, "blog.html",{'blog':blog})
+def category(request): 
+    categories = Category.objects.annotate(product_count=Count('product')).order_by('id')
+    return render(request, "category.html",{'categories':categories})
+
 def contact(request): return render(request, "contact.html")
 def seller_list(request): return render(request, "seller_list.html")
 def seller_details(request): return render(request, "seller_details.html")
@@ -150,7 +165,7 @@ def dashboardAdmin(request):
     return render(request, 'Admin/dashbord_admin.html', context)
 
 def auction(request):
-    products = Product.objects.all()  
+    products = Product.objects.all().order_by('-auction_start_date_time')  
     return render(request, "auction.html", {'products': products})
 
 # This view now ONLY handles the initial page load.
@@ -397,7 +412,7 @@ def add_product(request):
     else:
         form = ProductForm()
 
-    return render(request, 'add_product.html', {'form': form})
+    return render(request, 'Admin/add_product.html', {'form': form})
     
 
 @login_required
@@ -407,22 +422,13 @@ def auc_details(request, pk):
     review_count = reviews.count()
     review_form = ReviewForm()  # Initialize the form
 
-    if request.user.is_authenticated:
-        initial_data = {
-            'name': request.user.username,
-            'email': request.user.email,
-        }
-        review_form = ReviewForm(initial=initial_data)
-
     if request.method == 'POST':
         form_data = ReviewForm(request.POST)
         if form_data.is_valid():
             new_review = form_data.save(commit=False)
             new_review.product = product
 
-            if request.user.is_authenticated:
-                if hasattr(request.user, 'image') and request.user.image:
-                    new_review.image = request.user.image
+            new_review.user = request.user
 
             new_review.save()
             messages.success(request, 'Your review was submitted successfully!')
@@ -485,3 +491,26 @@ def user_wishlist_products(request):
         'wishlist_products': products
     }
     return render(request, 'wishlist.html', context)
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category added successfully!')
+            return redirect('category')  # Redirect back to the same page or to a list view
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CategoryForm()
+    return render(request, 'Admin/add_category.html', {'form': form})
+
+def add_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = BlogForm()
+    return render(request, 'Admin/add_blog.html', {'form': form})

@@ -26,205 +26,24 @@
     <div class="category-grid-section pt-110 mb-110">
         <div class="container">
             <div class="row gy-5 row-cols-xl-5 row-cols-md-3 row-cols-sm-2 row-cols-1">
+                {% for category in categories %}
                 <div class="col wow animate fadeInDown" data-wow-delay="200ms" data-wow-duration="1500ms">
                     <div class="category-card7 two">
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Automotive</a></h4>
-                                <span>45,533 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img1.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Antiques</a></h4>
-                                <span>43,856 Item</span>
-                            </div>
-                                <div class="category-img">
-                                    <img src="{% static 'assets/img/home7/home7-category-img2.jpg' %}" alt="">
-                                </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="400ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Digital Art</a></h4>
-                                <span>48,258 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img3.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="500ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
                         <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon4.svg' %}" alt="">
+                            <img src="{% static "assets/img/home7/category.png"%}" alt="">
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Books & Comic</a></h4>
-                                <span>46,156 Item</span>
+                                <h4><a href="auction-sidebar.html">{{ category.name}}</a></h4>
+                                <span>{{category.product_count}} Item</span>
                             </div>
                             <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img4.jpg' %}" alt="">
+                                <img src="{{ category.image.url}}" alt="">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="600ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon5.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Gadget</a></h4>
-                                <span>41,546 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img5.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="700ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon6.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Real Estate</a></h4>
-                                <span>45,489 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img6.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="800ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon7.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Fashion</a></h4>
-                                <span>45,890 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img7.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="800ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon8.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Ceramics</a></h4>
-                                <span>41,255 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img8.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="700ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon9.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Instruments</a></h4>
-                                <span>41,589 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img9.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="600ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon10.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Toys & Games</a></h4>
-                                <span>43,658 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img10.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="500ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon11.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Automobiles</a></h4>
-                                <span>43,898 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img11.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="400ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon12.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Jewelry</a></h4>
-                                <span>44,784 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img12.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col wow animate fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-                    <div class="category-card7 two">
-                        <div class="category-icon">
-                            <img src="{% static 'assets/img/home7/icon/home7-category-icon13.svg' %}" alt="">
-                        </div>
-                        <div class="category-wrap">
-                            <div class="category-content">
-                                <h4><a href="auction-sidebar.html">Decorative Art</a></h4>
-                                <span>46,258 Item</span>
-                            </div>
-                            <div class="category-img">
-                                <img src="{% static 'assets/img/home7/home7-category-img13.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {%endfor%}
             </div>
         </div>
     </div>
