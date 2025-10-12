@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
-from .models import Product,Review,ContactSubmission,Category,Blog
+from .models import Product,Review,ContactSubmission,Category,Blog,Bidding
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -180,7 +180,18 @@ class BlogForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
-
+class BiddingForm(forms.ModelForm):
+    class Meta:
+        model = Bidding
+        fields = ['bid_amount']
+        widgets = {
+            'bid_amount': forms.NumberInput(attrs={
+                'class': 'form-control text-center',
+                'min': '0',
+                'step': '1',
+                'id': 'bidInput'
+            }),
+        }
 
 
 

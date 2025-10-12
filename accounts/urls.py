@@ -22,6 +22,7 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('auction/', views.auction, name="auction"),
     path('auction-details/<int:pk>/', views.auc_details, name="auction-details"),
+    path('auction-details/<int:pk>/place_bid/', views.place_bid, name="place_bid"),
     path('add_category/', views.add_category, name='add_category'),
     path('category/',views.category, name="category"),
     path('contact/',views.contact, name="contact"),

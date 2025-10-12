@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from django.db.models import Max
+from django.core.exceptions import ValidationError
 
 
 #For Edit profile
@@ -144,3 +146,31 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+class Bidding(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="bids")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
+    bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    bid_time = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-bid_amount']  # Highest bids first
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.product_name} - {self.bid_amount}"
+
+    def clean(self):
+        """Ensure bid is higher than current product price"""
+        if self.product.current_bid and self.bid_amount <= self.product.current_bid:
+            raise ValidationError("Bid amount must be higher than current bid price.")
+
+    def save(self, *args, **kwargs):
+        """Save bid and update current product bid if it's higher"""
+        self.clean()
+        super().save(*args, **kwargs)
+
+        # Update product's current bid if this is the highest
+        highest_bid = Bidding.objects.filter(product=self.product).aggregate(Max('bid_amount'))['bid_amount__max']
+        if highest_bid and highest_bid > self.product.current_bid:
+            self.product.current_bid = highest_bid
+            self.product.save()

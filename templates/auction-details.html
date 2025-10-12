@@ -126,21 +126,25 @@
                                 <span class="fs-5"><strong>Ending On:</strong> {{ product.auction_end_date_time|date:"F d, Y, h:i A" }}</span>
                             </div>
                         </div>
-                        <div class="quantity-area">
-                              {% if product.auction_status == "live" %}
-                                <h6>Your Max Bid:</h6>
-                                <div class="quantity-counter-and-btn-area">
-                                    <div class="quantity-counter">
-                                        <a href="#" class="quantity__minus"><i class='bx bx-minus'></i></a>
-                                        <input name="quantity" type="text" class="quantity__input" value="2900">
-                                        <a href="#" class="quantity__plus"><i class='bx bx-plus' ></i></a>
-                                    </div>
-                                    <a class="primary-btn btn-hover" href="auction-grid.html">
+                            <div class="quantity-area">
+                                {% if product.auction_status == "live" %}
+                                    <h6>Your Max Bid:</h6>
+                                    <form method="POST" action="{% url 'place_bid' product.id %}">
+                                    {% csrf_token %}
+                                    <div class="quantity-counter-and-btn-area">
+                                        <div class="quantity-counter d-flex align-items-center">
+                                        <a class="quantity" id="btnMinus"><i class='bx bx-minus'></i></a>
+                                        <input name="bid_amount" type="text" class="quantity__input text-center" id="bidInput" value="{{ product.current_bid|default:0 }}">
+                                        <a class="quantity" id="btnPlus"><i class='bx bx-plus'></i></a>
+                                        </div>
+
+                                        <button type="submit" class="primary-btn btn-hover">
                                         Place Bid
                                         <span></span>
-                                    </a>
-                                </div>
-                                {%endif%}
+                                        </button>
+                                    </div>
+                                    </form>
+                                {% endif %}
                             </div>  
                             <ul class="question-and-wishlist-area">
                             <li>
@@ -302,15 +306,60 @@
                     </div>
                 </div>
             </div>
+            <div class="container my-5">
+                <h2 class="fw-bold mb-4">Bidding Summary</h2>
+                    <div class="table-responsive shadow-sm">
+                        <div class="rounded-top-3 overflow-hidden">
+                            <table class="table align-middle mb-0">
+                                <!-- Table Head -->
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th scope="col" class="p-3">Bidder</th>
+                                        <th scope="col" class="p-3">Bid Amount (₹)</th>
+                                        <th scope="col" class="p-3">Bid Time</th>
+                                    </tr>
+                                </thead>
+
+                                <!-- Table Body -->
+                                <tbody class="bg-white">
+                                    {% for bid in bids %}
+                                    <tr {% if forloop.first %}class="table-success"{% endif %}>
+                                        <td>{{ bid.user.username }}</td>
+                                        <td>{{ bid.bid_amount }}</td>
+                                        <td>{{ bid.bid_time|date:"M d, Y H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="3" class="text-center">No bids yet.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row pt-40">
+                        <div class="col-lg-12">
+                            <div class="inner-pagination-area two">
+                                <ul class="paginations">
+                                    <li class="page-item active">
+                                        <a href="#">01</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">02</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">03</a>
+                                    </li>
+                                    <li class="page-item paginations-button">
+                                        <a href="#">
+                                            <svg width="16" height="13" viewBox="0 0 16 13" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.557 10.1026L1.34284 1.89603M15.557 10.1026C12.9386 8.59083 10.8853 3.68154 12.7282 0.489511M15.557 10.1026C12.9386 8.59083 7.66029 9.2674 5.81744 12.4593" stroke-width="0.96" stroke-linecap="round"></path>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
     </div>
-    <!-- End Auction Details section -->
-    <script>
-    document.querySelectorAll('input[name="rate"]').forEach((elem) => {
-        elem.addEventListener("change", function() {
-            document.querySelector('input[name="rating"]').value = this.value;
-        });
-    });
-
-    </script>
     {% endblock %}

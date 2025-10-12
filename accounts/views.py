@@ -20,7 +20,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
 from .forms import ProductForm,ReviewForm
-from .models import Product,Wishlist,Category,Blog
+from .models import Product,Wishlist,Category,Blog,Bidding
 
 
 #For edit profile
@@ -28,7 +28,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm,CategoryForm,SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm,CustomPasswordForm,BlogForm   
+from .forms import RegistrationForm, EmailAuthenticationForm, PasswordResetRequestForm,CategoryForm,SetNewPasswordForm, UserProfileEditForm, CustomPasswordChangeForm,ContactForm,CustomPasswordForm,BlogForm,BiddingForm  
 
 User = get_user_model()
 
@@ -421,6 +421,7 @@ def auc_details(request, pk):
     reviews = product.reviews.all().order_by('-created_at')
     review_count = reviews.count()
     review_form = ReviewForm()  # Initialize the form
+    bids = Bidding.objects.filter(product=product).order_by('-bid_amount')
 
     if request.method == 'POST':
         form_data = ReviewForm(request.POST)
@@ -442,6 +443,7 @@ def auc_details(request, pk):
         'review_form': review_form,
         'review_count': review_count,
         'MEDIA_URL': settings.MEDIA_URL,
+        'bids':bids,
     }
     
     return render(request, 'auction-details.html', context)
@@ -514,3 +516,29 @@ def add_blog(request):
     else:
         form = BlogForm()
     return render(request, 'Admin/add_blog.html', {'form': form})
+
+def place_bid(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, "Please log in to place a bid.")
+            return redirect('login')
+
+        bid_amount = request.POST.get('bid_amount')
+        if not bid_amount:
+            messages.error(request, "Please enter a bid amount.")
+            return redirect('product_detail', product_id=product.id)
+
+        try:
+            bid_amount = float(bid_amount)
+            new_bid = Bidding.objects.create(
+                user=request.user,
+                product=product,
+                bid_amount=bid_amount
+            )
+            messages.success(request, f"You placed a bid of ₹{bid_amount}")
+        except Exception as e:
+            messages.error(request, str(e))
+
+    return redirect('auction-details', pk=pk)

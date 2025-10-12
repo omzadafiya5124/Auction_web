@@ -115,8 +115,8 @@
 .auction-card-img-wrap .card-img:hover .product-card-image {
     transform: scale(1.05); 
 }
-
-    </style>
+ 
+</style>
     {% block extra_css %}{% endblock%}
 </head>
 
@@ -512,6 +512,32 @@
         setInterval(function() {
         location.reload();
     }, 60000); 
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const plusBtn = document.getElementById('btnPlus');
+            const minusBtn = document.getElementById('btnMinus');
+            const bidInput = document.getElementById('bidInput');
+
+            const currentBid = parseFloat(bidInput.value || 0);
+
+            plusBtn.addEventListener('click', () => {
+                let value = parseFloat(bidInput.value || 0);
+                bidInput.value = (value + 100).toFixed(2); // increase by ₹100
+            });
+
+            minusBtn.addEventListener('click', () => {
+                let value = parseFloat(bidInput.value || 0);
+                if (value > currentBid) {
+                    bidInput.value = (value - 100).toFixed(2);
+                    if (parseFloat(bidInput.value) < currentBid) {
+                        bidInput.value = currentBid.toFixed(2);
+                    }
+                }
+            });
+        });
+
+
         
     </script>
     <script data-cfasync="false" src="../../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="{% static "assets/js/jquery-3.7.1.min.js"%}"></script>
