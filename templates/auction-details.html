@@ -92,9 +92,13 @@
                                 <!-- Assuming you have a current_bid field, otherwise use start_price -->
                                 <strong>₹{{ product.current_bid|default:product.start_price }}</strong>
                             {% elif product.auction_status == "closed"%}
+                                {% if not highest_bid %}
+                                    <strong class="text-danger">No buyer won this auction — better luck next time!</strong>
+                                {%else%}
                                 <span class="fs-5 text-danger">Sold Out : :</span>
                                 <!-- Assuming you have a current_bid field, otherwise use start_price -->
                                 <strong class="text-danger">₹{{ product.current_bid|default:product.start_price }}</strong>
+                                {%endif%}
                             {%else%}
                                 <span class="fs-5" style="color:#00b4d8;">Start Bid at : :</span>
                                 <!-- Assuming you have a current_bid field, otherwise use start_price -->
@@ -146,6 +150,19 @@
                                     </form>
                                 {% endif %}
                             </div>  
+                            {% if product.auction_status == "closed" %}
+                                {% if highest_bid %}
+                                    <div class="alert alert-success mt-4">
+                                    🏆 <strong>Winner:</strong> {{ winner.username }} <br>
+                                    💰 <strong>Winning Bid:</strong> ₹{{ highest_bid.bid_amount }} <br>
+                                    🕒 <strong>Placed on:</strong> {{ highest_bid.bid_time|date:"M d, Y H:i" }}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning mt-4">
+                                    No bids placed yet.
+                                    </div>
+                                {% endif %}
+                            {%endif%}
                             <ul class="question-and-wishlist-area">
                             <li>
                                 <a href="contact.html">
@@ -323,7 +340,7 @@
                                 <!-- Table Body -->
                                 <tbody class="bg-white">
                                     {% for bid in bids %}
-                                    <tr {% if forloop.first %}class="table-success"{% endif %}>
+                                    <tr>
                                         <td>{{ bid.user.username }}</td>
                                         <td>{{ bid.bid_amount }}</td>
                                         <td>{{ bid.bid_time|date:"M d, Y H:i" }}</td>

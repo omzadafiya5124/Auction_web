@@ -34,7 +34,7 @@
                         </div>
                         <div class="category-wrap">
                             <div class="category-content">
-                                <h4><a href="auction-sidebar.html">{{ category.name}}</a></h4>
+                                <h4><a href="{% url 'category_details' category.id %}">{{ category.name}}</a></h4>
                                 <span>{{category.product_count}} Item</span>
                             </div>
                             <div class="category-img">

@@ -15,12 +15,13 @@ from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from django.views.decorators.http import require_POST
 from django.db.models import Count
+from django.db.models import Max
 #For Admin
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
 from .forms import ProductForm,ReviewForm
-from .models import Product,Wishlist,Category,Blog,Bidding
+from .models import User,Product,Wishlist,Category,Blog,Bidding
 
 
 #For edit profile
@@ -50,13 +51,32 @@ def about(request): return render(request, "about.html")
 def blog(request,pk):
     blog = get_object_or_404(Blog, pk=pk) 
     return render(request, "blog.html",{'blog':blog})
+
 def category(request): 
     categories = Category.objects.annotate(product_count=Count('product')).order_by('id')
     return render(request, "category.html",{'categories':categories})
 
 def contact(request): return render(request, "contact.html")
-def seller_list(request): return render(request, "seller_list.html")
-def seller_details(request): return render(request, "seller_details.html")
+
+def seller_list(request): 
+    sellers = User.objects.filter(account_type='Seller', is_active=True)  # add is_active=True if needed
+    context = {
+        'sellers': sellers
+    }
+    return render(request, "seller_list.html", context)
+
+def seller_details(request, pk):
+    seller  = get_object_or_404(User, pk=pk, account_type='Seller')
+    products = seller.seller_products.all()
+    s_cnt = products.count()
+    
+    context = {
+        'seller': seller,
+        's_cnt':s_cnt,
+        'products': products,  # optional
+    }
+    return render(request, "seller_details.html", context)
+
 def how_to_sell(request): return render(request, "how-to-sell.html")
 def how_to_bid(request): return render(request, "how-to-buy.html")
 def faqs(request): return render(request, "faq.html")
@@ -72,6 +92,41 @@ def edit_profile_view(request):
     form = UserProfileEditForm() 
     return render(request,"dashboard-edit-profile.html",{'form':form})
 
+def user_auction(request):
+    user = request.user
+
+    latest_user_bids = (
+        Bidding.objects
+        .filter(user=user)
+        .values('product') 
+        .annotate(max_bid=Max('bid_amount'))  
+    )
+
+    winning_bids = []
+    losing_bids = []
+
+    for entry in latest_user_bids:
+        product_id = entry['product']
+        user_highest_bid = entry['max_bid']
+
+        # Get the actual Bidding object for this highest bid
+        user_bid = Bidding.objects.filter(user=user, product_id=product_id, bid_amount=user_highest_bid).first()
+        product = user_bid.product
+
+        # Get the overall highest bid for that product
+        highest_bid = product.bids.order_by('-bid_amount').first()
+
+        # Compare to decide winner or loser
+        if highest_bid and highest_bid.user == user:
+            winning_bids.append(user_bid)
+        else:
+            losing_bids.append(user_bid)
+
+    context = {
+        'winning_bids': winning_bids,
+        'losing_bids': losing_bids,
+    }
+    return render(request, "dashboard-my-auction.html", context)
 
 #For contect Form
 def contact_view(request):
@@ -423,6 +478,8 @@ def auc_details(request, pk):
     review_form = ReviewForm()  # Initialize the form
     bids = Bidding.objects.filter(product=product).order_by('-bid_amount')
 
+    highest_bid = bids.first()
+    winner = highest_bid.user if highest_bid else None
     if request.method == 'POST':
         form_data = ReviewForm(request.POST)
         if form_data.is_valid():
@@ -444,9 +501,22 @@ def auc_details(request, pk):
         'review_count': review_count,
         'MEDIA_URL': settings.MEDIA_URL,
         'bids':bids,
+        'highest_bid': highest_bid,
+        'winner': winner,
     }
     
     return render(request, 'auction-details.html', context)
+
+@login_required
+def category_details(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    products = Product.objects.filter(category=category)
+
+    context = {
+        'category':category,
+        'products':products,
+    }
+    return render(request, 'category_details.html', context )
 
 @login_required
 def toggle_wishlist(request, product_id):
@@ -479,16 +549,11 @@ def user_wishlist_products(request):
     """
     products = []
     try:
-        # It's common to have a OneToOneField from User to Wishlist,
-        # which makes this lookup easier.
         wishlist = request.user.wishlist
         products = wishlist.products.all()
     except Wishlist.DoesNotExist:
-        # If the user has never added an item, their wishlist might not exist.
-        # In this case, 'products' will correctly remain an empty list.
         pass
 
-    # THE FIX IS HERE: The key 'wishlist_products' now matches the template.
     context = {
         'wishlist_products': products
     }
@@ -528,7 +593,7 @@ def place_bid(request, pk):
         bid_amount = request.POST.get('bid_amount')
         if not bid_amount:
             messages.error(request, "Please enter a bid amount.")
-            return redirect('product_detail', product_id=product.id)
+            return redirect('auction-details', pk=pk)
 
         try:
             bid_amount = float(bid_amount)

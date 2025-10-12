@@ -160,16 +160,8 @@
                         <li class="menu-item-has-children">
                             <a href="#" class="drop-down">Pages</a><i class="bi bi-plus dropdown-icon"></i>
                             <ul class="sub-menu">
-                                <li><a href="{% url "category" %}">Category</a></li>
-                                <li>
-                                    <a href="#">Seller</a>
-                                    <i class="d-lg-flex d-none bi bi-chevron-right dropdown-icon"></i>
-                                    <i class="d-lg-none d-flex bi bi-plus dropdown-icon"></i>
-                                    <ul class="sub-menu">
-                                        <li><a href="{% url "seller_list" %}">Seller List</a></li>
-                                        <li><a href="{% url "seller_details" %}">Seller Details</a></li>
-                                    </ul>
-                                </li>
+                                <li><a href="{% url "category" %}">Category</a></li>    
+                                <li><a href="{% url "seller_list" %}">Seller List</a></li>  
                                 <li><a href="{% url "how-to-sell" %}">How To Sell</a></li>
                                 <li><a href="{% url "how-to-bid" %}">How to Bid</a></li>
                                 <li><a href="{% url "faqs" %}">Faqs</a></li>

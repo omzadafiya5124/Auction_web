@@ -24,10 +24,11 @@ urlpatterns = [
     path('auction-details/<int:pk>/', views.auc_details, name="auction-details"),
     path('auction-details/<int:pk>/place_bid/', views.place_bid, name="place_bid"),
     path('add_category/', views.add_category, name='add_category'),
+    path('category_details/<int:pk>/', views.category_details, name="category_details"),
     path('category/',views.category, name="category"),
     path('contact/',views.contact, name="contact"),
     path('sellers/',views.seller_list, name="seller_list"),
-    path('sellers/details/',views.seller_details, name="seller_details"),
+    path('sellers/details/<int:pk>  ',views.seller_details, name="seller_details"),
     path('how-to-sell/',views.how_to_sell, name="how-to-sell"),
     path('how-to-bid/',views.how_to_bid, name="how-to-bid"),
     path('faqs/',views.faqs, name="faqs"),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('edit-profile/edit/', views.edit_profile, name='edit_profile'),
     path('password/change/', views.change_password, name='change_password'),
     path('help_and_support/',views.help_support, name="help_support"),
+    path('user_auction/',views.user_auction,name="user_auction"),
         #For contect Form
     path('submit-contact/', views.contact_view, name='submit_contact_form'),
     path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
@@ -49,5 +51,7 @@ urlpatterns = [
     # path('blogs/', views.blog, name='blog_list'),
     path('blogs/<int:pk>/', views.blog, name='blog'),
     path('add_blog/', views.add_blog, name='add_blog'),
+
+    
 ]
 

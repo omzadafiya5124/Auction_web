@@ -68,7 +68,8 @@ class Product(models.Model):
     gallery_images = models.JSONField(default=list, blank=True)
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='seller_products',null=True, blank=True)
+    
     def __str__(self):
         return self.product_name
 
@@ -105,6 +106,15 @@ class Product(models.Model):
         now = timezone.now()
         if now >= self.auction_start_date_time and now <= self.auction_end_date_time:
             return self.auction_end_date_time
+        return None
+
+    def highest_bid(self):
+        return self.bids.order_by('-bid_amount').first()
+
+    def winner(self):
+        highest = self.highest_bid()
+        if highest:
+            return highest.user
         return None
 
 class Wishlist(models.Model):
