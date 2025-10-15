@@ -27,6 +27,7 @@
                             </a>
                         </li>
                         <li>
+                            {%if user.account_type == "Bidder" %}
                             <a href="{% url 'user_wishlist' %}">
                                 <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
                                     <g>
@@ -38,6 +39,7 @@
                                 </svg>
                                 <h6>My Wishlist</h6>
                             </a>
+                            {%endif%}
                         </li>
                         <li>
                             <a href="{% url 'edit_profile_view' %}">

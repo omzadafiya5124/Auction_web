@@ -23,118 +23,190 @@
     </div>
     <!-- Start Dashboard section -->
         {% include "dashboard-menu.html" %}
-                <div class="dashboard-content-wrap">
-                    <div class="profile-info-wrap">
-                        <div class="profile-img">
-                            <img src="{{user.image.url}}" alt="">
-                        </div>
-                        <div class="profile-content">
-                            <h4>{{user.username}}</h4>
+            <div class="dashboard-content-wrap">
+                <div class="profile-info-wrap">
+                    <div class="profile-img">
+                        {% if user.image %}
+                            <img src="{{ user.image.url }}" alt="Profile Image">
+                        {% else %}
+                            <img src="{% static 'assets/img/default-avatar.png' %}" alt="Default Image">
+                        {% endif %}
+                    </div>
+                    <div class="profile-content">
+                        <h4>{{ user.username }}</h4>
+                        <h5 class="text-danger">{{ user.account_type }}</h5>
+                    </div>
+                </div>
+
+                <!-- Dashboard Stats -->
+                {%if user.account_type == "Bidder"%}
+                <div class="row g-lg-3 gy-4">
+                    <div class="col-lg-4">
+                        <div class="single-counter-card">
+                            <span>Auction Attend</span>
+                            <h2>{{ attended_auctions_count }}</h2>
                         </div>
                     </div>
+                    <div class="col-lg-4">
+                        <div class="single-counter-card two">
+                            <span>Auction Win</span>
+                            <h2>{{ won_auctions_count }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-counter-card three">
+                            <span>Auction Losing</span>
+                            <h2>{{ losing_auctions_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bidding Summary -->
+                <div class="bidding-summary-wrap mt-5">
+                    <h6>Bidding Summary</h6>
+                    <table class="bidding-summary-table">
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Auction Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bid in page_obj %}
+                            <tr>
+                                <td data-label="Product ID">{{ bid.product.id }}</td>
+                                <td data-label="Product Name">{{ bid.product.product_name }}</td>
+                                <td data-label="Amount">₹{{ bid.bid_amount }}</td>
+                                <td data-label="Status">
+                                {% if bid in winning_bids %}
+                                        <span>Winning</span>
+                                    {% else %}
+                                        <span class="cancel">Losing</span>
+                                    {% endif %}
+                                </td>
+                                <td data-label="Auction Date">{{ bid.bid_time|date:"F d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No bids found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                    <div class="row pt-40">
+                        <div class="col-lg-12">
+                            <div class="inner-pagination-area two">
+                                <ul class="paginations">
+                                    <li class="page-item active">
+                                        <a href="#">01</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">02</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">03</a>
+                                    </li>
+                                    <li class="page-item paginations-button">
+                                        <a href="#">
+                                            <svg width="16" height="13" viewBox="0 0 16 13" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.557 10.1026L1.34284 1.89603M15.557 10.1026C12.9386 8.59083 10.8853 3.68154 12.7282 0.489511M15.557 10.1026C12.9386 8.59083 7.66029 9.2674 5.81744 12.4593" stroke-width="0.96" stroke-linecap="round"></path>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%else%}
                     <div class="row g-lg-3 gy-4">
                         <div class="col-lg-4">
                             <div class="single-counter-card">
-                                <span>Auction Attend</span>
-                                <h2>280</h2>
+                                <span>Total Products</span>
+                                <h2>{{ s_cnt }}</h2>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="single-counter-card two">
-                                <span>Auction Win</span>
-                                <h2>50</h2>
+                                <span>Sold Products</span>
+                                <h2>{{ sold_cnt }}</h2>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="single-counter-card three">
-                                <span>Cancel Auction</span>
-                                <h2>25</h2>
+                                <span>Unsold Products</span>
+                                <h2>{{ unsold_cnt }}</h2>
                             </div>
                         </div>
                     </div>
-                        <div class="bidding-summary-wrap">
-                            <h6>Bidding Summary</h6>
-                            <table class="bidding-summary-table">
-                                <thead>
+
+                    <div class="bidding-summary-wrap mt-5">
+                        <h6>Seller Summary</h6>
+                        <table class="bidding-summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Product Name</th>
+                                    <th>Highest Bid (₹)</th>
+                                    <th>Status</th>
+                                    <th>Auction Start</th>
+                                    <th>Auction End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
                                     <tr>
-                                        <th>Auction ID</th>
-                                        <th>Product name</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Auction Date</th>
+                                        <td data-label="Product ID">{{ product.id }}</td>
+                                        <td data-label="Product Name">{{ product.product_name }}</td>
+                                        <td data-label="Highest Bid">
+                                            ₹{{ product.highest_bid.bid_amount|default:"0" }}
+                                        </td>
+                                        <td data-label="Status">
+                                            {% if product.is_sold %}
+                                                <span>Sold</span>
+                                            {% else %}
+                                                <span class="cancel">Unsold</span>
+                                            {% endif %}
+                                        </td>
+                                        <td data-label="Auction Start">{{ product.auction_start_date_time|date:"F d, Y, h:i A" }}</td>
+                                        <td data-label="Auction End">{{ product.auction_end_date_time|date:"F d, Y, h:i A" }}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885455</td>
-                                        <td data-label="Product name">Porcelain</td>
-                                        <td data-label="Amount">$1800</td>    
-                                        <td data-label="Status"><span>Winning</span></td>
-                                        <td data-label="Auction Date">June 25, 2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885482</td>
-                                        <td data-label="Product name">Old Clocks</td>
-                                        <td data-label="Amount">$1900</td>    
-                                        <td data-label="Status"><span>Winning</span></td>
-                                        <td data-label="Auction Date">June 13, 2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885536</td>
-                                        <td data-label="Product name">Manuscripts</td>
-                                        <td data-label="Amount">$2000</td>    
-                                        <td data-label="Status"><span class="cancel">Cancel</span></td>
-                                        <td data-label="Auction Date">June 2, 2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885548</td>
-                                        <td data-label="Product name">Renaissance Art</td>
-                                        <td data-label="Amount">$2100</td>    
-                                        <td data-label="Status"><span>Winning</span></td>
-                                        <td data-label="Auction Date">June 8, 2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885563</td>
-                                        <td data-label="Product name">Impressionism Art</td>
-                                        <td data-label="Amount">$2200</td>    
-                                        <td data-label="Status"><span>Winning</span></td>
-                                        <td data-label="Auction Date">June 21, 2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Auction ID">12584885589</td>
-                                        <td data-label="Product name">Romanticism Art</td>
-                                        <td data-label="Amount">$2300</td>    
-                                        <td data-label="Status"><span class="cancel">Cancel</span></td>
-                                        <td data-label="Auction Date">June 9, 2024</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row pt-40">
-                            <div class="col-lg-12">
-                                <div class="inner-pagination-area two">
-                                    <ul class="paginations">
-                                        <li class="page-item active">
-                                            <a href="#">01</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#">02</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a href="#">03</a>
-                                        </li>
-                                        <li class="page-item paginations-button">
-                                            <a href="#">
-                                                <svg width="16" height="13" viewBox="0 0 16 13" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M15.557 10.1026L1.34284 1.89603M15.557 10.1026C12.9386 8.59083 10.8853 3.68154 12.7282 0.489511M15.557 10.1026C12.9386 8.59083 7.66029 9.2674 5.81744 12.4593" stroke-width="0.96" stroke-linecap="round"></path>
-                                                </svg>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                {% empty %}
+                                    <tr><td colspan="6" class="text-center">No Products found.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row pt-40">
+                        <div class="col-lg-12">
+                            <div class="inner-pagination-area two">
+                                <ul class="paginations">
+                                    <li class="page-item active">
+                                        <a href="#">01</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">02</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#">03</a>
+                                    </li>
+                                    <li class="page-item paginations-button">
+                                        <a href="#">
+                                            <svg width="16" height="13" viewBox="0 0 16 13" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.557 10.1026L1.34284 1.89603M15.557 10.1026C12.9386 8.59083 10.8853 3.68154 12.7282 0.489511M15.557 10.1026C12.9386 8.59083 7.66029 9.2674 5.81744 12.4593" stroke-width="0.96" stroke-linecap="round"></path>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
                 </div>
+                {%endif%}
             </div>
         </div>
     </div>

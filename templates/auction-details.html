@@ -131,7 +131,8 @@
                             </div>
                         </div>
                             <div class="quantity-area">
-                                {% if product.auction_status == "live" %}
+                                {% if product.auction_status == "live"%}
+                                {%if user.account_type == "seller"%}
                                     <h6>Your Max Bid:</h6>
                                     <form method="POST" action="{% url 'place_bid' product.id %}">
                                     {% csrf_token %}
@@ -148,6 +149,11 @@
                                         </button>
                                     </div>
                                     </form>
+                                    {%else%}
+                                         <div class="alert alert-warning mt-4">
+                                            Seller can not Bid .
+                                        </div>
+                                    {%endif%}
                                 {% endif %}
                             </div>  
                             {% if product.auction_status == "closed" %}

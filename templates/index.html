@@ -523,10 +523,19 @@
                                             <h6><a href="{% url 'auction-details' product.id %}">{{ product.product_name }}</a></h6>
                                             <div class="price-and-code-area">
                                                 <div class="price">
-                                                     <span class="text-danger">Sold Out:</span>
-                                                    <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                                    {%if product.is_sold %}
+                                                        <span class="text-danger">Sold Out:</span>
+                                                        <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                                    {%else%}
+                                                        <span class="text-danger">Not Sold</span>
+                                                        <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                                    {%endif%}
                                                 </div>
-                                                <a href="{% url 'auction-details' product.id %}" class="bid-btn">Sold Out</a>
+                                                {%if product.is_sold %}
+                                                    <a href="{% url 'auction-details' product.id %}" class="bid-btn">Sold Out</a>
+                                                {%else%}
+                                                    <a   class="bid-btn">Not Sold</a>
+                                                {%endif%}
                                             </div>
                                         </div>
                                     </div>

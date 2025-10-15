@@ -500,8 +500,13 @@
                                             <span>Current Bid at:</span>
                                             <strong>₹{{ product.current_bid }}</strong>
                                         {% elif product.auction_status == "closed" %}
-                                            <span class="text-danger">Sold Out:</span>
-                                            <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                            {%if product.is_sold %}
+                                                <span class="text-danger">Sold Out:</span>
+                                                <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                            {%else%}
+                                                <span class="text-danger">Not Sold</span>
+                                                <strong class="text-danger">₹{{ product.current_bid }}</strong>
+                                            {%endif%}
                                         {%else%}
                                             <span style="color:#00b4d8;">Start Bid at:</span>
                                             <strong style="color:#00b4d8;">₹{{ product.start_price}}</strong>
@@ -510,7 +515,11 @@
                                     {% if product.auction_status == "live" %}
                                         <a href="{% url 'auction-details' product.id %}" class="bid-btn">Bid Now</a>
                                     {% elif product.auction_status == "closed" %}
-                                        <a href="{% url 'auction-details' product.id %}" class="bid-btn">Sold Out</a>
+                                        {%if product.is_sold %}
+                                            <a href="{% url 'auction-details' product.id %}" class="bid-btn">Sold Out</a>
+                                            {%else%}
+                                                <a   class="bid-btn">Not Sold</a>
+                                        {%endif%}
                                     {%else%}
                                         <a href="{% url 'auction-details' product.id %}" class="bid-btn">Coming Soon</a>
                                     {%endif%}

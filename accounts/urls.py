@@ -13,9 +13,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('password-reset/', views.password_reset_request_view, name='password_reset_request'),
     path('password-reset/confirm/', views.password_reset_confirm_view, name='password_reset_confirm'),
-    path('add_product/', views.add_product, name='add_product'),
-    #admin dashbord
-    path('dashboard-admin/', views.dashboardAdmin, name='dashboard-admin'),
+    
 
 
     # Other Page URLs
@@ -52,6 +50,13 @@ urlpatterns = [
     path('blogs/<int:pk>/', views.blog, name='blog'),
     path('add_blog/', views.add_blog, name='add_blog'),
 
+    path('dashboard-admin/', views.dashboardAdmin, name='dashboard-admin'),
+    path('admin-manage-product/', views.adminManageProduct, name='admin-manage-product'),
+    #delete pro
+    path('admin-delete-product/<int:product_id>/', views.deleteProduct, name='delete-product'),
     
+
+    path('admin-manage-category/', views.adminManageCategory, name='admin-manage-category'), 
+    path('admin-delete-category/<int:category_id>/', views.deleteCategory, name='delete-category'), 
 ]
 

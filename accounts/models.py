@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.db.models import Max
 from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
 
 
 #For Edit profile
@@ -53,6 +54,13 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def delete(self, *args, **kwargs):
+    # Delete the associated image file from storage before deleting the database record.
+        if self.image:
+            if default_storage.exists(self.image.name):
+                default_storage.delete(self.image.name)
+        super().delete(*args, **kwargs)
 
 class Product(models.Model):
     product_name = models.CharField(max_length=200)
@@ -116,6 +124,16 @@ class Product(models.Model):
         if highest:
             return highest.user
         return None
+
+    def delete(self, *args, **kwargs):
+    # This line causes the error because default_storage is not defined
+        if self.main_image:
+            # Check if the file exists before trying to delete it
+            if default_storage.exists(self.main_image.name):
+                default_storage.delete(self.main_image.name)
+        
+        # Then, call the superclass's delete method to remove the database record
+        super().delete(*args, **kwargs)
 
 class Wishlist(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wishlist')
