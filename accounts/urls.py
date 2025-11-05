@@ -54,9 +54,19 @@ urlpatterns = [
     path('admin-manage-product/', views.adminManageProduct, name='admin-manage-product'),
     #delete pro
     path('admin-delete-product/<int:product_id>/', views.deleteProduct, name='delete-product'),
+    # product add/edit modal endpoints
+    path('admin-product/new/', views.admin_product_form, name='admin-product-new'),
+    path('admin-product/<int:pk>/edit/', views.admin_product_edit, name='admin-product-edit'),
     
 
     path('admin-manage-category/', views.adminManageCategory, name='admin-manage-category'), 
     path('admin-delete-category/<int:category_id>/', views.deleteCategory, name='delete-category'), 
+    # category edit modal endpoint
+    path('admin-category/<int:pk>/edit/', views.admin_category_edit, name='admin-category-edit'), 
+    # admin users
+    path('admin-manage-users/', views.adminManageUsers, name='admin-manage-users'),
+    path('admin-user/new/', views.admin_user_new, name='admin-user-new'),
+    path('admin-user/<int:pk>/edit/', views.admin_user_edit, name='admin-user-edit'),
+    path('admin-user/<int:pk>/delete/', views.admin_user_delete, name='admin-user-delete'),
 ]
 

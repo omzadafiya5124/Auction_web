@@ -1,0 +1,141 @@
+<style>
+/* Responsive, clean styling scoped to this modal form */
+.modal-form .form-group { margin-bottom: .75rem; }
+.modal-form label { display:block; margin-bottom: .35rem; color:#5a5c69; font-weight:500; }
+.modal-form input.form-control,
+.modal-form select.form-control,
+.modal-form textarea.form-control { width:100%; }
+.modal-form .form-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; align-items:start; }
+.modal-form .form-section { background:#fbfbfd; border:1px solid #e3e6f0; border-radius:10px; padding:12px; }
+.modal-form .form-section + .form-section { margin-top: 10px; }
+@media (max-width: 768px){
+  .modal-form .form-grid { grid-template-columns: 1fr; }
+}
+.modal-form .form-section-title { font-size: .95rem; padding-bottom:6px; border-bottom: 1px dashed #e3e6f0; margin-bottom:8px; }
+.modal-form .actions { margin-top: 16px; display:flex; gap:8px; justify-content:flex-end; }
+.modal-form .avatar-preview { width:88px; height:88px; border-radius:50%; object-fit:cover; border:2px solid #e3e6f0; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.modal-form .inline { display:flex; align-items:center; gap:10px; }
+.modal-form small.help { display:block; color:#6c757d; margin-top:4px; }
+/* Clear checkbox styling for Django ClearableFileInput */
+.modal-form input[type="checkbox"][name$="-clear"] { position:absolute; opacity:0; width:0; height:0; }
+.modal-form input[type="checkbox"][name$="-clear"] + label { 
+  display:inline-flex; align-items:center; gap:6px; 
+  background:#fdecea; color:#c0392b; border:1px solid #f5c6cb; 
+  padding:4px 10px; border-radius:999px; cursor:pointer; font-size:12px; 
+}
+.modal-form input[type="checkbox"][name$="-clear"] + label:before { content:"\f2ed"; font-family:"Font Awesome 6 Free"; font-weight:900; }
+/* Hide native file input UI; use custom Change image button instead */
+.modal-form input[type="file"][name="image"] { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+</style>
+
+<form id="modalUserForm" class="modal-form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-grid">
+        <div class="form-section" style="grid-column:1 / -1;">
+            <div class="form-section-title" style="font-weight:600; color:#5a5c69;">Basic Information</div>
+        <div class="form-group">
+            <label>{{ form.username.label }}</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.email.label }}</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.mobile_number.label }}</label>
+            {{ form.mobile_number }}
+            {{ form.mobile_number.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.date_of_birth.label }}</label>
+            {{ form.date_of_birth }}
+            {{ form.date_of_birth.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.gender.label }}</label>
+            {{ form.gender }}
+            {{ form.gender.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.account_type.label }}</label>
+            {{ form.account_type }}
+            {{ form.account_type.errors }}
+        </div>
+            <small class="help">Select the user role (Seller or Bidder).</small>
+        </div>
+        
+        <div class="form-section" style="grid-column:1 / -1;">
+            <div class="form-section-title" style="font-weight:600; color:#5a5c69;"><i class="fas fa-user-circle" style="margin-right:6px; color:#4e73df;"></i>Avatar</div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label>{{ form.image.label }}</label>
+            <div class="image-preview inline">
+                {{ form.image }}
+                {% if form.instance and form.instance.pk and form.instance.image %}
+                    <img id="avatarPreview" src="{{ form.instance.image.url }}" class="avatar-preview" />
+                {% else %}
+                    <img id="avatarPreview" class="avatar-preview" style="display:none;" />
+                {% endif %}
+            </div>
+            <div style="margin-top:6px;">
+                {% if form.instance and form.instance.pk and form.instance.image %}
+                <button type="button" id="triggerChangeImage" class="btn btn-secondary" style="padding:.35rem .6rem; border-radius:999px; font-size:12px;"><i class="fas fa-camera"></i> Change image</button>
+                {% else %}
+                <button type="button" id="triggerChangeImage" class="btn btn-secondary" style="padding:.35rem .6rem; border-radius:999px; font-size:12px;"><i class="fas fa-camera"></i> Choose image</button>
+                {% endif %}
+            </div>
+            {{ form.image.errors }}
+        </div>
+        </div>
+        
+        <div class="form-section" style="grid-column:1 / -1;">
+            <div class="form-section-title" style="font-weight:600; color:#5a5c69;"><i class="fas fa-shield-alt" style="margin-right:6px; color:#4e73df;"></i>Security & Status</div>
+        <div class="form-group">
+            <label>Password (set or change)</label>
+            {{ form.password }}
+            <small class="help">Leave blank to keep current password.</small>
+        </div>
+        <div class="form-group inline">
+            <label style="min-width:110px;">{{ form.inactive.label }}</label>
+            {{ form.inactive }}
+        </div>
+        
+        </div>
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn btn-secondary" id="modalCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<script>
+(function(){
+  // Ensure DOB max is today on client side as well
+  var dob = document.querySelector('input[type="date"][name="date_of_birth"]');
+  if(dob){
+    var today = new Date();
+    var m = (today.getMonth()+1).toString().padStart(2,'0');
+    var d = today.getDate().toString().padStart(2,'0');
+    dob.setAttribute('max', today.getFullYear() + '-' + m + '-' + d);
+  }
+
+  // Instant avatar preview when selecting a new file
+  var fileInput = document.querySelector('input[type="file"][name="image"]');
+  var preview = document.getElementById('avatarPreview');
+  var changeBtn = document.getElementById('triggerChangeImage');
+  if(fileInput && preview){
+    fileInput.addEventListener('change', function(){
+      if(fileInput.files && fileInput.files[0]){
+        preview.src = URL.createObjectURL(fileInput.files[0]);
+        preview.style.display = '';
+      }
+    });
+    if(changeBtn){ changeBtn.addEventListener('click', function(){ fileInput.click(); }); }
+  }
+})();
+</script>
+

@@ -1,6 +1,7 @@
 # In accounts/forms.py
 
 from django import forms
+from datetime import date
 from django.contrib.auth.forms import AuthenticationForm 
 from .models import User
 from django.contrib.auth import get_user_model
@@ -132,12 +133,20 @@ class SetNewPasswordForm(forms.Form):
         return confirm_password
     
 class ProductForm(forms.ModelForm):
+    class MultiFileInput(forms.ClearableFileInput):
+        allow_multiple_selected = True
+
+    gallery_images_upload = forms.FileField(
+        required=False,
+        widget=MultiFileInput(attrs={'class': 'form-control', 'multiple': True})
+    )
+
     class Meta:
         model = Product
         fields = [
             'product_name', 'sub_description', 'product_description', 'start_price',
             'auction_start_date_time', 'auction_end_date_time',
-            'category', 'main_image',
+            'category', 'seller', 'main_image',
         ]
         widgets = {
             'product_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -147,8 +156,59 @@ class ProductForm(forms.ModelForm):
             'auction_start_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
             'auction_end_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
+            'seller': forms.Select(attrs={'class': 'form-control'}),
             'main_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Limit sellers to users with Seller account type
+        if 'seller' in self.fields:
+            self.fields['seller'].queryset = User.objects.filter(account_type='Seller')
+
+
+class AdminUserForm(forms.ModelForm):
+    password = forms.CharField(required=False, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    inactive = forms.BooleanField(required=False, label='Inactive', widget=forms.CheckboxInput())
+
+    class Meta:
+        model = User
+        fields = ['username','email','mobile_number','date_of_birth','gender','account_type','image']
+        widgets = {
+            'username': forms.TextInput(attrs={'class':'form-control'}),
+            'email': forms.EmailInput(attrs={'class':'form-control'}),
+            'mobile_number': forms.TextInput(attrs={'class':'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'type':'date','class':'form-control'}),
+            'gender': forms.Select(attrs={'class':'form-control'}),
+            'account_type': forms.Select(attrs={'class':'form-control'}),
+            'image': forms.FileInput(attrs={'class':'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ensure the date input cannot select a future date (client-side hint)
+        if 'date_of_birth' in self.fields and hasattr(self.fields['date_of_birth'], 'widget'):
+            self.fields['date_of_birth'].widget.attrs['max'] = date.today().isoformat()
+        # Set inactive initial value from instance.is_active
+        instance = kwargs.get('instance')
+        if instance is not None:
+            self.fields['inactive'].initial = not bool(instance.is_active)
+
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data.get('date_of_birth')
+        if dob and dob > date.today():
+            raise forms.ValidationError('Date of birth cannot be in the future.')
+        return dob
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # Apply inactive checkbox to is_active
+        inactive = self.cleaned_data.get('inactive')
+        if inactive is not None:
+            user.is_active = not bool(inactive)
+        if commit:
+            user.save()
+        return user
 
 class ReviewForm(forms.ModelForm):
     class Meta:

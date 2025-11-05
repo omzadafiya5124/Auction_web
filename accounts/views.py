@@ -679,6 +679,45 @@ def adminManageProduct(request):
     }
     return render(request, 'Admin/product/manage_product.html', context)
 
+def admin_product_form(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            # Handle gallery images upload (append)
+            gallery_files = request.FILES.getlist('gallery_images_upload')
+            if gallery_files:
+                saved_paths = product.gallery_images or []
+                for f in gallery_files:
+                    path = default_storage.save(f"products/gallery/{f.name}", f)
+                    saved_paths.append(path)
+                product.gallery_images = saved_paths
+                product.save(update_fields=['gallery_images'])
+            return JsonResponse({'ok': True})
+        return render(request, 'Admin/product/_product_form.html', {'form': form})
+    form = ProductForm()
+    return render(request, 'Admin/product/_product_form.html', {'form': form})
+
+def admin_product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            product = form.save()
+            # Handle gallery images upload (append)
+            gallery_files = request.FILES.getlist('gallery_images_upload')
+            if gallery_files:
+                saved_paths = product.gallery_images or []
+                for f in gallery_files:
+                    path = default_storage.save(f"products/gallery/{f.name}", f)
+                    saved_paths.append(path)
+                product.gallery_images = saved_paths
+                product.save(update_fields=['gallery_images'])
+            return JsonResponse({'ok': True})
+        return render(request, 'Admin/product/_product_form.html', {'form': form})
+    form = ProductForm(instance=product)
+    return render(request, 'Admin/product/_product_form.html', {'form': form})
+
 def deleteProduct(request, product_id):
     # This is a security measure: only allow POST requests to delete
     if request.method != 'POST':
@@ -748,4 +787,58 @@ def deleteCategory(request, category_id):
     
     # Redirect back to the category list page
     return redirect('admin-manage-category')
+
+def admin_category_edit(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'ok': True})
+        return render(request, 'Admin/category/_category_form.html', {'form': form})
+    form = CategoryForm(instance=category)
+    return render(request, 'Admin/category/_category_form.html', {'form': form})
+
+def adminManageUsers(request):
+    sellers = User.objects.filter(account_type='Seller').order_by('-id')
+    bidders = User.objects.filter(account_type='Bidder').order_by('-id')
+    context = { 'sellers': sellers, 'bidders': bidders }
+    return render(request, 'Admin/users/manage_user.html', context)
+
+def admin_user_new(request):
+    from .forms import AdminUserForm
+    if request.method == 'POST':
+        form = AdminUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            if form.cleaned_data.get('password'):
+                user.set_password(form.cleaned_data['password'])
+                user.save(update_fields=['password'])
+            return JsonResponse({'ok': True})
+        return render(request, 'Admin/users/_user_form.html', {'form': form})
+    form = AdminUserForm()
+    return render(request, 'Admin/users/_user_form.html', {'form': form})
+
+def admin_user_edit(request, pk):
+    from .forms import AdminUserForm
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = AdminUserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            user = form.save()
+            if form.cleaned_data.get('password'):
+                user.set_password(form.cleaned_data['password'])
+                user.save(update_fields=['password'])
+            return JsonResponse({'ok': True})
+        return render(request, 'Admin/users/_user_form.html', {'form': form})
+    form = AdminUserForm(instance=user)
+    return render(request, 'Admin/users/_user_form.html', {'form': form})
+
+def admin_user_delete(request, pk):
+    if request.method != 'POST':
+        return redirect('admin-manage-users')
+    user = get_object_or_404(User, pk=pk)
+    user.delete()
+    messages.success(request, 'User deleted successfully')
+    return redirect('admin-manage-users')
 

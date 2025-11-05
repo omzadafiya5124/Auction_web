@@ -236,6 +236,64 @@
     .delete-btn:hover {
         background-color: #c21a0a; /* A slightly darker shade of red */
     }
+
+        /* --- Modal + Form styling to match admin look --- */
+        .btn { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: .5rem; 
+            padding: .6rem 1rem; 
+            border-radius: 6px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 500; 
+        }
+        .btn-primary { background-color: var(--primary-color); color: #fff; }
+        .btn-secondary { background-color: var(--secondary-color); color: #fff; }
+        .btn:hover { filter: brightness(.95); }
+
+        #modalOverlay { backdrop-filter: blur(1px); }
+        #modalCard { border: 1px solid var(--light-gray); }
+        #modalCard h3 { color: var(--text-color); }
+        #modalBody .form-group { margin-bottom: 1rem; }
+        #modalBody label { display:block; margin-bottom: .4rem; color: var(--text-color); font-weight: 500; }
+        #modalBody .form-control { width: 100%; padding: .6rem .75rem; border: 1px solid var(--light-gray); border-radius: 6px; }
+        #modalBody .form-control:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 .2rem rgba(78,115,223,.15); }
+        #modalBody .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        #modalBody .form-grid .full { grid-column: 1 / -1; }
+        #modalBody .image-preview { display:flex; align-items:center; gap:12px; }
+        #modalBody .image-preview img { width: 72px; height:72px; object-fit: cover; border-radius:6px; border:1px solid var(--light-gray); }
+
+        /* Table scroll behavior */
+        .product-table-card .table-responsive {
+            overflow: auto;              /* enable both axes scroll as needed */
+            max-height: 75vh;            /* show more rows in one display */
+            border-top: 1px solid var(--light-gray);
+        }
+        .product-table-card table {
+            min-width: 1000px;           /* still fits on one display but roomier */
+            font-size: 13px;             /* slightly larger for readability */
+        }
+        .product-table-card table th,
+        .product-table-card table td { padding: 6px 8px; line-height: 1.2; }
+        .product-image { width: 40px; height: 40px; }
+
+        /* Card visual emphasis */
+        .product-table-card { 
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(58, 59, 69, 0.12);
+            border: 1px solid var(--light-gray);
+            padding: 1.25rem 1.5rem; 
+        }
+        .product-table-header h2 { font-size: 1.25rem; }
+        .product-table-card thead th { 
+            position: sticky; 
+            top: 0; 
+            background: #f9fafc; 
+            z-index: 1; 
+        }
+        .product-table-card tbody tr:nth-child(even){ background: #fbfbfd; }
     </style>
 </head>
 <body>
@@ -244,11 +302,13 @@
     <!-- Main Content -->
     <main class="main-content">
         
-
+        <h1>Manage Products</h1>
         <!-- Product Table Card -->
         <div class="product-table-card">
-            <div class="product-table-header">
+            <div class="product-table-header" style="display:flex; align-items:center; justify-content: space-between;">
                 <h2>Product List</h2>
+                <!-- <button id="addProductBtn" class="edit-btn" style="background:#1cc88a;">+ Add Product</button> -->
+                <button id="addProductBtn" class="edit-btn btn btn-primary">Add Product</button>
             </div>
             <div class="table-responsive">
                 <table>
@@ -257,7 +317,12 @@
                             <th>Image</th>
                             <th>Product Name</th>
                             <th>Category</th>
+                            <th>Seller</th>
+                            <th>Sub Description</th>
+                            <th>Current Bid</th>
                             <th>Start Price</th>
+                            <th>Auction Start</th>
+                            <th>Auction End</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -281,8 +346,21 @@
                             <!-- 3. Category: Assumes a ForeignKey relationship to a Category model with a 'name' field -->
                             <td>{{ product.category.name }}</td>
 
+                            <!-- Seller -->
+                            <td>{% if product.seller %}{{ product.seller.username }}{% else %}—{% endif %}</td>
+
+                            <!-- Sub Description (truncated) -->
+                            <td>{{ product.sub_description|truncatechars:30 }}</td>
+
+                            <!-- Current Bid -->
+                            <td>${{ product.current_bid|default:product.start_price|floatformat:2 }}</td>
+
                             <!-- 4. Start Price -->
                             <td>${{ product.start_price|floatformat:2 }}</td> <!-- Formats the price to 2 decimal places -->
+
+                            <!-- Auction Start/End -->
+                            <td>{{ product.auction_start_date_time|date:"Y-m-d H:i" }}</td>
+                            <td>{{ product.auction_end_date_time|date:"Y-m-d H:i" }}</td>
 
                             <!-- 5. Status (with conditional coloring) -->
                             <td>
@@ -300,12 +378,12 @@
                             <!-- 6. Action Buttons with Dynamic URLs -->
                             <td class="action-btns">
                                 <!-- Replace 'edit-product-url' and 'delete-product-url' with your actual URL names -->
-                                <a href="" class="edit-btn"><i class="fas fa-edit"></i> Edit</a>
+                                <a href="#" class="edit-btn js-edit-product" data-product-id="{{ product.id }}"><i class="fas fa-edit"></i> <!-- for edit icon --></a>
                                 <form action="{% url 'delete-product' product.id %}" method="POST" style="display: inline;">
                                     {% csrf_token %}
                                     <button type="submit" class="delete-btn" 
                                             onclick="return confirm('Are you sure you want to delete the product \'{{ product.product_name }}\'? This action cannot be undone.');">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i> <!-- for delete icon -->
                                     </button>
                                 </form>
                                 {% comment %} <a href="" class="delete-btn"><i class="fas fa-trash"></i> Delete</a> {% endcomment %}
@@ -318,7 +396,7 @@
                         {% empty %}
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 2rem;">
-                                No products found. <a href="{% url 'add-product-url' %}">Add the first one!</a>
+                                No products found. <a href="#" id="emptyAddProduct">Add the first one!</a>
                             </td>
                         </tr>
         
@@ -327,5 +405,132 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal Root -->
+    <div id="modalOverlay" style="position:fixed; inset:0; background: rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; padding:16px; z-index:1000;">
+        <div id="modalCard" style="background:#fff; width: min(900px, 100%); max-height: 90vh; overflow:auto; border-radius:8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div style="display:flex; align-items:center; justify-content: space-between; padding: 16px 20px; border-bottom:1px solid #e3e6f0;">
+                <h3 id="modalTitle" style="margin:0; font-size:18px;">Modal</h3>
+                <button id="modalCloseBtn" style="border:none; background:transparent; font-size:22px; cursor:pointer">×</button>
+            </div>
+            <div id="modalBody" style="padding:20px;"></div>
+        </div>
+    </div>
+
+    <script>
+    (function(){
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const overlay = document.getElementById('modalOverlay');
+        const body = document.getElementById('modalBody');
+        const title = document.getElementById('modalTitle');
+        const closeBtn = document.getElementById('modalCloseBtn');
+
+        function openModal(modalTitle){
+            title.textContent = modalTitle || 'Modal';
+            overlay.style.display = 'flex';
+        }
+        function closeModal(){
+            overlay.style.display = 'none';
+            body.innerHTML = '';
+        }
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', function(e){ if(e.target === overlay){ closeModal(); }});
+
+        function bindFormSubmit(formEl, submitUrl){
+            formEl.addEventListener('submit', function(e){
+                e.preventDefault();
+                const fd = new FormData(formEl);
+                fetch(submitUrl, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    body: fd
+                }).then(async (res)=>{
+                    const contentType = res.headers.get('content-type') || '';
+                    if(res.ok){
+                        // JSON success -> reload list
+                        try { const data = await res.json(); if(data.ok){ window.location.reload(); return; } } catch(_){}
+                        window.location.reload();
+                        return;
+                    }
+                    if(contentType.includes('text/html')){
+                        const html = await res.text();
+                        body.innerHTML = html;
+                        const newForm = body.querySelector('form');
+                        bindFormSubmit(newForm, submitUrl);
+                        initSellerFilter();
+                    }
+                });
+            });
+            const cancelBtn = body.querySelector('#modalCancelBtn');
+            if(cancelBtn){ cancelBtn.addEventListener('click', closeModal); }
+        }
+
+        function loadForm(url, modalHeader){
+            openModal(modalHeader);
+            body.innerHTML = '<div>Loading...</div>';
+            fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' }})
+                .then(r=>r.text())
+                .then(html=>{
+                    body.innerHTML = html;
+                    const form = body.querySelector('form');
+                    bindFormSubmit(form, url);
+                    initSellerFilter();
+                });
+        }
+
+        function initSellerFilter(){
+            const input = body.querySelector('#sellerSearch');
+            const select = body.querySelector('select[name="seller"]');
+            if(!input || !select){ return; }
+            const options = Array.from(select.options).map(o=>({value:o.value, text:o.text, selected:o.selected}));
+            input.addEventListener('input', function(){
+                const q = input.value.trim().toLowerCase();
+                select.innerHTML = '';
+                let first = true;
+                options.forEach(function(opt){
+                    if(!q || opt.text.toLowerCase().includes(q)){
+                        const el = document.createElement('option');
+                        el.value = opt.value; el.text = opt.text;
+                        if(first && q){ el.selected = true; first = false; }
+                        else if(!q && opt.selected){ el.selected = true; }
+                        select.appendChild(el);
+                    }
+                });
+            });
+        }
+
+        const addBtn = document.getElementById('addProductBtn');
+        if(addBtn){
+            addBtn.addEventListener('click', function(){
+                loadForm('{% url "admin-product-new" %}', 'Add Product');
+            });
+        }
+        const emptyAdd = document.getElementById('emptyAddProduct');
+        if(emptyAdd){ emptyAdd.addEventListener('click', function(e){ e.preventDefault(); loadForm('{% url "admin-product-new" %}', 'Add Product'); }); }
+
+        document.querySelectorAll('.js-edit-product').forEach(function(btn){
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+                const id = btn.getAttribute('data-product-id');
+                const url = '{% url "admin-product-edit" 0 %}'.replace('/0/','/' + id + '/');
+                loadForm(url, 'Edit Product');
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
