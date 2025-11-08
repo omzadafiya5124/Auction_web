@@ -21,7 +21,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
 from .forms import ProductForm,ReviewForm
-from .models import User,Product,Wishlist,Category,Blog,Bidding
+from .models import User,Product,Wishlist,Category,Blog,Bidding,Review
 from django.utils import timezone
 
 
@@ -45,11 +45,24 @@ def home(request):
             product.highest_bid = bids.first()
             product.winner = product.highest_bid.user if product.highest_bid else None
             product.is_sold = product.highest_bid is not None
+    
+    # Check if any live products exist (auction has started and not ended)
+    now = timezone.now()
+    has_live_products = products.filter(
+        auction_start_date_time__lte=now,
+        auction_end_date_time__gte=now
+    ).exists()
+    # Check if any upcoming products exist (auction hasn't started yet)
+    has_upcoming_products = products.filter(
+        auction_start_date_time__gt=now
+    ).exists()
             
     context ={
         'products':products,
         'categories':categories,
         'blogs':blogs,
+        'has_live_products': has_live_products,
+        'has_upcoming_products': has_upcoming_products,
     }
     return render(request, "index.html",context)
 
@@ -187,6 +200,23 @@ def user_auction(request):
     user = request.user
 
     if user.account_type == 'Seller':
+        # Get seller's products
+        seller_products = Product.objects.filter(seller=user).order_by('-auction_start_date_time')
+        
+        # Add auction status and highest bid info to each product
+        now = timezone.now()
+        for product in seller_products:
+            bids = Bidding.objects.filter(product=product).order_by('-bid_amount')
+            product.highest_bid = bids.first()
+            product.is_sold = bool(product.highest_bid)
+            # Determine auction status
+            if product.auction_start_date_time <= now <= product.auction_end_date_time:
+                product.status_display = "live"
+            elif now < product.auction_start_date_time:
+                product.status_display = "upcoming"
+            else:
+                product.status_display = "closed"
+        
         if request.method == 'POST':
             form = ProductForm(request.POST, request.FILES)
             if form.is_valid():
@@ -204,7 +234,10 @@ def user_auction(request):
                 return redirect('user_auction')
         else:
             form = ProductForm()
-        return render(request, "dashboard-my-auction.html", {'form': form})
+        return render(request, "dashboard-my-auction.html", {
+            'form': form,
+            'seller_products': seller_products
+        })
 
     # For bidder users (unchanged)
     latest_user_bids = (
@@ -297,8 +330,64 @@ def admin_required(view_func):
     return wrapper
 
 @admin_required
-def dashboardAdmin(request):    
-    return render(request, 'Admin/dashbord_admin.html')
+def dashboardAdmin(request):
+    # Get statistics
+    total_bidders = User.objects.filter(account_type='Bidder').count()
+    total_sellers = User.objects.filter(account_type='Seller').count()
+    total_categories = Category.objects.count()
+    total_products = Product.objects.count()
+    
+    # Get products data for chart (last 6 months)
+    from datetime import timedelta
+    import json
+    
+    # Get all products for last 6 months
+    now = timezone.now()
+    six_months_ago = now - timedelta(days=180)
+    all_products = Product.objects.filter(
+        auction_start_date_time__gte=six_months_ago
+    )
+    
+    # Group products by month
+    products_by_month_dict = {}
+    for product in all_products:
+        month_key = product.auction_start_date_time.strftime('%Y-%m')
+        products_by_month_dict[month_key] = products_by_month_dict.get(month_key, 0) + 1
+    
+    # Generate last 6 months labels and data
+    months_list = []
+    product_counts_list = []
+    
+    # Use a more reliable month calculation
+    current_date = now.date()
+    month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    
+    for i in range(5, -1, -1):  # Last 6 months: 5 months ago to current
+        # Calculate months ago
+        target_month = current_date.month - i
+        target_year = current_date.year
+        
+        # Handle year rollover
+        while target_month < 1:
+            target_month += 12
+            target_year -= 1
+        while target_month > 12:
+            target_month -= 12
+            target_year += 1
+        
+        year_month = f"{target_year}-{target_month:02d}"
+        months_list.append(month_names[target_month - 1])
+        product_counts_list.append(products_by_month_dict.get(year_month, 0))
+    
+    context = {
+        'total_bidders': total_bidders,
+        'total_sellers': total_sellers,
+        'total_categories': total_categories,
+        'total_products': total_products,
+        'months_json': json.dumps(months_list),
+        'product_counts_json': json.dumps(product_counts_list),
+    }
+    return render(request, 'Admin/dashbord_admin.html', context)
 
 def auction(request):
     products = Product.objects.all().order_by('-auction_start_date_time')
@@ -841,4 +930,35 @@ def admin_user_delete(request, pk):
     user.delete()
     messages.success(request, 'User deleted successfully')
     return redirect('admin-manage-users')
+
+@admin_required
+def adminManageReview(request):
+    # Get all reviews with product information
+    reviews = Review.objects.all().select_related('product', 'user').order_by('-created_at')
+    
+    context = {
+        'reviews': reviews,
+    }
+    return render(request, 'Admin/review/manage_review.html', context)
+
+@admin_required
+def deleteReview(request, review_id):
+    # Security: Only allow POST requests for deletion
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request method.')
+        return redirect('admin-manage-review')
+    
+    # Fetch the review object or return a 404 error
+    review_to_delete = get_object_or_404(Review, id=review_id)
+    
+    # Store product name for message
+    product_name = review_to_delete.product.product_name
+    
+    # Delete the review
+    review_to_delete.delete()
+    
+    messages.success(request, f'Review for "{product_name}" has been deleted successfully!')
+    
+    # Redirect back to the review list page
+    return redirect('admin-manage-review')
 

@@ -5,29 +5,29 @@
         <div class="cards">
             <div class="card visitors">
                 <div class="card-content">
-                    <h3>Users</h3>
-                    <p>1,294</p>
+                    <h3>Total Bidders</h3>
+                    <p>{{ total_bidders }}</p>
                 </div>
                 <i class="fas fa-users"></i>
             </div>
             <div class="card sales">
                 <div class="card-content">
-                    <h3>Products</h3>
-                    <p>$1,345</p>
+                    <h3>Total Products</h3>
+                    <p>{{ total_products }}</p>
                 </div>
                 <i class="fas fa-chart-bar"></i>
             </div>
             <div class="card subscribers">
                 <div class="card-content">
-                    <h3>Categories</h3>
-                    <p>1,303</p>
+                    <h3>Total Categories</h3>
+                    <p>{{ total_categories }}</p>
                 </div>
                 <i class="fas fa-newspaper"></i>
             </div>
             <div class="card order">
                 <div class="card-content">
-                    <h3>Order</h3>
-                    <p>576</p>
+                    <h3>Total Sellers</h3>
+                    <p>{{ total_sellers }}</p>
                 </div>
                 <i class="fas fa-check-circle"></i>
             </div>
@@ -44,7 +44,7 @@
             </div>
             <!-- START: New Chart Card -->
             <div class="chart-card">
-                <h2>Sales Overview</h2>
+                <h2>Products Overview</h2>
                 <p>Last 6 Months</p>
                 <canvas id="mySalesChart"></canvas>
             </div>
@@ -58,10 +58,10 @@
         const mySalesChart = new Chart(ctx, {
             type: 'bar', // Type of chart
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], // Labels for the X-axis
+                labels: {{ months_json|safe }}, // Labels for the X-axis
                 datasets: [{
-                    label: 'Sales ($)',
-                    data: [1250, 1900, 3000, 5100, 4200, 6500], // Your data points
+                    label: 'Products Added',
+                    data: {{ product_counts_json|safe }}, // Your data points
                     backgroundColor: 'rgba(78, 115, 223, 0.8)', // Bar color
                     borderColor: 'rgba(78, 115, 223, 1)',
                     borderWidth: 1,
@@ -76,6 +76,9 @@
                         beginAtZero: true,
                         grid: {
                             color: '#e3e6f0'
+                        },
+                        ticks: {
+                            stepSize: 1
                         }
                     },
                     x: {
@@ -86,7 +89,7 @@
                 },
                 plugins: {
                     legend: {
-                        display: false // Hide the legend label "Sales ($)"
+                        display: false // Hide the legend label
                     }
                 }
             }

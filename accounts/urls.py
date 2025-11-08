@@ -68,5 +68,8 @@ urlpatterns = [
     path('admin-user/new/', views.admin_user_new, name='admin-user-new'),
     path('admin-user/<int:pk>/edit/', views.admin_user_edit, name='admin-user-edit'),
     path('admin-user/<int:pk>/delete/', views.admin_user_delete, name='admin-user-delete'),
+    # admin reviews
+    path('admin-manage-review/', views.adminManageReview, name='admin-manage-review'),
+    path('admin-delete-review/<int:review_id>/', views.deleteReview, name='delete-review'),
 ]
 

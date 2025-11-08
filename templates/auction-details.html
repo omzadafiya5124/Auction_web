@@ -132,24 +132,28 @@
                         </div>
                             <div class="quantity-area">
                                 {% if product.auction_status == "live"%}
-                               
-                                    <h6>Your Max Bid:</h6>
-                                    <form method="POST" action="{% url 'place_bid' product.id %}">
-                                    {% csrf_token %}
-                                    <div class="quantity-counter-and-btn-area">
-                                        <div class="quantity-counter d-flex align-items-center">
-                                        <a class="quantity" id="btnMinus"><i class='bx bx-minus'></i></a>
-                                        <input name="bid_amount" type="text" class="quantity__input text-center" id="bidInput" value="{{ product.current_bid|default:0 }}">
-                                        <a class="quantity" id="btnPlus"><i class='bx bx-plus'></i></a>
+                                    {% if user.is_authenticated and user.account_type == "Seller" %}
+                                        <div class="alert alert-info mt-4">
+                                            <strong>Note:</strong> Sellers cannot bid on their own or other products. Only bidders can place bids.
                                         </div>
+                                    {% else %}
+                                        <h6>Your Max Bid:</h6>
+                                        <form method="POST" action="{% url 'place_bid' product.id %}">
+                                        {% csrf_token %}
+                                        <div class="quantity-counter-and-btn-area">
+                                            <div class="quantity-counter d-flex align-items-center">
+                                            <a class="quantity" id="btnMinus"><i class='bx bx-minus'></i></a>
+                                            <input name="bid_amount" type="text" class="quantity__input text-center" id="bidInput" value="{{ product.current_bid|default:0 }}">
+                                            <a class="quantity" id="btnPlus"><i class='bx bx-plus'></i></a>
+                                            </div>
 
-                                        <button type="submit" class="primary-btn btn-hover">
-                                        Place Bid
-                                        <span></span>
-                                        </button>
-                                    </div>
-                                    </form>
-        
+                                            <button type="submit" class="primary-btn btn-hover">
+                                            Place Bid
+                                            <span></span>
+                                            </button>
+                                        </div>
+                                        </form>
+                                    {% endif %}
                                 {% endif %}
                             </div>  
                             {% if product.auction_status == "closed" %}
